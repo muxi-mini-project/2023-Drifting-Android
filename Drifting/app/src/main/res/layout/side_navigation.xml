@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="65dp"
+    android:layout_height="match_parent"
+    android:background="@color/teal_200"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:background="@drawable/mine"
+        android:layout_marginTop="10dp">
+
+    </ImageButton>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="61dp"
+        android:background="@drawable/friends"
+        android:layout_marginTop="10dp">
+
+    </ImageButton>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="63dp"
+        android:background="@drawable/discover"
+        android:layout_marginTop="10dp">
+
+    </ImageButton>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="63dp"
+        android:background="@drawable/settings"
+        android:layout_marginTop="10dp">
+
+    </ImageButton>
+
+</LinearLayout>
