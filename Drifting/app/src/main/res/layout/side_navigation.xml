@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:background="@drawable/mine"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
     </ImageButton>
 
@@ -24,7 +24,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="63dp"
-        android:background="@drawable/discover"
+        android:background="@drawable/discovering"
         android:layout_marginTop="10dp">
 
     </ImageButton>
