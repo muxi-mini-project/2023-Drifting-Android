@@ -4,14 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.drift.ui.login.LoginFragment;
 
 public class MainActivity extends AppCompatActivity {
     private Button mloginButton;
@@ -21,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment fragment = fm.findFragmentById(R.id.login_frame);//向FragmentMAnager请求并获取fragment
 
     protected Fragment createFragment() {
-        return new LoginFragment();
+        return null;
     }//创建一个空的Fragment
 
     @Override

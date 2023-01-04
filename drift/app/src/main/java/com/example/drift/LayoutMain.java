@@ -13,10 +13,6 @@ import androidx.fragment.app.FragmentTransaction;
 public class LayoutMain extends AppCompatActivity {
 
 
-    protected Fragment createhaoyouFragment() {
-        return new haoyouFragment();
-    }
-
     protected Fragment createshezhiFragment() {
         return new shezhiFragment();
     }
@@ -41,7 +37,7 @@ public class LayoutMain extends AppCompatActivity {
         mHaoyou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startFragment(createhaoyouFragment());
+
             }
         });
         mFaxian.setOnClickListener(new View.OnClickListener() {
