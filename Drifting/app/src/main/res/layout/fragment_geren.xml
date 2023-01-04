@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F5FA">
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/black"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="50dp"/>
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/yuanquan" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="张某"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="150dp"
+            android:textSize="35dp"
+            android:textStyle="bold"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="性别:"
+        android:textSize="20dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginLeft="150dp"/>
+    <TextView
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:text="个性签名:"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="150dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="180dp"
+        android:background="#D9DDEB">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</FrameLayout>
