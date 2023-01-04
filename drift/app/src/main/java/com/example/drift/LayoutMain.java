@@ -13,13 +13,11 @@ import androidx.fragment.app.FragmentTransaction;
 public class LayoutMain extends AppCompatActivity {
 
 
-    protected Fragment createhaoyouFragment(){
+    protected Fragment createhaoyouFragment() {
         return new haoyouFragment();
     }
-    protected Fragment createfaxianFragment(){
-        return new faxianFragment();
-    }
-    protected Fragment createshezhiFragment(){
+
+    protected Fragment createshezhiFragment() {
         return new shezhiFragment();
     }
 
@@ -33,39 +31,40 @@ public class LayoutMain extends AppCompatActivity {
         ImageView mHaoyou = (ImageView) findViewById(R.id.haoyou_button);
         ImageView mFaxian = (ImageView) findViewById(R.id.faxian_button);
         ImageView mSheZhi = (ImageView) findViewById(R.id.shezhi_button);
-    mGeren.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(LayoutMain.this,geren_Activity.class);
-            startActivity(intent);
-        }
-    });
-    mHaoyou.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startFragment(createhaoyouFragment());
-        }
-    });
-    mFaxian.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(LayoutMain.this,yaoqing_camera.class);
-            startActivity(intent);
-        }
-    });
-    mSheZhi.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startFragment(createshezhiFragment());
-        }
-    });
+        mGeren.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LayoutMain.this, geren_Activity.class);
+                startActivity(intent);
+            }
+        });
+        mHaoyou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startFragment(createhaoyouFragment());
+            }
+        });
+        mFaxian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LayoutMain.this, yaoqing_camera.class);
+                startActivity(intent);
+            }
+        });
+        mSheZhi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startFragment(createshezhiFragment());
+            }
+        });
     }
-    public void startFragment(Fragment fragment){
+
+    public void startFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();//创建并获取一个Fragment管理器
-        if(fragment == null)
-        fragment = fm.findFragmentById(R.id.main_container);
+        if (fragment == null)
+            fragment = fm.findFragmentById(R.id.main_container);
         fm.beginTransaction()
-                .add(R.id.main_container,fragment)
+                .add(R.id.main_container, fragment)
                 .commit();
     }
 }

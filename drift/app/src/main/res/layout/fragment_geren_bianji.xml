@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F5FA"
-    tools:context=".gerenFragment">
+    android:background="#F4F5FA">
 
     <ImageView
         android:layout_width="100dp"
@@ -20,32 +18,30 @@
         android:layout_marginTop="25dp"
         android:background="@drawable/yuanquan" />
 
-    <TextView
-        android:id="@+id/name_text"
+    <EditText
+        android:id="@+id/name_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="张某"
-        android:textSize="35dp"
-        android:textStyle="bold" />
+        android:textSize="30dp" />
 
     <TextView
-        android:id="@+id/sex_text"
+        android:id="@+id/sex_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="105dp"
+        android:layout_marginTop="95dp"
         android:text="性别:"
         android:textSize="15dp" />
 
-    <TextView
-        android:id="@+id/sign_text"
+    <EditText
+        android:id="@+id/sign_edit"
         android:layout_width="130dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="130dp"
-        android:inputType="none"
+        android:layout_marginTop="120dp"
         android:text="个性签名:"
         android:textSize="10dp" />
 
