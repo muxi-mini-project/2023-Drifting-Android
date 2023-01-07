@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="65dp"
-    android:layout_height="match_parent"
-    android:background="@color/teal_200"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_gravity="bottom"
+    android:layout_height="80dp"
+    android:orientation="horizontal">
 
     <ImageButton
+        android:id="@+id/mine"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:background="@drawable/mine"
-        android:layout_marginTop="20dp">
+        android:layout_height="wrap_content"
+        android:src="@drawable/mine">
 
     </ImageButton>
 
     <ImageButton
+        android:id="@+id/friends"
         android:layout_width="wrap_content"
-        android:layout_height="61dp"
-        android:background="@drawable/friends"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content"
+        android:src="@drawable/friends">
 
     </ImageButton>
 
     <ImageButton
+        android:id="@+id/discovering"
         android:layout_width="wrap_content"
-        android:layout_height="63dp"
-        android:background="@drawable/discovering"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content"
+        android:src="@drawable/discovering">
 
     </ImageButton>
 
     <ImageButton
+        android:id="@+id/settings"
         android:layout_width="wrap_content"
-        android:layout_height="63dp"
-        android:background="@drawable/settings"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content"
+        android:src="@drawable/settings">
 
     </ImageButton>
 

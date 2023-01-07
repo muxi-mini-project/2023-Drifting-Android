@@ -11,12 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="退出"/>
 
         <TextView
             android:layout_width="0dp"
@@ -33,29 +36,35 @@
         android:layout_width="300dp"
         android:layout_height="590dp"
         android:layout_marginTop="60dp"
-        android:gravity="left"
+        android:gravity="start"
         android:hint="开始写下您的东西吧!"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:layout_width="70dp"
-        android:layout_height="50dp"
-        android:text="保存"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="107dp"
-        tools:layout_editor_absoluteY="665dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="70dp"
-        android:layout_height="50dp"
-        android:text="发布"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="222dp"
-        tools:layout_editor_absoluteY="665dp" />
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:text="保存"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:text="发布"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

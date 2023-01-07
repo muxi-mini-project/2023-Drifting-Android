@@ -15,17 +15,18 @@
         android:gravity="center"
         android:background="#F6F5F2">
         <Button
+            android:id="@+id/album"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:text="相册"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:textColor="@color/black"
             android:backgroundTint="#CFD4E8"/>
         <Button
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:text="拍摄"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:backgroundTint="#CFD4E8"
             android:textColor="@color/black"
             android:id="@+id/camera_button"/>
