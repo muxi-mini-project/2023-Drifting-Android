@@ -12,7 +12,7 @@ public class Camera_DriftingCameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_paishe_camera);
+        setContentView(R.layout.camera_paishe);
 
         Button album = (Button) findViewById(R.id.album);
         album.setOnClickListener(new View.OnClickListener() {

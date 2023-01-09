@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,8 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -77,7 +74,7 @@ public class Main_DiscoveringFragment extends Fragment {
     }
 
     private void updateUI(){
-        Inviting_InvitingLab invitingLab = Inviting_InvitingLab.get(getActivity());
+        Inviting_Lab invitingLab = Inviting_Lab.get(getActivity());
         List<Inviting_> inviting_list = invitingLab.getInvitings();
         mAdapter = new InvitingAdapter(inviting_list);
         mRecyclerView.setAdapter(mAdapter);//出大问题

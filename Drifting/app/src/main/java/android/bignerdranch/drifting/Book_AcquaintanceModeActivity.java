@@ -28,7 +28,7 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drifting_book_acquaintance_mode);
+        setContentView(R.layout.book_acquaintance_mode);
 
         iv_image = (ImageView) findViewById(R.id.iv_image);
         Button choose_cover = (Button) findViewById(R.id.acquaintance_choose_front_cover);
@@ -156,7 +156,7 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
         //    指定下拉列表的显示数据
-        final String[] choices = {"本地相册", "漂流相册", "拍摄"};
+        final String[] choices = {"本地相册", "漂流相册", "拍摄","使用默认封面"};
         //    设置一个下拉的列表选择项
         builder.setItems(choices, new DialogInterface.OnClickListener() {
             @Override
@@ -166,18 +166,17 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_PICK, null);
                         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                         startActivityForResult(intent, 2);
-
-//                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-//                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-////                    intent.setType("sdcard/*"); //不可选择
-//                        intent.setType("image/*");
-//                        startActivityForResult(intent,2);
                     }
                     case 1: {
-
+                        break;
                     }
                     case 2: {
                         startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 1);
+                        break;
+                    }
+                    case 3:{
+                        iv_image.setImageResource(R.drawable.yaoqing_background);
+                        break;
                     }
                 }
             }

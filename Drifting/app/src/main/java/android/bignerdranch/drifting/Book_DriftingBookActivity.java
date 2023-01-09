@@ -12,7 +12,7 @@ public class Book_DriftingBookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drifting_book_one);
+        setContentView(R.layout.book_create);
 
         Button acquaintance_mode = (Button) findViewById(R.id.acquaintance_mode);
         acquaintance_mode.setOnClickListener(new View.OnClickListener() {

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.*;
 
-public class Inviting_InvitingLab {
+public class Inviting_Lab {
     private int inviting_num0;
     private int inviting_num1;
     private int inviting_num2;
@@ -26,16 +26,16 @@ public class Inviting_InvitingLab {
         return inviting_num3;
     }
 
-    private static Inviting_InvitingLab sInvitingLab;
+    private static Inviting_Lab sInvitingLab;
     private List<Inviting_> mInvitings;
-    public static Inviting_InvitingLab get(Context context) {
+    public static Inviting_Lab get(Context context) {
         if (sInvitingLab == null) {
-            sInvitingLab = new Inviting_InvitingLab(context);
+            sInvitingLab = new Inviting_Lab(context);
         }
         return sInvitingLab;
     }
 
-    private Inviting_InvitingLab(Context context) {
+    private Inviting_Lab(Context context) {
         mInvitings = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             switch (i % 4){

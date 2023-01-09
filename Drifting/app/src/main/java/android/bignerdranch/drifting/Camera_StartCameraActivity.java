@@ -13,7 +13,7 @@ public class Camera_StartCameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_camera);
+        setContentView(R.layout.camera_start);
 
         Button back = (Button) findViewById(R.id.return_button);
         back.setOnClickListener(new View.OnClickListener() {
