@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="65dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_200"
-    android:orientation="vertical">
+    android:background="@color/side_navigationBackground"
+    android:orientation="horizontal">
 
     <ImageButton
-        android:layout_width="wrap_content"
+        android:id="@+id/person_btn"
+        android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/mine"
-        android:layout_marginTop="20dp">
-
-    </ImageButton>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/mine"/>
 
     <ImageButton
-        android:layout_width="wrap_content"
+        android:id="@+id/friend_btn"
+        android:layout_width="61dp"
         android:layout_height="61dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/friends"
-        android:layout_marginTop="10dp">
-
-    </ImageButton>
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
-        android:layout_width="wrap_content"
+        android:id="@+id/discover_btn"
+        android:layout_width="63dp"
         android:layout_height="63dp"
+        android:layout_marginLeft="45dp"
         android:background="@drawable/discovering"
-        android:layout_marginTop="10dp">
-
-    </ImageButton>
+        android:layout_marginTop="10dp"/>
 
     <ImageButton
-        android:layout_width="wrap_content"
+        android:id="@+id/setting_btn"
+        android:layout_width="63dp"
         android:layout_height="63dp"
+        android:layout_marginLeft="45dp"
         android:background="@drawable/settings"
-        android:layout_marginTop="10dp">
-
-    </ImageButton>
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>

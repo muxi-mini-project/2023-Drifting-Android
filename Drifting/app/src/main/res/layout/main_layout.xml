@@ -18,25 +18,25 @@
             android:id="@+id/geren_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/geren"
+            android:background="@drawable/mine"
             android:clickable="true"/>
         <ImageView
             android:id="@+id/haoyou_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/haoyou"
+            android:background="@drawable/friends"
             android:clickable="true"/>
         <ImageView
             android:id="@+id/faxian_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/faxian"
+            android:background="@drawable/discovering"
             android:clickable="true"/>
         <ImageView
             android:id="@+id/shezhi_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/shezhi"
+            android:background="@drawable/mine"
             android:clickable="true"/>
     </LinearLayout>
     <FrameLayout
