@@ -26,7 +26,7 @@ public class Camera_DriftingCameraActivity extends AppCompatActivity {
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Camera_StartCameraActivity.class));
+                startActivity(new Intent(getApplicationContext(), Camera_Start.class));
             }
         });
     }

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:targetApi="31">
+        <provider
+            android:authorities="com.example.drift.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+        <activity
+            android:name=".Camera_Start"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value=""/>
+        </activity>
         <activity
             android:name=".Book_Writing"
             android:exported="false">
@@ -42,7 +61,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Camera_StartCameraActivity"
+            android:name=".Camera_Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
