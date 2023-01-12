@@ -4,6 +4,6 @@
     <!--添加圆角度数-->
     <corners android:radius="12345dp"/>
     <!--添加白色边框-->
-    <stroke android:color="#F4F5FA" android:width="25dp"/>
+    <stroke android:color="#FFFFFF" android:width="25dp"/>
 
 </shape>

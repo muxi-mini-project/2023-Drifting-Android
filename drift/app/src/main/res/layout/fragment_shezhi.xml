@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="310dp"
+    android:layout_width="match_parent"
     android:layout_height="630dp"
     android:background="#F4F5FA"
     android:gravity="center">
 
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="580dp"
+        android:layout_width="400dp"
+        android:layout_height="620dp"
         android:background="@drawable/yuanjiaojuxing"
         android:orientation="vertical"
         >
         <Button
             android:id="@+id/fenxiang_text"
-            android:layout_width="400dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:layout_gravity="center"
@@ -23,7 +23,7 @@
             android:textSize="30dp"/>
         <Button
             android:id="@+id/tongzhi_text"
-            android:layout_width="400dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/white"
@@ -32,7 +32,7 @@
             android:textSize="30dp"/>
         <Button
             android:id="@+id/yijian_text"
-            android:layout_width="400dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="意见反馈"
@@ -42,7 +42,7 @@
             android:textSize="30dp"/>
         <Button
             android:id="@+id/gengxin_text"
-            android:layout_width="400dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/white"
@@ -51,7 +51,7 @@
             android:textSize="30dp"/>
         <Button
             android:id="@+id/guanyu_text"
-            android:layout_width="400dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
 
             android:backgroundTint="@color/white"
@@ -61,7 +61,7 @@
             android:textSize="30dp" />
         <Button
             android:id="@+id/tuichu_button"
-            android:layout_width="400dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="退出账号"

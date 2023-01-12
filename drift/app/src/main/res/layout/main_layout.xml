@@ -4,49 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="630dp"
-    android:orientation="horizontal">
-    <LinearLayout
-        android:layout_width="80dp"
-        android:layout_height="630dp"
-        android:background="#D9DDEA"
-        android:orientation="vertical"
-        android:gravity="center">
-        <ImageView
-            android:id="@+id/geren_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/geren"
-            android:clickable="true"/>
-        <ImageView
-            android:id="@+id/haoyou_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/haoyou"
-            android:clickable="true"/>
-        <ImageView
-            android:id="@+id/faxian_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/faxian"
-            android:clickable="true"/>
-        <ImageView
-            android:id="@+id/shezhi_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shezhi"
-            android:clickable="true"/>
-    </LinearLayout>
+    android:orientation="vertical">
     <FrameLayout
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="630dp"
-        android:background="#F3F4F9"/>
-</LinearLayout>
-    <ImageView
+        android:background="#F3F4F9">
+    </FrameLayout>
+
+    </RelativeLayout>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#D8DCE9"/>
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="15dp">
+        <ImageButton
+            android:id="@+id/geren_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/geren"
+            android:backgroundTint="@color/white"
+            android:layout_marginRight="25dp"/>
+        <ImageButton
+            android:id="@+id/haoyou_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/haoyou"
+            android:backgroundTint="@color/white"
+            android:layout_marginRight="25dp"/>
+        <ImageButton
+            android:id="@+id/faxian_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/faxian" />
+        <ImageButton
+            android:id="@+id/shezhi_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/shezhi"
+            android:backgroundTint="@color/white"
+            android:layout_marginLeft="25dp"/>
+    </LinearLayout>
 </LinearLayout>

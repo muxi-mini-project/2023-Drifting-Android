@@ -1,12 +1,5 @@
 package com.example.drift;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,9 +10,19 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * 漂流相机获取图片界面
+ */
 public class paishe_camera extends AppCompatActivity {
     Button mTakephotoButton;
     Button mPhotoButton;

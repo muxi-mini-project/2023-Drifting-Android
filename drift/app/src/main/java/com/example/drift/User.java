@@ -1,8 +1,6 @@
 package com.example.drift;
 
-import android.net.Uri;
-import android.widget.ImageView;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +13,7 @@ public class User {
     private String signature;//个性签名
     private boolean sex;//0男1女
     private boolean ifTongZhi;//是否通知进度
-    private drift_cameraLab Mydrift_cameraLab;//漂流相机项目库
+    private List<UUID> mMydrift_cameraLab;//漂流相机项目库
     private String portrait;//头像
 
     public User() {//初始化
@@ -23,7 +21,7 @@ public class User {
         signature = "这个人很懒，没有设置个性签名";
         sex = true;
         ifTongZhi = false;
-        Mydrift_cameraLab = new drift_cameraLab();
+        mMydrift_cameraLab = new ArrayList<UUID>();
     }
 
     public String getSignature() {
@@ -58,8 +56,8 @@ public class User {
         this.ifTongZhi = ifTongZhi;
     }
 
-    public drift_cameraLab getMydrift_cameraLab() {
-        return Mydrift_cameraLab;
+    public List<UUID> getMydrift_cameraLab() {
+        return mMydrift_cameraLab;
     }
 
     public String getPortrait() {

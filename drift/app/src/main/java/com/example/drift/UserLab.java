@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 用户库
+ */
 public class UserLab {
     private static UserLab sUserLab;
     private List<User> mUsers;

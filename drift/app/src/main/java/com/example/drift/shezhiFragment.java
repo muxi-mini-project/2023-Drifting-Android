@@ -2,22 +2,19 @@ package com.example.drift;
 
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.content.DialogInterface.OnClickListener;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import java.util.UUID;
 
@@ -31,8 +28,7 @@ public class shezhiFragment extends Fragment {
     Button mGengxinText;
     Button mGuanyuText;
     Button mTuichuButton;
-    final String FRAGMENT_KEY = "id";
-
+    final String GET_USER = "user_id";
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -50,7 +46,7 @@ public class shezhiFragment extends Fragment {
         mGengxinText = (Button) view.findViewById(R.id.gengxin_text);
         mGuanyuText = (Button) view.findViewById(R.id.guanyu_text);
         mTuichuButton = (Button) view.findViewById(R.id.tuichu_button);
-        UUID mUUID = (UUID) getArguments().getSerializable(FRAGMENT_KEY);
+        UUID mUUID = (UUID) getArguments().getSerializable(GET_USER);
         User user = UserLab.get(getContext()).getUser(mUUID);
         mTuichuButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +140,7 @@ public class shezhiFragment extends Fragment {
                 AlertDialog.Builder builder = new Builder(getContext());
                 builder.setIcon(android.R.drawable.ic_dialog_info);
                 builder.setTitle("关于我们");
-                builder.setMessage("制作团队:木犀互联网技术团队" + '\n');
+                //builder.setMessage("制作团队:木犀互联网技术团队" + '\n');
                 //+"产品设计:张舒涵、叶晓芸"+'\n'+
                 // +"技术指导:王子忱、林炜昊、王祎博、张耘硕、陈敬文");
 

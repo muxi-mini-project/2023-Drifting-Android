@@ -1,16 +1,18 @@
 package com.example.drift;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+/**
+ * 暂时无用
+ */
 public class MainActivity extends AppCompatActivity {
     private Button mloginButton;
     private LinearLayout mbackground;

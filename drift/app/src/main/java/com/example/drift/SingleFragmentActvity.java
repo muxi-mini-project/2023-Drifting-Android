@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+/**
+ * 暂时无用的接口
+ */
 public abstract class SingleFragmentActvity extends AppCompatActivity {
     protected abstract Fragment createFragment();//创建一个空的Fragment
 

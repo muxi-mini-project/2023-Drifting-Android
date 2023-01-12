@@ -2,7 +2,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F5FA">
+    android:background="#FEFEFE">
+
+    <Button
+        android:id="@+id/ziliao_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="260dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#D8DCEA"
+        android:text="完成"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/black" />
 
     <ImageView
         android:layout_width="100dp"
@@ -45,18 +56,64 @@
         android:text="个性签名:"
         android:textSize="10dp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="180dp"
-        android:background="#D9DDEB">
+        android:background="#FEFEFE"
+        android:orientation="vertical"
+        android:gravity="center|top">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/gerenlayout1"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/ing"
+            android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="15dp"
+                android:text="正在进行"
+                android:textSize="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gerenjinduing_view"
+                android:layout_width="217dp"
+                android:layout_height="135dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="240dp"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/finish">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="200dp"
+                android:text="已经结束"
+                android:textSize="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gerenjinduover_view"
+                android:layout_width="217dp"
+                android:layout_height="135dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>
