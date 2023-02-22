@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +14,7 @@ import java.util.UUID;
 /**
  * 个人界面
  */
-public class MineActivity extends AppCompatActivity {
+public class Mine_Activity extends AppCompatActivity {
     private boolean finish = false;
     FragmentManager fm = getSupportFragmentManager();//创建并获取一个Fragment管理器
     Fragment fragment = fm.findFragmentById(R.id.container2);//向FragmentMAnager请求并获取fragment
@@ -26,18 +25,18 @@ public class MineActivity extends AppCompatActivity {
 
 
     protected Fragment createFragment1() {
-        return new MineFragment();
+        return new Mine_Fragment();
     }
 
     protected Fragment createFragment2() {
-        return new gerenbianjiFragment();
+        return new Mine_BianJiFragment();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updateUI();
-        setContentView(R.layout.activity_mine);//显示land_main.xml中的视图
+        setContentView(R.layout.mine_activity);//显示land_main.xml中的视图
 
 
         if (fragment == null)
@@ -82,7 +81,7 @@ public class MineActivity extends AppCompatActivity {
 
     private void updateUI() {
         UUID mUUID = (UUID) getIntent().getSerializableExtra(FRAGMENT_KEY);
-        mUser = User_Lab.get(MineActivity.this).getUser(mUUID);
+        mUser = User_Lab.get(Mine_Activity.this).getUser(mUUID);
     }
 }
 

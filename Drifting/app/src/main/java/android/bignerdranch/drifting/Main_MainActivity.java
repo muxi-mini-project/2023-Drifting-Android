@@ -1,5 +1,7 @@
 package android.bignerdranch.drifting;
 
+import static android.bignerdranch.drifting.Mine_Activity.FRAGMENT_KEY;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -10,8 +12,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class Main_MainActivity extends AppCompatActivity {
+    User_ mUser;
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, Main_MainActivity.class);
@@ -42,7 +46,14 @@ public class Main_MainActivity extends AppCompatActivity {
         mine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new Main_MineFragment());
+                if (User_Now.getUserNow().getUser() != null) {
+                    Intent intent;
+                    intent = new Intent(Main_MainActivity.this, Mine_Activity.class);
+                    intent.putExtra(FRAGMENT_KEY, mUser.getUUID());
+                    startActivity(intent);
+                } else
+                    Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
+
             }
         });
         friends.setOnClickListener(new View.OnClickListener() {

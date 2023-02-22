@@ -8,11 +8,11 @@
     android:orientation="vertical"
     android:background="@drawable/yaoqing_background"
     android:gravity="center|top">
-    <android.bignerdranch.drifting.Camera_ZoomImageView
-        android:layout_width="300dp"
-        android:layout_height="400dp"
-        android:id="@+id/picture"
-        android:layout_marginTop="50dp"/>
+        <android.bignerdranch.drifting.Camera_ZoomImageView
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            android:id="@+id/picture"
+            android:layout_marginTop="50dp"/>
 
 
         <LinearLayout
@@ -36,5 +36,5 @@
             android:backgroundTint="#CFD4E8"
             android:textColor="@color/black"
             android:id="@+id/camera_button"/>
-    </LinearLayout>
+        </LinearLayout>
 </LinearLayout>

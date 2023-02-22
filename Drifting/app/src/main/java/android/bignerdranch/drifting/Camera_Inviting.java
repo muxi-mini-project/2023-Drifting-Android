@@ -1,25 +1,25 @@
-package com.example.drift;
-
-import androidx.appcompat.app.AppCompatActivity;
+package android.bignerdranch.drifting;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class yaoqing_camera extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Camera_Inviting extends AppCompatActivity {
     Button mStartButton;
     Button mFangqiButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_yaoqing_camera);
+        setContentView(R.layout.camera_inviting);
         mStartButton = (Button) findViewById(R.id.start_button);
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(yaoqing_camera.this, start_camera.class);
+                Intent intent = new Intent(Camera_Inviting.this, Camera_Start.class);
                 startActivity(intent);
             }
         });
@@ -27,7 +27,7 @@ public class yaoqing_camera extends AppCompatActivity {
         mFangqiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(yaoqing_camera.this, LayoutMain.class);
+                Intent intent = new Intent(Camera_Inviting.this, Main_MainActivity.class);
                 startActivity(intent);
             }
         });

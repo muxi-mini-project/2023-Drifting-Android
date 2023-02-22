@@ -1,5 +1,6 @@
 package android.bignerdranch.drifting;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -77,7 +78,11 @@ public class Main_DiscoveringFragment extends Fragment {
         Inviting_Lab invitingLab = Inviting_Lab.get(getActivity());
         List<Inviting_> inviting_list = invitingLab.getInvitings();
         mAdapter = new InvitingAdapter(inviting_list);
-        mRecyclerView.setAdapter(mAdapter);//出大问题
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public interface ItemOnClickListener{
+        public void onClick(View view,int i);
     }
 
     private class InvitingHolder extends RecyclerView.ViewHolder {
@@ -118,10 +123,10 @@ public class Main_DiscoveringFragment extends Fragment {
             mTextView.setText("来自"+mInviting.getInviter()+"的漂流"+inviting_type);
             mImageButton.setImageResource(R.drawable.login_interface);
         }
+
     }
 
     private class InvitingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
         private List<Inviting_> mInviting_list;
 
         public InvitingAdapter(List<Inviting_> inviting_list){
@@ -131,6 +136,7 @@ public class Main_DiscoveringFragment extends Fragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+
             return new InvitingHolder(layoutInflater,parent);
         }
 
@@ -144,5 +150,8 @@ public class Main_DiscoveringFragment extends Fragment {
         public int getItemCount() {
             return mInviting_list.size();
         }
+
     }
+
+
 }

@@ -1,11 +1,6 @@
-package com.example.drift;
+package android.bignerdranch.drifting;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,27 +9,31 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import java.util.UUID;
 
-public class gerenbianjiFragment extends Fragment {
+public class Mine_BianJiFragment extends Fragment {
     EditText mNameEdit;
     EditText mSignEdit;
     TextView mSexText;
     String name;
     String sign;
-    User mUser;
+    User_ mUser;
     final String FRAGMENT_KEY = "id";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUser = UserLab.get(getActivity()).getUser((UUID) getArguments().getSerializable(FRAGMENT_KEY));
+        mUser = User_Lab.get(getActivity()).getUser((UUID) getArguments().getSerializable(FRAGMENT_KEY));
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_geren_bianji, container, false);
+        View view = inflater.inflate(R.layout.mine_bianji, container, false);
         mNameEdit = (EditText) view.findViewById(R.id.name_edit);
         mSignEdit = (EditText) view.findViewById(R.id.sign_edit);
         mSexText = (TextView) view.findViewById(R.id.sex_edit);
