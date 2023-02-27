@@ -1,22 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+<<<<<<< HEAD
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+=======
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
         tools:ignore="QueryAllPackagesPermission" />
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
+<<<<<<< HEAD
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="33" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
+
+=======
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo"
+<<<<<<< HEAD
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+        tools:targetApi="33">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.drift.fileprovider"
+=======
         android:label="漂流"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
@@ -27,10 +60,27 @@
         <provider
             android:authorities="com.example.drift.fileprovider"
             android:name="androidx.core.content.FileProvider"
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
+<<<<<<< HEAD
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+
+<activity android:name=".Camera_inviting"
+    android:exported="false">
+    <meta-data
+        android:name="android.app.lib_name"
+        android:value=""/>
+</activity>
+        <activity
+            android:name=".Mine_BIanjiFragment"
+            android:exported="false">
+=======
                 android:resource="@xml/file_paths"/>
         </provider>
         <activity
@@ -38,19 +88,85 @@
             android:exported="false"
             android:screenOrientation="portrait"
             >
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
+<<<<<<< HEAD
+            android:name=".Camera_Start"
+            android:exported="false">
+=======
             android:name=".start_camera"
             android:exported="false"
             android:screenOrientation="portrait">
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
+<<<<<<< HEAD
+            android:name=".Book_Writing"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Book_StrangerModeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Book_AcquaintanceModeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Camera_AlbumActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Camera_Activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Camera_DriftingCameraActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Book_DriftingBookActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Main_MainActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Login_LoginActivity"
+            android:exported="true">
+=======
             android:name=".yaoqing_camera"
             android:exported="false">
             <meta-data
@@ -62,6 +178,7 @@
             android:name=".LayoutMain"
             android:exported="true"
             android:screenOrientation="portrait">
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -73,4 +190,8 @@
                 android:value="" />
         </activity>
     </application>
+<<<<<<< HEAD
+
+=======
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
 </manifest>

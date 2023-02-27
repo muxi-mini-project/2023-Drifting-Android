@@ -1,6 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+<<<<<<< HEAD
+    <style name="Theme.Drifting" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+=======
     <style name="Theme.Drift" parent="Theme.MaterialComponents.Light.NoActionBar">
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>

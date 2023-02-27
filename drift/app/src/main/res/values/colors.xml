@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+<<<<<<< HEAD
+    <color name="gray">#FFEEEEEE</color>
+    <color name="side_navigationBackground">#FBFBFD</color>
+    <color name="friend_search_background">#F5F4F5</color>
+    <color name="friend_background">#FAFAFC</color>
+=======
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
 </resources>

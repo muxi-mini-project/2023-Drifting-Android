@@ -11,7 +11,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+<<<<<<< HEAD
+=======
             <option value="$PROJECT_DIR$/permissionx" />
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
           </set>
         </option>
       </GradleProjectSettings>

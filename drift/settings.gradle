@@ -3,7 +3,10 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+<<<<<<< HEAD
+=======
 
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
     }
 }
 dependencyResolutionManagement {
@@ -13,5 +16,10 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+<<<<<<< HEAD
+rootProject.name = "Drifting"
+include ':app'
+=======
 rootProject.name = "drift"
 include ':app','permissionx'
+>>>>>>> f21e450d1254c55810e3882171e672d0e42b0ba8
