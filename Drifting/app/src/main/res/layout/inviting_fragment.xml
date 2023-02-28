@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Inviting_Fragment">
+    tools:context=".Inviting.Inviting_Fragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,7 +14,7 @@
         android:text="邀请"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="48sp"
+        android:textSize="38sp"
         android:textStyle="bold">
 
     </TextView>

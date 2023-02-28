@@ -2,16 +2,15 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F4F5FA">
+    android:orientation="vertical">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:background="@drawable/yaoqing"/>
     <TextView
-        android:id="@+id/camera_name_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
@@ -20,40 +19,28 @@
         android:layout_marginTop="20dp"
         android:textStyle="bold"/>
     <TextView
-        android:id="@+id/camera_initiator_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="发起人:"
         android:textSize="15dp"
-        android:padding="5dp"/>
+        android:padding="10dp"/>
     <TextView
-        android:id="@+id/camera_time_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="发起时间:"
+        android:padding="10dp"
+        android:text="发起时间"
         android:textSize="15dp"/>
     <TextView
-        android:id="@+id/camera_title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="主题设定:"
+        android:padding="10dp"
+        android:text="主题拟定"
         android:textSize="15dp"/>
     <TextView
-        android:id="@+id/camera_timeofone_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="单人用时设置:"
-        android:textSize="15dp"/>
-    <TextView
-        android:id="@+id/camera_alluser_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="此前接龙人:"
-        android:padding="5dp"
-        android:textSize="10dp"/>
+        android:text="此前接龙人(X位):"
+        android:padding="10dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
