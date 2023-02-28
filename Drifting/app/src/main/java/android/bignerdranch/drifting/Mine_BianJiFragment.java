@@ -30,7 +30,7 @@ public class Mine_BianJiFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUser = User_Lab.get(getActivity()).getUser((UUID) getArguments().getSerializable(FRAGMENT_KEY));
+        mUser = User_Now.getUserNow().getUser();
     }
 
     @Override
@@ -42,10 +42,7 @@ public class Mine_BianJiFragment extends Fragment {
         mSexText = (TextView) view.findViewById(R.id.sex_edit);
         mNameEdit.setText(mUser.getName());
         mSignEdit.setText(mUser.getSignature());
-        if (mUser.isSex())
-            mSexText.setText("性别:女");
-        else
-            mSexText.setText("性别:男");
+            mSexText.setText("性别:"+mUser.getSex());
         mNameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

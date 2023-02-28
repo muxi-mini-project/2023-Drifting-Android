@@ -49,10 +49,7 @@ public class Main_MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (User_Now.getUserNow().getUser() != null) {
-                    Intent intent;
-                    intent = new Intent(Main_MainActivity.this, Camera_inviting.class);
-                   // intent.putExtra(FRAGMENT_KEY, mUser.getUUID());
-                    startActivity(intent);
+                    replaceFragment(new Mine_Fragment());
                 } else
                     Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
 
@@ -84,6 +81,7 @@ public class Main_MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.content_container,fragment);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         transaction.commit();
     }
 

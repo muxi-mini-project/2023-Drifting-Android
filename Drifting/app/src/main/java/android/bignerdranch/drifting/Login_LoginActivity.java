@@ -33,6 +33,7 @@ public class Login_LoginActivity extends AppCompatActivity {
     private int account;
     private String password;
     TextView ty;
+    User_ user = new User_();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,38 +96,63 @@ public class Login_LoginActivity extends AppCompatActivity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ty.setText(account+password);
-//               Login_student student = new Login_student();
-//               student.setStudentID(account);
-//               student.setPassWord(password);
-//                Retrofit.Builder builder = new Retrofit.Builder()
-//                        .baseUrl("http://116.204.121.9:61583/")
-//                        .addConverterFactory(GsonConverterFactory.create());
-//                Retrofit retrofit = builder.build();
-//                Login_connetor login_connetor = retrofit.create(Login_connetor.class);
-//                Call<Login_return> call = login_connetor.login(student);
-//                call.enqueue(new Callback<Login_return>() {
-//                    @Override
-//                   public void onResponse(Call<Login_return> call, Response<Login_return> response) {
-//                        if (response.isSuccessful()) {
-//                       Toast.makeText(Login_LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//
-                        Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
-                        startActivity(intent);
-                        finish();
-//                         } else {
-//                            ty.setText(response.body().getMessage().toString());
-//                           Toast.makeText(getApplicationContext(), "身份认证失败，请重新登录", Toast.LENGTH_SHORT).show();
-//                          }
-//                    }
-//
-//                    @Override
-//                   public void onFailure(Call<Login_return> call, Throwable t) {
-//
-//                        ty.setText(t.getMessage());
-//                        //测试阶段获取错误原因并显示在界面上
-//                    }
-//                });
+                ty.setText(account + password);
+                Login_student student = new Login_student();
+                student.setStudentID(account);
+                student.setPassWord(password);
+                Retrofit.Builder builder = new Retrofit.Builder()
+                        .baseUrl("http://116.204.121.9:61583/")
+                        .addConverterFactory(GsonConverterFactory.create());
+                Retrofit retrofit = builder.build();
+                Login_connetor login_connetor = retrofit.create(Login_connetor.class);
+                Call<Login_return> call = login_connetor.login(student);
+                call.enqueue(new Callback<Login_return>() {
+                    @Override
+                    public void onResponse(Call<Login_return> call, Response<Login_return> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(Login_LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                            Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
+                            startActivity(intent);
+                            finish();
+                            upload_User(response.body().getData());
+                        } else {
+                            Toast.makeText(getApplicationContext(), "身份认证失败，请重新登录", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Login_return> call, Throwable t) {
+                    }
+                });
+            }
+        });
+    }
+    public void upload_User(String token) {
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://116.204.121.9:61583/")
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = builder.build();
+        User_connetor mine_connetor = retrofit.create(User_connetor.class);
+        Call<User_return> call = mine_connetor.getUserMes(token);
 
-        }
-});}}
+        call.enqueue(new Callback<User_return>() {
+            @Override
+            public void onResponse(Call<User_return> call, Response<User_return> response) {
+               User_return user1 = response.body();
+                //  Toast.makeText(getApplicationContext(),"用户数据获取成功",Toast.LENGTH_SHORT).show();
+                if (user1.getName() != " " && user1.getName()!=null)
+                    user.setName(user1.getName());
+                else
+                    user.setName("welcome");
+                if (user1.getSelfWord() != "" && user1.getSelfWord() != null)
+                    user.setSignature(user1.getSelfWord());
+                user.setSex(user1.getSex());
+                User_Now.getUserNow().setUser(user);
+            }
+
+            @Override
+            public void onFailure(Call<User_return> call, Throwable t) {
+
+            }
+        });
+    }
+}

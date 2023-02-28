@@ -16,7 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * 工具类，用于将图片保存到本地
+ * 工具类，用于将图片保存到本地并获取图片
  */
 public class SaveFile {
 

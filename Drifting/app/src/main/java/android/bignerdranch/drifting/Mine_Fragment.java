@@ -45,7 +45,6 @@ public class Mine_Fragment extends Fragment {
     ImageView mPortrait;
     User_ mUser;
     private Uri uri;
-    final String FRAGMENT_KEY = "id";
     private static final String SAVE_PIC_PATH = Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED) ?
             Environment.getExternalStorageDirectory().getAbsolutePath() :
             "/mnt/sdcard";
@@ -54,8 +53,7 @@ public class Mine_Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID mUUID = (UUID) getArguments().getSerializable(FRAGMENT_KEY);
-        mUser = User_Lab.get(getActivity()).getUser(mUUID);
+        mUser = User_Now.getUserNow().getUser();
 
     }
 
@@ -95,10 +93,7 @@ public class Mine_Fragment extends Fragment {
             mPortrait.setImageDrawable(bd);
         }
         mNameText.setText(mUser.getName());
-        if (mUser.isSex())
-            mSexText.setText("性别:女");
-        else
-            mSexText.setText("性别:男");
+            mSexText.setText("性别:"+mUser.getSex());
         mSignText.setText(mUser.getSignature());
         mPortrait.setOnClickListener(new View.OnClickListener() {
             @Override

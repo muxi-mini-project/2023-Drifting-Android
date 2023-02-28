@@ -6,7 +6,7 @@ package android.bignerdranch.drifting;
  */
 public class User_Now {
     static User_Now usernow;
-    static User_ user;
+     User_ user;
 
     public static User_Now getUserNow() {
         if (usernow == null)

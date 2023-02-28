@@ -11,7 +11,7 @@ public class User_ {
     private String name;//昵称
     private final UUID mUUID;//id
     private String signature;//个性签名
-    private final boolean sex;//0男1女
+    private String sex;//0男1女
     private boolean ifTongZhi;//是否通知进度
     private final List<UUID> mMydrift_cameraLab;//漂流相机项目库
     private String portrait;//头像
@@ -19,7 +19,6 @@ public class User_ {
     public User_() {//初始化
         mUUID = UUID.randomUUID();
         signature = "这个人很懒，没有设置个性签名";
-        sex = true;
         ifTongZhi = false;
         mMydrift_cameraLab = new ArrayList<UUID>();
     }
@@ -40,7 +39,11 @@ public class User_ {
         this.name = name;
     }
 
-    public boolean isSex() {
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getSex() {
         return sex;
     }
 
