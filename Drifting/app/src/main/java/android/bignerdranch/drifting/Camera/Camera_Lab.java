@@ -46,7 +46,7 @@ public class Camera_Lab {
         //保存在总库中
         mDrift_Cameras.add(drift_camera);
         //保存在用户库中
-        User_Lab.get(context).getUser(user).getMydrift_cameraLab().add(drift_camera.getId());
+//        User_Lab.get(context).getUser(user).getMydrift_cameraLab().add(drift_camera.getId());
     }
 
     /**
@@ -74,6 +74,6 @@ public class Camera_Lab {
         mDrift_cameraLab.getdrift_camera(id).getParticipator().add(user);
         mDrift_cameraLab.getdrift_camera(id).setCreatornow(user);
         //保存在用户数据中
-        User_Lab.get(context).getUser(user).getMydrift_cameraLab().add(id);
+//        User_Lab.get(context).getUser(user).getMydrift_cameraLab().add(id);
     }
 }

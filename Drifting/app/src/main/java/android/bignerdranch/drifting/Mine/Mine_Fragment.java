@@ -3,14 +3,14 @@ package android.bignerdranch.drifting.Mine;
 import static android.app.Activity.RESULT_OK;
 import static androidx.recyclerview.widget.RecyclerView.Adapter;
 import static androidx.recyclerview.widget.RecyclerView.OnClickListener;
-import static androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_;
-import android.bignerdranch.drifting.User.User_Lab;
 import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.User.User_connector;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,9 +35,21 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 个人界面
@@ -58,6 +70,10 @@ public class Mine_Fragment extends Fragment {
     boolean isRefuse = false;
     boolean Havpower = false;
 
+    public class User_returnformAvatar{
+        private Object message;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,14 +85,14 @@ public class Mine_Fragment extends Fragment {
         mUser = User_Now.getUserNow().getUser();
         View view = inflater.inflate(R.layout.mine_fragment, container, false);
 
-        mZiliaoButton = (Button)view.findViewById(R.id.ziliao_button);
+        mZiliaoButton = (Button) view.findViewById(R.id.ziliao_button);
         mNameText = (TextView) view.findViewById(R.id.name_text);
         mSexText = (TextView) view.findViewById(R.id.sex_text);
         mSignText = (TextView) view.findViewById(R.id.sign_text);
         mPortrait = (ImageView) view.findViewById(R.id.portrait);
-        mDoingNow = (RecyclerView)view.findViewById(R.id.gerenjinduing_view);
+        mDoingNow = (RecyclerView) view.findViewById(R.id.gerenjinduing_view);
         mDoingNow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mDoneAgo = (RecyclerView)view.findViewById(R.id.gerenjinduover_view);
+        mDoneAgo = (RecyclerView) view.findViewById(R.id.gerenjinduover_view);
         mDoneAgo.setLayoutManager(new LinearLayoutManager(getActivity()));
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -94,7 +110,10 @@ public class Mine_Fragment extends Fragment {
                             Toast.makeText(getContext(), "保存失败", Toast.LENGTH_SHORT).show();
                         }
                         mPortrait.setImageBitmap(bit);
-                        mUser.setPortrait(uri);
+                        StringBuffer stringBuffer = new StringBuffer(uri);
+                        stringBuffer.insert(4,"s");
+                        mUser.setPortrait(stringBuffer.toString());
+                        putavatar(uri, mUser.getToken());
                     }
                 }
             }
@@ -113,19 +132,24 @@ public class Mine_Fragment extends Fragment {
         ActivityResultLauncher<Intent> launcher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-                if(result.getResultCode() == RESULT_OK){
+                if (result.getResultCode() == RESULT_OK) {
                     mNameText.setText(mUser.getName());
-                    mSignText.setText("个性签名:"+  mUser.getSignature());
+                    mSignText.setText("个性签名:" + mUser.getSignature());
                 }
             }
         });
-        if (mUser.getPortrait() != null) {
-            Bitmap bitmap = SaveFile.getDiskBitmap(mUser.getPortrait());
-            mPortrait.setImageBitmap(bitmap);
+//        if (mUser.getPortrait() != null) {
+//            Bitmap bitmap = SaveFile.getDiskBitmap(mUser.getPortrait());
+//            mPortrait.setImageBitmap(bitmap);
+//        }
+        try {
+            mPortrait.setImageBitmap(getImage(mUser.getPortrait()));
+        }catch (Exception e){
+            e.printStackTrace();
         }
         mNameText.setText(mUser.getName());
-        mSexText.setText("性别:"+mUser.getSex());
-        mSignText.setText(mSignText.getText()+mUser.getSignature());
+        mSexText.setText("性别:" + mUser.getSex());
+        mSignText.setText(mSignText.getText() + mUser.getSignature());
         mPortrait.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,26 +172,65 @@ public class Mine_Fragment extends Fragment {
         mZiliaoButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"正在施工",Toast.LENGTH_SHORT).show();
-        //Intent intent = new Intent(getActivity(),Mine_BianJiFragment.class);
-        //launcher2.launch(intent);
+                Toast.makeText(getContext(), "正在施工", Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(getActivity(),Mine_BianJiFragment.class);
+                //launcher2.launch(intent);
             }
         });
-   //     updateUI();
+        //     updateUI();
         return view;
     }
 
-  //  public void updateUI() {
+    //  public void updateUI() {
 //        if (DoingAdapter == null) {
 //            DoingAdapter = new JinduAdaptering();//将案例组传给Adapter并创建Adapter
 //            mDoingNow.setAdapter(DoingAdapter);//将RecyclerView与Adapter绑定
 //            if (DoneAdapter == null) {
 //                DoneAdapter = new JinduAdapterover();
 //                mDoneAgo.setAdapter(DoneAdapter);
-   //         }
+    //         }
     //    }
-   // }
+    // }
 
+    private void putavatar(String uri, String token) {
+        File file = new File(uri);
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://116.204.121.9:61583/")
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = builder.build();
+        User_connector user_connector = retrofit.create(User_connector.class);
+        RequestBody requestFile =
+                RequestBody.create(file,MediaType.parse("multipart/form-data"));
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+        Call<User_returnformAvatar> call = user_connector.putUseravatar(body, token);
+        call.enqueue(new Callback<User_returnformAvatar>() {
+            @Override
+            public void onResponse(Call<User_returnformAvatar> call, Response<User_returnformAvatar> response) {
+                if(response.isSuccessful())
+                Toast.makeText(getContext(), "保存成功", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getContext(), "保存失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<User_returnformAvatar> call, Throwable t) {
+                Toast.makeText(getContext(), "错误", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public static Bitmap getImage(String path) throws Exception{
+        URL url = new URL(path);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(5000);
+        conn.setRequestMethod("GET");
+        if(conn. getResponseCode() == 200){
+            InputStream inStream = conn. getInputStream();
+            Bitmap bitmap = BitmapFactory. decodeStream(inStream) ;
+            return bitmap;
+        }
+        return null;
+    }
     /**
      * 以下为Adapter和Holder
      */

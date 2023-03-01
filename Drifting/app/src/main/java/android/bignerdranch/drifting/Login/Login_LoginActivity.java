@@ -32,7 +32,14 @@ public class Login_LoginActivity extends AppCompatActivity {
     private Integer account;
     private String password;
     User_ user = new User_();
-
+  public static class User_returnAll{
+        private Long code;
+        private User_return data;
+        private Object message;
+        public User_return getData() {
+            return data;
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +62,22 @@ public class Login_LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int p = 0;
+                try{
+                   Integer we = Integer.valueOf(mAccountText.getText().toString());
+                }catch (Exception e){
+                    p = 1;
+                    Toast.makeText(getApplicationContext(),"请不要在账号中输入英文",Toast.LENGTH_SHORT).show();
+                }
+                if(p == 0){
+                account = Integer.valueOf(mAccountText.getText().toString());
+                user.setId(account);
+            }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                account = Integer.valueOf(mAccountText.getText().toString());
+
             }
         });//接收账号
         mPasswordText.addTextChangedListener(new TextWatcher() {
@@ -69,11 +87,12 @@ public class Login_LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                password = mPasswordText.getText().toString();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                password = mPasswordText.getText().toString();
+
             }
         });//接收密码
 
@@ -81,8 +100,8 @@ public class Login_LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Login_student student = new Login_student();
-                if(account == null || password == null){
-                    Toast.makeText(Login_LoginActivity.this, "请输入账号密码", Toast.LENGTH_SHORT).show();
+                if( account == null||password == null){
+                    Toast.makeText(Login_LoginActivity.this, "请输入账号或密码", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     student.setStudentID(account);
@@ -126,25 +145,26 @@ public class Login_LoginActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
         User_connector mine_connector = retrofit.create(User_connector.class);
-        Call<User_return> call = mine_connector.getUserMes(token);
+        Call<User_returnAll> call = mine_connector.getUserMes(token);
 
-        call.enqueue(new Callback<User_return>() {
+        call.enqueue(new Callback<User_returnAll>() {
             @Override
-            public void onResponse(Call<User_return> call, Response<User_return> response) {
-                User_return user1 = response.body();
+            public void onResponse(Call<User_returnAll> call, Response<User_returnAll> response) {
+                User_returnAll user2 = response.body();
+               User_return user1 = user2.getData();
                 //  Toast.makeText(getApplicationContext(),"用户数据获取成功",Toast.LENGTH_SHORT).show();
-                if (user1.getName() != " " && user1.getName()!=null)
                     user.setName(user1.getName());
-                else
-                    user.setName("welcome");
                 if (user1.getSelfWord() != "" && user1.getSelfWord() != null)
                     user.setSignature(user1.getSelfWord());
                 user.setSex(user1.getSex());
+                user.setToken(token);
                 User_Now.getUserNow().setUser(user);
+                user.setPortrait("http://mini-project.muxixyz.com/drifting/user_avatar/"+
+                        User_Now.getUserNow().getUser().getId()+"myicon.JPG");
             }
 
             @Override
-            public void onFailure(Call<User_return> call, Throwable t) {
+            public void onFailure(Call<User_returnAll> call, Throwable t) {
 
             }
         });

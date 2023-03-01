@@ -30,7 +30,7 @@ public class GetAllItems extends AppCompatActivity {
         if (mGetAllItems == null)
             mGetAllItems = new GetAllItems();
         context = context1;
-        user = User_Lab.get(context).getUser(uid);
+//        user = User_Lab.get(context).getUser(uid);
 
         return mGetAllItems;
     }
@@ -181,7 +181,7 @@ public class GetAllItems extends AppCompatActivity {
         for (UUID id : user.getMydrift_cameraLab())
             if (!Camera_Lab.get(context).getdrift_camera(id).getIfover())
                 AllIfuserunderway.add(Camera_Lab.get(context)
-                        .getdrift_camera(id).getCreatornow().equals(user.getUUID()));
+                        .getdrift_camera(id).getCreatornow().equals(""));
         //for(UUID id : user.getMy)漂流小说
 
         //for(UUID id : user.getMy)漂流画

@@ -84,9 +84,9 @@ public class Camera_ {
         return name;
     }
 
-    public String getinitiator(Context context) {
-        return User_Lab.get(context).getUser(participator.get(0)).getName();
-    }
+//    public String getinitiator(Context context) {
+//        return User_Lab.get(context).getUser(participator.get(0)).getName();
+//    }
 
     public int getMaxuser() {
         return maxuser;

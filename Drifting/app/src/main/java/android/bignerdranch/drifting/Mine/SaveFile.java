@@ -1,5 +1,6 @@
 package android.bignerdranch.drifting.Mine;
 
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -39,7 +40,7 @@ public class SaveFile {
         if (!foder.exists()) {
             foder.mkdirs();
         }
-        File myCaptureFile = new File(foder, fileName);
+        File myCaptureFile = new File(foder, User_Now.getUserNow().getUser().getId()+fileName);
         if (myCaptureFile.exists()) {
             myCaptureFile.delete();
         }
@@ -48,7 +49,6 @@ public class SaveFile {
         bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
         bos.flush();
         bos.close();
-        Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show();
         String uri = myCaptureFile.getAbsolutePath();
         return uri;
     }

@@ -11,4 +11,12 @@ public class Login_student {
     public void setPassWord(String passWord) {
         this.passWord = passWord;
     }
+
+    public Integer getStudentID() {
+        return studentID;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
 }
