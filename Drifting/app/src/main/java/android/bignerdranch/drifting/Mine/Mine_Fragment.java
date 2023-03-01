@@ -44,7 +44,6 @@ import java.net.URL;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -133,15 +132,12 @@ public class Mine_Fragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == RESULT_OK) {
-                    mNameText.setText(mUser.getName());
-                    mSignText.setText("个性签名:" + mUser.getSignature());
+                mNameText.setText(User_Now.getUserNow().getUser().getName());
+                mSignText.setText(User_Now.getUserNow().getUser().getSignature());
                 }
             }
         });
-//        if (mUser.getPortrait() != null) {
-//            Bitmap bitmap = SaveFile.getDiskBitmap(mUser.getPortrait());
-//            mPortrait.setImageBitmap(bitmap);
-//        }
+
         try {
             mPortrait.setImageBitmap(getImage(mUser.getPortrait()));
         }catch (Exception e){
@@ -172,9 +168,8 @@ public class Mine_Fragment extends Fragment {
         mZiliaoButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "正在施工", Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(getActivity(),Mine_BianJiFragment.class);
-                //launcher2.launch(intent);
+                Intent intent = new Intent(getActivity(), Mine_BianJiActivity.class);
+                launcher2.launch(intent);
             }
         });
         //     updateUI();

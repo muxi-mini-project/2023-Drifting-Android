@@ -25,6 +25,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * 登录界面
+ */
 public class Login_LoginActivity extends AppCompatActivity {
     private EditText mAccountText;
     private EditText mPasswordText;
@@ -67,7 +70,7 @@ public class Login_LoginActivity extends AppCompatActivity {
                    Integer we = Integer.valueOf(mAccountText.getText().toString());
                 }catch (Exception e){
                     p = 1;
-                    Toast.makeText(getApplicationContext(),"请不要在账号中输入英文",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"请不要在账号中输入数字外其他字符",Toast.LENGTH_SHORT).show();
                 }
                 if(p == 0){
                 account = Integer.valueOf(mAccountText.getText().toString());
