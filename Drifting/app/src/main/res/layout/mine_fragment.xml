@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FEFEFE"
+    tools:context=".Main.Main_MainActivity">
+    <Button
+        android:id="@+id/ziliao_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="260dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#D8DCEA"
+        android:text="编辑"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/black" />
+
+    <ImageView
+        android:id="@+id/portrait"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="50dp"
+        android:src="@color/black" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/yuanquan" />
+
+    <TextView
+        android:id="@+id/name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="50dp"
+        android:text="张某"
+        android:textSize="35dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/sex_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="105dp"
+        android:text="性别:"
+        android:textSize="15dp" />
+<ScrollView
+    android:layout_width="140dp"
+    android:layout_height="45dp"
+    android:layout_marginLeft="150dp"
+    android:layout_marginTop="130dp"
+    >
+    <TextView
+        android:scrollbars="vertical"
+        android:id="@+id/sign_text"
+        android:layout_width="140dp"
+        android:layout_height="45dp"
+        android:inputType="none"
+        android:text="个性签名:"
+        android:textSize="10dp" /></ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="180dp"
+        android:background="#FEFEFE"
+        android:orientation="vertical"
+        android:gravity="center|top">
+
+        <LinearLayout
+            android:id="@+id/gerenlayout1"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/ing"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="15dp"
+                android:text="正在进行"
+                android:textSize="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gerenjinduing_view"
+                android:layout_width="217dp"
+                android:layout_height="135dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="240dp"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/finish">
+
+            <TextView
+                android:id="@+id/noticing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="200dp"
+                android:text="已经结束"
+                android:textSize="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gerenjinduover_view"
+                android:layout_width="217dp"
+                android:layout_height="135dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

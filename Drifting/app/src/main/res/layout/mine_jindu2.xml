@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_gerenjindu"
+    android:layout_width="217dp"
+    android:layout_height="30dp"
+    android:orientation="horizontal">
+<ScrollView
+    android:layout_width="140dp"
+    android:layout_height="30dp">
+    <TextView
+        android:scrollbars="horizontal"
+        android:id="@+id/jinduname_text"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:text="text"
+        android:textSize="17dp" />
+</ScrollView>
+
+    <ScrollView
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="150dp">
+<TextView
+    android:id="@+id/jindurenshu_text"
+    android:scrollbars="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="30dp"
+    android:textSize="17dp"
+    android:text="1/11" />
+
+    </ScrollView>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/star"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>
