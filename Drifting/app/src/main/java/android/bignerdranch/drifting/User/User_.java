@@ -1,8 +1,6 @@
 package android.bignerdranch.drifting.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import android.graphics.Bitmap;
 
 /**
  * 用户
@@ -13,9 +11,17 @@ public class User_ {
     private String signature;//个性签名
     private String sex;
     private boolean ifTongZhi;//是否通知进度
-    private final List<UUID> mMydrift_cameraLab;//漂流相机项目库
+    private Bitmap avatar;
     private String portrait;//头像
     private String token;//登录获取到的token
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getToken() {
         return token;
@@ -29,16 +35,9 @@ public class User_ {
 
         signature = "这个人很懒，没有设置个性签名";
         ifTongZhi = false;
-        mMydrift_cameraLab = new ArrayList<UUID>();
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getSignature() {
         return signature;
@@ -73,9 +72,6 @@ public class User_ {
         this.ifTongZhi = ifTongZhi;
     }
 
-    public List<UUID> getMydrift_cameraLab() {
-        return mMydrift_cameraLab;
-    }
 
     public String getPortrait() {
         return portrait;
@@ -83,5 +79,13 @@ public class User_ {
 
     public void setPortrait(String portrait) {
         this.portrait = portrait;
+    }
+
+    public Bitmap getavatar() {
+        return avatar;
+    }
+
+    public void setavatar(Bitmap bitmap) {
+        avatar = bitmap;
     }
 }

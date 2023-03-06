@@ -1,8 +1,7 @@
 package android.bignerdranch.drifting.Login;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.bignerdranch.drifting.Main.Main_MainActivity;
+import android.bignerdranch.drifting.Mine.FileUtils;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_;
 import android.bignerdranch.drifting.User.User_Now;
@@ -11,6 +10,7 @@ import android.bignerdranch.drifting.User.User_return;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +18,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,7 +41,13 @@ public class Login_LoginActivity extends AppCompatActivity {
     private Integer account;
     private String password;
     User_ user = new User_();
-  public static class User_returnAll{
+    private static String token;
+
+    public static String getToken() {
+        return token;
+    }
+
+    public static class User_returnAll{
         private Long code;
         private User_return data;
         private Object message;
@@ -52,6 +64,25 @@ public class Login_LoginActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+        File drifting = new File(file,"drifting");
+        File target = new File(drifting,"mytoken.txt");
+        if(target.exists()){
+            try{
+                FileInputStream fis = new FileInputStream(target.getAbsolutePath());
+                byte[] b = new byte[fis.available()];
+                fis.read(b);
+                String readStr = new String(b);
+                token = readStr;
+                upload_User(readStr);
+                Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
+                startActivity(intent);
+                finish();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
 
         mAccountText = (EditText) findViewById(R.id.login_account);
         mPasswordText = (EditText) findViewById(R.id.login_password);
@@ -65,17 +96,8 @@ public class Login_LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int p = 0;
-                try{
-                   Integer we = Integer.valueOf(mAccountText.getText().toString());
-                }catch (Exception e){
-                    p = 1;
-                    Toast.makeText(getApplicationContext(),"请不要在账号中输入数字外其他字符",Toast.LENGTH_SHORT).show();
-                }
-                if(p == 0){
                 account = Integer.valueOf(mAccountText.getText().toString());
                 user.setId(account);
-            }
             }
 
             @Override
@@ -123,7 +145,13 @@ public class Login_LoginActivity extends AppCompatActivity {
                                 Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
                                 startActivity(intent);
                                 finish();
-                                upload_User(response.body().getData());
+                                token = response.body().getData();
+                                upload_User(token);
+                                try {
+                                    FileUtils.savetoken( response.body().getData(), "mytoken.txt", "Drifting");
+                                }catch (IOException e){
+                                    e.printStackTrace();
+                                }
                             } else {
                                 Toast.makeText(getApplicationContext(), "身份认证失败，请重新登录", Toast.LENGTH_SHORT).show();
                             }
@@ -134,11 +162,6 @@ public class Login_LoginActivity extends AppCompatActivity {
                         }
                     });
                 }
-
-//                Toast.makeText(Login_LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-//                Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
-//                startActivity(intent);
-//                finish();
             }
         });
     }
@@ -161,9 +184,9 @@ public class Login_LoginActivity extends AppCompatActivity {
                     user.setSignature(user1.getSelfWord());
                 user.setSex(user1.getSex());
                 user.setToken(token);
+                user.setPortrait("http://"+user1.getAvatar());
+                User_Now user_now = User_Now.getUserNow();
                 User_Now.getUserNow().setUser(user);
-                user.setPortrait("http://mini-project.muxixyz.com/drifting/user_avatar/"+
-                        User_Now.getUserNow().getUser().getId()+"myicon.JPG");
             }
 
             @Override

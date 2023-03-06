@@ -93,6 +93,8 @@ public class Mine_Fragment extends Fragment {
         mDoingNow.setLayoutManager(new LinearLayoutManager(getActivity()));
         mDoneAgo = (RecyclerView) view.findViewById(R.id.gerenjinduover_view);
         mDoneAgo.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        //更新网络用户头像
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -117,6 +119,8 @@ public class Mine_Fragment extends Fragment {
                 }
             }
         });
+
+
         ActivityResultLauncher<Intent> launcher1 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -207,14 +211,13 @@ public class Mine_Fragment extends Fragment {
                 else
                     Toast.makeText(getContext(), "保存失败", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onFailure(Call<User_returnformAvatar> call, Throwable t) {
                 Toast.makeText(getContext(), "错误", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    public static Bitmap getImage(String path) throws Exception{
+    private static Bitmap getImage(String path) throws Exception{
         URL url = new URL(path);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setConnectTimeout(5000);

@@ -21,6 +21,9 @@ import android.widget.Button;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * 漂流相机。拍摄和确定会闪退
+ */
 public class Camera_Activity extends AppCompatActivity {
     Button mTakephotoButton;
     Button mPhotoButton;

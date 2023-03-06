@@ -1,8 +1,10 @@
-package android.bignerdranch.drifting.Book;
+package android.bignerdranch.drifting.Drawing;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.AlertDialog;
+import android.bignerdranch.drifting.Camera.Camera_Activity;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,14 +20,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
-public class Book_StrangerModeActivity extends AppCompatActivity {
+public class Drawing_StrangerModeActivity extends AppCompatActivity {
     private ImageView iv_image;
     private final int max_number = 9;
     private String name;
     private String title;
     private String person_number;
     private int number;
+
+    private Uri imageUri;
+    final String PHOTO_RETURN = "photo_return";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,20 +48,44 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(name == null || title == null || person_number == null){
-                    Toast.makeText(Book_StrangerModeActivity.this, "请输入名字，主题和人数", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Drawing_StrangerModeActivity.this, "请输入名字，主题和人数", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     if(isNumeric(person_number)) {
                         number = Integer.parseInt(person_number);
                         if(number <= max_number){
-                            startActivity(new Intent(Book_StrangerModeActivity.this, Book_Writing.class));
+//                            Image_create_message message = new Image_create_message(cover,kind,name,number);
+//                            Retrofit.Builder builder = new Retrofit.Builder()
+//                                    .baseUrl("/api/v1/drifting_drawing/create")
+//                                    .addConverterFactory(GsonConverterFactory.create());
+//                            Retrofit retrofit = builder.build();
+//                            Image_create image_create = retrofit.create(Image_create.class);
+//                            Call<upload_return> call = image_create.create(Login_LoginActivity.getToken(),message);
+//                            call.enqueue(new Callback<upload_return>() {
+//                                @Override
+//                                public void onResponse(Call<upload_return> call, Response<upload_return> response) {
+//                                    Toast.makeText(Drawing_StrangerModeActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
+//
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<upload_return> call, Throwable t) {
+//                                    Toast.makeText(Drawing_StrangerModeActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+                            Intent intent = new Intent(Drawing_StrangerModeActivity.this, Drawing_Start.class);
+                            intent.putExtra(PHOTO_RETURN, imageUri.toString());
+                            setResult(RESULT_OK, intent);
+                            finish();
+
+                            startActivity(new Intent(Drawing_StrangerModeActivity.this, Camera_Activity.class));
                         }
                         else {
-                            Toast.makeText(Book_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Drawing_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
-                        Toast.makeText(Book_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Drawing_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

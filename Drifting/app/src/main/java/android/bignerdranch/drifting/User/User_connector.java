@@ -4,20 +4,12 @@ import android.bignerdranch.drifting.Login.Login_LoginActivity;
 import android.bignerdranch.drifting.Mine.Mine_BianJiActivity;
 import android.bignerdranch.drifting.Mine.Mine_Fragment;
 
-import java.io.File;
-import java.util.Observable;
-
 import okhttp3.MultipartBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
-import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 
@@ -40,14 +32,14 @@ public interface User_connector {
      * 登录后通过token上传用户头像
      */
     @Multipart
-    @POST("api/v1/user/avatar")
-    Call<Mine_Fragment.User_returnformAvatar> putUseravatar(@Part MultipartBody.Part file,
+    @PUT("api/v1/user/avatar")
+    Call<Mine_Fragment.User_returnformAvatar> putUseravatar(@Part MultipartBody.Part body,
                                                             @Header("Authorization") String token);
 
     /**
      * 登录后通过token修改用户信息
      */
-    @POST("api/v1/user/update")
+    @PUT("api/v1/user/update")
     Call<Mine_BianJiActivity.Return_fromdata> putUserdata(@Body() User_Putdata user_putdata,
                                                           @Header("Authorization") String token);
 }

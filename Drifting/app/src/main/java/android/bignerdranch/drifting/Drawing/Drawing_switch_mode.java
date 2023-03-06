@@ -1,29 +1,26 @@
-package android.bignerdranch.drifting.Book;
+package android.bignerdranch.drifting.Drawing;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bignerdranch.drifting.Book.Book_AcquaintanceModeActivity;
+import android.bignerdranch.drifting.Book.Book_StrangerModeActivity;
 import android.bignerdranch.drifting.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-/**
- * 选择进行熟人还是陌生人模式
- */
-
-public class Book_DriftingBookActivity extends AppCompatActivity {
+public class Drawing_switch_mode extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_create);
-
+        setContentView(R.layout.drawing_switch);
         Button acquaintance_mode = (Button) findViewById(R.id.acquaintance_mode);
         acquaintance_mode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Book_AcquaintanceModeActivity.class));
+                startActivity(new Intent(getApplicationContext(), Drawing_AcquaintanceModeActivity.class));
             }
         });
 
@@ -31,7 +28,7 @@ public class Book_DriftingBookActivity extends AppCompatActivity {
         stranger_mode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Book_StrangerModeActivity.class));
+                startActivity(new Intent(getApplicationContext(), Book_StrangerModeActivity.class));
             }
         });
     }

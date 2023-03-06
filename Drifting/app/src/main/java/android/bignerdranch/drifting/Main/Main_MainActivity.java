@@ -1,11 +1,14 @@
 package android.bignerdranch.drifting.Main;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.bignerdranch.drifting.Inviting.Inviting_Fragment;
+import android.bignerdranch.drifting.Inviting.Loading.user_drawing_request_return;
+import android.bignerdranch.drifting.Login.Login_LoginActivity;
 import android.bignerdranch.drifting.Mine.Mine_Fragment;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_;
@@ -13,12 +16,24 @@ import android.bignerdranch.drifting.User.User_Now;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class Main_MainActivity extends AppCompatActivity {
     User_ mUser;
+    static user_drawing_request_return request_return;
+
+    public static user_drawing_request_return getRequest_return() {
+        return request_return;
+    }
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, Main_MainActivity.class);
@@ -33,11 +48,7 @@ public class Main_MainActivity extends AppCompatActivity {
 
         //默认进入邀请界面
         Inviting_Fragment mFragment = new Inviting_Fragment();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        fragmentTransaction.add(R.id.content_container, mFragment);
-        fragmentTransaction.commit();
-
+        replaceFragment(mFragment);
 
         //导航栏链接
         ImageButton mine = (ImageButton) findViewById(R.id.mine);
@@ -90,8 +101,6 @@ public class Main_MainActivity extends AppCompatActivity {
                 replaceFragment(new Main_SettingsFragment());
             }
         });
-
-
     }
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();

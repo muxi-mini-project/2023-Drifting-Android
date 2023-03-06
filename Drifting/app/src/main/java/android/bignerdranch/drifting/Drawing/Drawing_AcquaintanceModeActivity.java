@@ -1,8 +1,13 @@
-package android.bignerdranch.drifting.Book;
+package android.bignerdranch.drifting.Drawing;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.AlertDialog;
+import android.bignerdranch.drifting.Book.Book_AcquaintanceModeActivity;
+import android.bignerdranch.drifting.Book.Book_Writing;
+import android.bignerdranch.drifting.Camera.Camera_Activity;
+import android.bignerdranch.drifting.Camera.Camera_Start;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
-public class Book_StrangerModeActivity extends AppCompatActivity {
+public class Drawing_AcquaintanceModeActivity extends AppCompatActivity {
     private ImageView iv_image;
     private final int max_number = 9;
     private String name;
@@ -29,39 +33,46 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stranger_mode);
+        setContentView(R.layout.acquaintance_mode);
 
-        //变量对应
         iv_image = (ImageView) findViewById(R.id.iv_image);
-        Button choose_cover = (Button) findViewById(R.id.stranger_choose_front_cover);
-        Button start = (Button) findViewById(R.id.stranger_start);
+        Button choose_cover = (Button) findViewById(R.id.acquaintance_choose_front_cover);
+        Button start = (Button) findViewById(R.id.acquaintance_start);
+        Button inviting_friends = (Button) findViewById(R.id.acquaintance_inviting_friends);
         EditText name_text = (EditText) findViewById(R.id.name_text);
         EditText title_text = (EditText) findViewById(R.id.title_text);
         EditText person_number_text = (EditText) findViewById(R.id.person_number_text);
 
-        //按钮响应
+        inviting_friends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Drawing_AcquaintanceModeActivity.this, "正在开发中", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(name == null || title == null || person_number == null){
-                    Toast.makeText(Book_StrangerModeActivity.this, "请输入名字，主题和人数", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Drawing_AcquaintanceModeActivity.this, "请输入名字，主题和人数", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     if(isNumeric(person_number)) {
                         number = Integer.parseInt(person_number);
                         if(number <= max_number){
-                            startActivity(new Intent(Book_StrangerModeActivity.this, Book_Writing.class));
+                            startActivity(new Intent(Drawing_AcquaintanceModeActivity.this, Camera_Activity.class));
                         }
                         else {
-                            Toast.makeText(Book_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Drawing_AcquaintanceModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
-                        Toast.makeText(Book_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Drawing_AcquaintanceModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
+
         choose_cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +80,6 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
             }
         });
 
-        //文本框内容接收
         name_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -118,8 +128,6 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
                 person_number = s.toString();
             }
         });
-
-
     }
     private boolean isNumeric(String str) {
         for (int i = 0; i < str.length(); i++) {
@@ -129,6 +137,7 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -162,7 +171,6 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_PICK, null);
                         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                         startActivityForResult(intent, 2);
-                        break;
                     }
                     case 1: {
                         break;

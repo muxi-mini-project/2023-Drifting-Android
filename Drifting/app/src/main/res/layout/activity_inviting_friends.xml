@@ -9,6 +9,7 @@
     android:background="@color/friend_background">
 
     <LinearLayout
+        android:layout_marginTop="25dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
@@ -29,40 +30,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/friends_rectangle"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/newFriend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:layout_weight="1"
-            android:text="新朋友"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:layout_weight="1"
-            android:text="通知"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-
-    </LinearLayout>
-    <LinearLayout
+        android:layout_marginBottom="25dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/shape_drifting_newfriends"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">

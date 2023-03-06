@@ -3,11 +3,16 @@ package android.bignerdranch.drifting.Book;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bignerdranch.drifting.R;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
+/**
+ * 写下自己漂流内容
+ */
 public class Book_Writing extends AppCompatActivity {
 
     @Override
@@ -24,7 +29,7 @@ public class Book_Writing extends AppCompatActivity {
             }
         }.start();
 
-        Button back = (Button) findViewById(R.id.back);
+        ImageButton back =  findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
