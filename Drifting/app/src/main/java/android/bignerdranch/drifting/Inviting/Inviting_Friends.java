@@ -10,7 +10,10 @@ import android.bignerdranch.drifting.Friends.FriendsList_return;
 import android.bignerdranch.drifting.Main.Main_FriendsFragment;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_Now;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import retrofit2.Call;
@@ -78,7 +84,12 @@ public class Inviting_Friends extends AppCompatActivity {
 
         public void bind(FriendsList_return.Friends_Net friends){
             mFriends = friends;
-            headImage.setImageResource(R.drawable.book);
+            try{
+                headImage.setImageBitmap(getImage("http://"+mFriends.getAvatar()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             friendName.setText(mFriends.getNameN());
             friendAuto.setText(mFriends.getSelfWord());
         }
@@ -121,5 +132,16 @@ public class Inviting_Friends extends AppCompatActivity {
         public int getItemCount() {
             return mFriends.size();
         }
+    }
+    private static Bitmap getImage(String path) throws Exception{
+        URL url = new URL(path);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(5000);
+        conn.setRequestMethod("GET");
+        if(conn. getResponseCode() == 200){
+            InputStream inStream = conn. getInputStream();
+            Bitmap bitmap = BitmapFactory. decodeStream(inStream) ;
+            return bitmap;
+        }else return null;
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class Book_Writing extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class Book_Writing extends AppCompatActivity {
             }
         }.start();
 
-        Button back = (Button) findViewById(R.id.back);
+        ImageButton back =  findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -8,6 +8,9 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -73,9 +76,9 @@ public class FileUtils {
      * @param path 外加地址
      * @throws IOException
      */
-    public static void savetoken(  String token, String fileName, String path) throws IOException {
+    public static void savetoken( Context context, String token, String fileName, String path) throws IOException {
         final String SAVE_TOKEN_PATH = Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED) ?
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() :
+                context.getFilesDir().getAbsolutePath() :
                 "/mnt/sdcard";
                     File root = new File(SAVE_TOKEN_PATH);
                     File mytokenFile = null;

@@ -104,9 +104,9 @@ public class Camera_setting_stranger extends AppCompatActivity {
                     Camera_return_upload.Camera_upload_create upload_create = new Camera_return_upload.Camera_upload_create();
                     upload_create.setName(name);
                     upload_create.setCover(mCoverURL);
-                    upload_create.setKind(KIND);
+                    upload_create.setKind(new Long(KIND));
                     upload_create.setTheme(theme);
-                    upload_create.setNumber(new Long(number).intValue());
+                    upload_create.setNumber(new Long(number));
                     Retrofit.Builder builder = new Retrofit.Builder()
                             .addConverterFactory(GsonConverterFactory.create())
                             .baseUrl("http://116.204.121.9:61583/");

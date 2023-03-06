@@ -1,5 +1,6 @@
 package android.bignerdranch.drifting.Camera;
 
+import java.net.Inet4Address;
 import java.util.List;
 
 /**
@@ -124,9 +125,9 @@ public class Camera_return_upload {
     //上传类
        static public class Camera_upload_create{
         private String cover;
-        private Integer kind;
+        private Long kind;
         private String name;
-        private Integer number;
+        private Long number;
         private String theme;
 
         public String getTheme() {
@@ -139,15 +140,14 @@ public class Camera_return_upload {
 
         public String getCover() { return cover; }
         public void setCover(String value) { this.cover = value; }
-
-        public Integer getKind() { return kind; }
-        public void setKind(Integer value) { this.kind = value; }
+        public Long getKind() { return kind; }
+        public void setKind(Long value) { this.kind = value; }
 
         public String getName() { return name; }
         public void setName(String value) { this.name = value; }
 
-        public Comparable<Integer> getNumber() { return number; }
-        public void setNumber(Integer value) { this.number = value; }
+        public Comparable<Long> getNumber() { return number; }
+        public void setNumber(Long value) { this.number = value; }
     }
     //返回类
    static public class Camera_return_create{

@@ -40,6 +40,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:targetApi="32">
+        <activity android:name=".Drawing.Drawing_switch_mode"/>
+        <activity android:name=".Drawing.Drawing_InvitingActivity"/>
+        <activity android:name=".Drawing.Drawing_AcquaintanceModeActivity"/>
+        <activity android:name=".Inviting.Inviting_Friends"/>
+        <activity android:name=".Friends.FriendsNewActivity"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value=""/>
+        </activity>
         <activity android:name=".Camera.Camera_setting_acquaintance"
             android:exported="false">
         <meta-data

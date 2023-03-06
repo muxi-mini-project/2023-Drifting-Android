@@ -59,8 +59,8 @@ public class Login_LoginActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
-        File drifting = new File(file,"drifting");
+        File file = new File(getFilesDir().getAbsolutePath());
+        File drifting = new File(file,"Drifting");
         File target = new File(drifting,"mytoken.txt");
         if(target.exists()){
             try{
@@ -141,8 +141,9 @@ public class Login_LoginActivity extends AppCompatActivity {
                                 finish();
                                 upload_User(response.body().getData());
                                 try {
-                                    FileUtils.savetoken( response.body().getData(), "mytoken.txt", "Drifting");
+                                    FileUtils.savetoken( getApplicationContext(),response.body().getData(), "mytoken.txt", "Drifting");
                                 }catch (IOException e){
+                                    Toast.makeText(getApplicationContext(),"2223",Toast.LENGTH_SHORT).show();
                                     e.printStackTrace();
                                 }
                             } else {
