@@ -19,6 +19,15 @@
 
     </ImageButton>
 
+    <android.bignerdranch.drifting.Camera.Camera_ZoomImageView
+        android:id="@+id/picture"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toTopOf="@+id/album"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <Button
         android:id="@+id/album"
         android:layout_width="wrap_content"
@@ -32,4 +41,32 @@
         app:layout_constraintStart_toStartOf="parent">
 
     </Button>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/change_button"
+            android:visibility="invisible"
+            android:text="更换"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp">
+
+        </Button>
+
+        <Button
+            android:id="@+id/commit_button"
+            android:visibility="invisible"
+            android:text="确定"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

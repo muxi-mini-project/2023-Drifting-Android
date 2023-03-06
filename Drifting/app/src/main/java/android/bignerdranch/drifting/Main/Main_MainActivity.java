@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.bignerdranch.drifting.Inviting.Inviting_Fragment;
+import android.bignerdranch.drifting.Inviting.Loading.inviting_messageReturn;
 import android.bignerdranch.drifting.Mine.Mine_Fragment;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_;
@@ -19,6 +20,11 @@ import android.widget.Toast;
 
 public class Main_MainActivity extends AppCompatActivity {
     User_ mUser;
+    static inviting_messageReturn request_return;
+
+    public static inviting_messageReturn getRequest_return() {
+        return request_return;
+    }
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, Main_MainActivity.class);
@@ -33,11 +39,7 @@ public class Main_MainActivity extends AppCompatActivity {
 
         //默认进入邀请界面
         Inviting_Fragment mFragment = new Inviting_Fragment();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        fragmentTransaction.add(R.id.content_container, mFragment);
-        fragmentTransaction.commit();
-
+        replaceFragment(mFragment);
 
         //导航栏链接
         ImageButton mine = (ImageButton) findViewById(R.id.mine);
@@ -72,11 +74,14 @@ public class Main_MainActivity extends AppCompatActivity {
         discovering.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 discovering.setImageResource(R.drawable.discovering);
                 settings.setImageResource(R.drawable.settings_unchosen);
                 mine.setImageResource(R.drawable.mine_unchosen);
                 friends.setImageResource(R.drawable.friends_unchosen);
                 replaceFragment(new Main_DiscoveringFragment());
+
+
             }
 
         });

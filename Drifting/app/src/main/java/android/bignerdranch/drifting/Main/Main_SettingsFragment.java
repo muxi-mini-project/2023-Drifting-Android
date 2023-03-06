@@ -2,6 +2,7 @@ package android.bignerdranch.drifting.Main;
 
 import android.app.AlertDialog.Builder;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.Login.Login_LoginActivity0;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_;
 import android.bignerdranch.drifting.User.User_Now;
@@ -9,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+
+import java.io.File;
 
 /**
  * 设置界面
@@ -56,7 +60,7 @@ public class Main_SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Builder builder = new Builder(getContext());
-                builder.setIcon(android.R.drawable.ic_dialog_info);//设置图标
+                builder.setIcon(R.drawable.logo);//设置图标
                 builder.setTitle("退出");//设置对话框的标题
                 builder.setMessage("确定要退出当前账号吗？");//设置对话框的内容
                 builder.setPositiveButton("确定", new OnClickListener() {  //这个是设置确定按钮
@@ -65,10 +69,14 @@ public class Main_SettingsFragment extends Fragment {
                     public void onClick(DialogInterface arg0, int arg1) {
                         Toast.makeText(getContext(), "退出成功", Toast.LENGTH_SHORT).show();
                         //退出当前用户
-                        User_Now.getUserNow().setUser(null);
+                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+                        File drifting = new File(file,"drifting");
+                        File target = new File(drifting,"mytoken.txt");
+                        if(target.exists())
+                            target.delete();
                         //跳转登录界面，清空Activity栈
-                        Intent intent = new Intent(requireContext(), Login_LoginActivity.class)
-                              .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent intent = new Intent(requireContext(), Login_LoginActivity0.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
                 });

@@ -1,9 +1,10 @@
-package android.bignerdranch.drifting.Book;
+package android.bignerdranch.drifting.Drawing;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.bignerdranch.drifting.Camera.Camera_Activity;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,56 +20,76 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class Book_AcquaintanceModeActivity extends AppCompatActivity {
+public class Drawing_StrangerModeActivity extends AppCompatActivity {
     private ImageView iv_image;
     private final int max_number = 9;
     private String name;
     private String title;
     private String person_number;
     private int number;
+
+    private Uri imageUri;
+    final String PHOTO_RETURN = "photo_return";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acquaintance_mode);
+        setContentView(R.layout.stranger_mode);
 
+        //变量对应
         iv_image = (ImageView) findViewById(R.id.iv_image);
-        Button choose_cover = (Button) findViewById(R.id.acquaintance_choose_front_cover);
-        Button start = (Button) findViewById(R.id.acquaintance_start);
-        Button inviting_friends = (Button) findViewById(R.id.acquaintance_inviting_friends);
+        Button choose_cover = (Button) findViewById(R.id.stranger_choose_front_cover);
+        Button start = (Button) findViewById(R.id.stranger_start);
         EditText name_text = (EditText) findViewById(R.id.name_text);
         EditText title_text = (EditText) findViewById(R.id.title_text);
         EditText person_number_text = (EditText) findViewById(R.id.person_number_text);
 
-        inviting_friends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(Book_AcquaintanceModeActivity.this, "正在开发中", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        //按钮响应
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(name == null || title == null || person_number == null){
-                    Toast.makeText(Book_AcquaintanceModeActivity.this, "请输入名字，主题和人数", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Drawing_StrangerModeActivity.this, "请输入名字，主题和人数", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     if(isNumeric(person_number)) {
                         number = Integer.parseInt(person_number);
                         if(number <= max_number){
-                            startActivity(new Intent(Book_AcquaintanceModeActivity.this, Book_Writing.class));
+//                            Image_create_message message = new Image_create_message(cover,kind,name,number);
+//                            Retrofit.Builder builder = new Retrofit.Builder()
+//                                    .baseUrl("/api/v1/drifting_drawing/create")
+//                                    .addConverterFactory(GsonConverterFactory.create());
+//                            Retrofit retrofit = builder.build();
+//                            Image_create image_create = retrofit.create(Image_create.class);
+//                            Call<upload_return> call = image_create.create(Login_LoginActivity.getToken(),message);
+//                            call.enqueue(new Callback<upload_return>() {
+//                                @Override
+//                                public void onResponse(Call<upload_return> call, Response<upload_return> response) {
+//                                    Toast.makeText(Drawing_StrangerModeActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
+//
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<upload_return> call, Throwable t) {
+//                                    Toast.makeText(Drawing_StrangerModeActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+                            Intent intent = new Intent(Drawing_StrangerModeActivity.this, Drawing_Start.class);
+                            intent.putExtra(PHOTO_RETURN, imageUri.toString());
+                            setResult(RESULT_OK, intent);
+                            finish();
+
+                            startActivity(new Intent(Drawing_StrangerModeActivity.this, Camera_Activity.class));
                         }
                         else {
-                            Toast.makeText(Book_AcquaintanceModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Drawing_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
-                        Toast.makeText(Book_AcquaintanceModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Drawing_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
-
         choose_cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +97,7 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
             }
         });
 
+        //文本框内容接收
         name_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -124,6 +146,8 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
                 person_number = s.toString();
             }
         });
+
+
     }
     private boolean isNumeric(String str) {
         for (int i = 0; i < str.length(); i++) {
@@ -133,7 +157,6 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
         }
         return true;
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -167,6 +190,7 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_PICK, null);
                         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                         startActivityForResult(intent, 2);
+                        break;
                     }
                     case 1: {
                         break;

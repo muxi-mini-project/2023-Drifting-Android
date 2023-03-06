@@ -29,7 +29,7 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_stranger_mode);
+        setContentView(R.layout.stranger_mode);
 
         //变量对应
         iv_image = (ImageView) findViewById(R.id.iv_image);

@@ -1,5 +1,8 @@
 package android.bignerdranch.drifting.User;
 
+/**
+ * 通过token请求用户信息所得到的数据
+ */
 public class User_return {
         private String avatar;
         private String name;
