@@ -15,6 +15,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.net.URL;
+import java.util.List;
+
+/**
+ * 拍摄前的一个界面，放置图片
+ */
 public class Camera_Start extends AppCompatActivity {
     ImageView photo1;
     ImageView photo2;
@@ -26,8 +32,8 @@ public class Camera_Start extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.camera_start);
+        Camera_ camera = Camera_ready_create.camera_ready_create.getCamera();
         if (p == false) {
             photo1 = (ImageView) findViewById(R.id.photo1);
             photo2 = (ImageView) findViewById(R.id.photo2);
@@ -62,4 +68,7 @@ public class Camera_Start extends AppCompatActivity {
             }
         });
     }
+//    private List<URL> GetPicture(Camera_ camera){
+//
+//    }
 }

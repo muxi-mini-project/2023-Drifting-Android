@@ -1,5 +1,6 @@
 package android.bignerdranch.drifting.Main;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddFriends_return;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddnewFriendSend;
@@ -53,6 +54,7 @@ public class Main_FriendsFragment extends Fragment {
     private FriendAdapter mFriendAdapter;
     private TextView newFriends;
 
+    @SuppressLint("MissingInflatedId")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

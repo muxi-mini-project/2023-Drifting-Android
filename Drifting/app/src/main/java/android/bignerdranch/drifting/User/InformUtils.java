@@ -29,8 +29,8 @@ public class InformUtils extends AppCompatActivity {
     public static void CameraInform(Context context , Camera_ camera){
 
         String channelId = "漂流相机";
-        int now = camera.getParticipator().size();
-        int max = camera.getMaxuser();
+        Long now = camera.getNowuser();
+        Long max = camera.getMaxuser();
         String name = camera.getName();
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             Notification notification = new Notification.Builder(context,channelId)

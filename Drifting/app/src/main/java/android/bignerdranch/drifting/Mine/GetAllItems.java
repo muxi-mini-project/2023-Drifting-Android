@@ -1,12 +1,24 @@
 package android.bignerdranch.drifting.Mine;
 
-import android.annotation.SuppressLint;
-import android.bignerdranch.drifting.User.User_;
+import android.app.Activity;
+import android.app.Application;
+import android.bignerdranch.drifting.Camera.Camera_;
+import android.bignerdranch.drifting.Camera.Camera_connector;
+import android.bignerdranch.drifting.Camera.Camera_return_upload;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 工具类，用于获取单个用户所有四种项目的名称和参与人数，并获取这些项目是否是该用户正在进行，项目是否已经结束
@@ -14,174 +26,121 @@ import java.util.UUID;
  * 目前测试阶段使用，连上接口后要改
  */
 public class GetAllItems extends AppCompatActivity {
+    final static int BOOK = 1001;
+    final static int CAMERA = 1002;
+    final static int NOVEL = 1003;
+    final static int DRAW = 1004;
     private static GetAllItems mGetAllItems;
-    private static User_ user;
-    private static Context context;
     /**
-     * 获取工具，绑定uid
+     * 缓存，避免重复使用接口
      */
-
-    @SuppressLint("SuspiciousIndentation")
-    public static GetAllItems get(UUID uid, Context context1) {
-        if (mGetAllItems == null)
+    //漂流相机
+    List<Camera_> List_Camera_userAll = new ArrayList<>();//获取用户参加的和自己创建的漂流相机
+    List<Camera_> List_Camera_ownercrea = new ArrayList<>();//获取用户自己创建的漂流相机
+   static public GetAllItems getGetAllItems(){
+        if(mGetAllItems == null)
             mGetAllItems = new GetAllItems();
-        context = context1;
-//        user = User_Lab.get(context).getUser(uid);
-
         return mGetAllItems;
     }
+    static Retrofit.Builder builder = new Retrofit.Builder()
+            .baseUrl("http://116.204.121.9:61583/")
+            .addConverterFactory(GsonConverterFactory.create());
+   static Retrofit retrofit = builder.build();
+   static Camera_connector mCamera_connector = retrofit.create(Camera_connector.class);
     /**
-     * 获取所有项目名称
+     * 获取用户自己创建的漂流相机
      */
-//    public List<String> getAllName() {
-//        List<String> Allnames = new ArrayList<>();
-//        //for(UUID id : user.getMy)漂流本
-//        for (UUID id : user.getMydrift_cameraLab())
-//            Allnames.add(Camera_Lab.get(context)
-//                    .getdrift_camera(id).getName());
-//        //for(UUID id : user.getMy)漂流小说
-//
-//        //for(UUID id : user.getMy)漂流画
-//        return Allnames;
-//    }
+    //项目
+   public List<Camera_> GetCamera_ownercrea(){
+       if(List_Camera_ownercrea.isEmpty()){
+           List<Camera_> camera_list = new ArrayList<>();
+       String token = User_Now.getUserNow().getUser().getToken();
+       Call<Camera_return_upload.Camera_return_usermessage> call = mCamera_connector.GetCamera_mes_user(token);
+       call.enqueue(new Callback<Camera_return_upload.Camera_return_usermessage>() {
+           @Override
+           public void onResponse(Call<Camera_return_upload.Camera_return_usermessage> call, Response<Camera_return_upload.Camera_return_usermessage> response) {
+               Camera_return_upload.Camera_return_usermessage message= response.body();
+               List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+               for(int i = 0;i<list.size();i++){
+                   Camera_ camera = new Camera_(list.get(i).getName(),
+                                                list.get(i).getTheme(),
+                                                list.get(i).getNumber(),
+                                                list.get(i).getCover(),
+                                                list.get(i).getWriter_number());
+                   camera_list.add(camera);
+           }
+               setList_Camera_ownercrea(camera_list);
+           }
+           @Override
+           public void onFailure(Call<Camera_return_upload.Camera_return_usermessage> call, Throwable t) {
+           }
+       });
+       return camera_list;
+    }else{
+       return List_Camera_ownercrea;
+   }
+   }
+   //项目名字
+   public List<String> GetCamera_ownercrea_name(){
+       if(getGetAllItems().getList_Camera_ownercrea().isEmpty())
+           GetCamera_ownercrea();
+       List<String> list =new ArrayList<>();
+       for(int i =0;i<getList_Camera_ownercrea().size();i++)
+           list.add(getList_Camera_ownercrea().get(i).getName());
+       return list;
+   }
+   //项目最大人数
+   public List<Long> GetCamera_ownercrea_maxuser(){
+       if(getGetAllItems().getList_Camera_ownercrea().isEmpty())
+         GetCamera_ownercrea();
+       List<Long> list = new ArrayList<>();
+       for(int i=0;i<getGetAllItems().getList_Camera_ownercrea().size();i++)
+           list.add(getGetAllItems().getList_Camera_ownercrea().get(i).getMaxuser());
+       return list;
+    }
+    //项目当前人数
+   public List<Long> GetCamera_ownercrea_nowuser(){
+       if(getGetAllItems().getList_Camera_ownercrea().isEmpty())
+          GetCamera_ownercrea();
+       List<Long> list = new ArrayList<>();
+       for(int i=0;i<getGetAllItems().getList_Camera_ownercrea().size();i++)
+           list.add(getGetAllItems().getList_Camera_ownercrea().get(i).getNowuser());
+       return list;
+   }
+  private void refreshMessage(int kind){
+       switch (kind){
+           case 1001 :{
 
-    /**
-     * 获取所有项目的最大参与人数
-     */
-//    public List<Integer> getAllMaxuser() {
-//        List<Integer> Allmaxusers = new ArrayList<>();
-//        //for(UUID id : user.getMy)漂流本
-//        for (UUID id : user.getMydrift_cameraLab())
-//            Allmaxusers.add(Camera_Lab.get(context)
-//                    .getdrift_camera(id).getMaxuser());
-//        //for(UUID id : user.getMy)漂流小说
-//
-//        //for(UUID id : user.getMy)漂流画
-//        return Allmaxusers;
-//    }
+               break;
+           }
+           case 1002 :{
+               List_Camera_ownercrea.clear();
+               List_Camera_userAll.clear();
+            break;
+           }
+           case 1003 :{
 
-    /**
-     * 获取所有项目的目前参与人数
-     */
-//    public List<Integer> getAllnowuser() {
-//        List<Integer> Allnowuser = new ArrayList<>();
-//        //for(UUID id : user.getMy)漂流本
-//        for (UUID id : user.getMydrift_cameraLab())
-//            Allnowuser.add(Camera_Lab.get(context)
-//                    .getdrift_camera(id).getParticipator().size());
-//        //for(UUID id : user.getMy)漂流小说
-//
-//        //for(UUID id : user.getMy)漂流画
-//        return Allnowuser;
-//    }
+           }
+           case 1004 :{
 
-    /**
-     * 判断所有项目是否结束并返回结果
-     */
-//    public List<Boolean> getAllIfover() {
-//        List<Boolean> AllIfover = new ArrayList<>();
-//        //for(UUID id : user.getMy)漂流本
-//        for (UUID id : user.getMydrift_cameraLab())
-//            AllIfover.add(Camera_Lab.get(context)
-//                    .getdrift_camera(id).getIfover());
-//        //for(UUID id : user.getMy)漂流小说
-//
-//        //for(UUID id : user.getMy)漂流画
-//        return AllIfover;
-//    }
+           }
+       }
 
-    /**
-     * 获取所有正在进行的项目名称
-     */
-//    public List<String> getAllNameunderway() {
-//        List<String> Nameunderway = new ArrayList<>();
-//        List<String> Allname = getAllName();
-//        List<Boolean> AllIfover = getAllIfover();
-//        for (int i = 0; i < Allname.size(); i++)
-//            if (!AllIfover.get(i))
-//                Nameunderway.add(Allname.get(i));
-//        return Nameunderway;
-//    }
+  }
 
-    /**
-     * 获取所有已结束的项目的名称
-     */
-//    public List<String> getAllNameover() {
-//        List<String> Nameunderway = new ArrayList<>();
-//        List<String> Allname = getAllName();
-//        List<Boolean> AllIfover = getAllIfover();
-//        for (int i = 0; i < AllIfover.size(); i++)
-//            if (AllIfover.get(i))
-//                Nameunderway.add(Allname.get(i));
-//        return Nameunderway;
-//    }
+    public void setList_Camera_userAll(List<Camera_> list_Camera_userAll) {
+        List_Camera_userAll = list_Camera_userAll;
+    }
 
-    /**
-     * 获取所有正在进行的项目的最大参与人数
-     */
-//    public List<Integer> getAllMaxuserunderway() {
-//        List<Integer> ALlMaxuserunderway = new ArrayList<>();
-//        List<Integer> AllMaxuser = getAllMaxuser();
-//        List<Boolean> AllIfover = getAllIfover();
-//        for (int i = 0; i < AllIfover.size(); i++)
-//            if (!AllIfover.get(i))
-//                ALlMaxuserunderway.add(AllMaxuser.get(i));
-//        return ALlMaxuserunderway;
-//    }
+    public void setList_Camera_ownercrea(List<Camera_> list_Camera_ownercrea) {
+        List_Camera_ownercrea = list_Camera_ownercrea;
+    }
 
-    /**
-     * 获取所有已结束的项目的最大参与人数
-     */
-//    public List<Integer> getAllMaxuserover() {
-//        List<Integer> ALlMaxuserunderway = new ArrayList<>();
-//        List<Integer> AllMaxuser = getAllMaxuser();
-//        List<Boolean> AllIfover = getAllIfover();
-//        for (int i = 0; i < AllIfover.size(); i++)
-//            if (AllIfover.get(i))
-//                ALlMaxuserunderway.add(AllMaxuser.get(i));
-//        return ALlMaxuserunderway;
-//    }
+    public List<Camera_> getList_Camera_userAll() {
+        return List_Camera_userAll;
+    }
 
-    /**
-     * 获取所有正在进行的项目的目前参与人数
-     */
-//    public List<Integer> getAllnowuserunderway() {
-//        List<Integer> Allnowuserunderway = new ArrayList<>();
-//        List<Integer> Allnowuser = getAllnowuser();
-//        List<Boolean> AllIfover = getAllIfover();
-//        for (int i = 0; i < AllIfover.size(); i++)
-//            if (!AllIfover.get(i))
-//                Allnowuserunderway.add(Allnowuser.get(i));
-//        return Allnowuserunderway;
-//    }
-
-    /**
-     * 获取所有已结束的项目的参与人数
-     */
-//    public List<Integer> getAllnowuserover() {
-//        List<Integer> Allnowuserover = new ArrayList<>();
-//        List<Integer> Allnowuser = getAllnowuser();
-//        List<Boolean> AllIfover = getAllIfover();
-//        for (int i = 0; i < AllIfover.size(); i++)
-//            if (AllIfover.get(i))
-//                Allnowuserover.add(Allnowuser.get(i));
-//        return Allnowuserover;
-//    }
-
-    /**
-     * 判断所有正在进行项目当前创作者是否是该用户并返回结果
-     */
-//    public List<Boolean> getAllIfuserunderway() {
-//        List<Boolean> AllIfuserunderway = new ArrayList<>();
-//        //for(UUID id : user.getMy)漂流本
-//        for (UUID id : user.getMydrift_cameraLab())
-//            if (!Camera_Lab.get(context).getdrift_camera(id).getIfover())
-//                AllIfuserunderway.add(Camera_Lab.get(context)
-//                        .getdrift_camera(id).getCreatornow().equals(""));
-//        //for(UUID id : user.getMy)漂流小说
-//
-//        //for(UUID id : user.getMy)漂流画
-//        return AllIfuserunderway;
-//    }
-
+    public List<Camera_> getList_Camera_ownercrea() {
+        return List_Camera_ownercrea;
+    }
 }

@@ -12,7 +12,7 @@
         android:background="#00000000"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/mine_unchosen">
+        android:src="@drawable/mine">
 
     </ImageButton>
 
@@ -23,7 +23,7 @@
         android:background="#00000000"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/friends_unchosen">
+        android:src="@drawable/friends">
 
     </ImageButton>
 
@@ -34,7 +34,7 @@
         android:background="#00000000"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/discovering_unchosen">
+        android:src="@drawable/discovering">
 
     </ImageButton>
 
@@ -45,7 +45,7 @@
         android:background="#00000000"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/settings_unchosen">
+        android:src="@drawable/settings">
 
     </ImageButton>
 

@@ -16,38 +16,67 @@ public class Camera_ {
     private final String name;//项目名称
     private final String title;//项目主题
     private String titlephoto;//项目主题图片(封面)
-    private final UUID id;//项目id
-    private final List<UUID> participator;//项目参与人
-    private final Date date;//发起时间
+    private Long nowuser;//目前参与人数
+    private final String date;//发起时间
+    private Long ID;//id
     private int timeofone;//单人用时,单位:天
     private final List<String> photoLab;//项目所含图片
-    private final int maxuser;//最大参与人数
-    private UUID creatornow; //当前创作人
+    private Long maxuser;//最大参与人数
+    private Long creatornow; //当前创作人
     private Boolean Ifover;//是否结束
+    private int kind;//0生人1熟人
 
     /**
      * 构造器
      *
      * @param name      项目名称
      * @param title     主题
-     * @param user      创建者/参与者
-     * @param timeofone 单人用时
      */
-    public Camera_(String name, String title, UUID user, int timeofone, int maxuser) {
+    public Camera_(String name, String title, Long maxuser, String titlephoto,Long nowuser) {
         if (title == null || title == "")
             this.title = "无主题";
         else
             this.title = title;
-        participator = new ArrayList<UUID>();
-        id = UUID.randomUUID();
+        this.nowuser = nowuser;
         photoLab = new ArrayList<String>();
-        date = new Date();
-        participator.add(user);
         this.timeofone = timeofone;
         this.name = name;
+        this.date = null;
         this.maxuser = maxuser;
-        this.creatornow = user;
         this.Ifover = false;
+        this.titlephoto = titlephoto;
+    }
+
+    public Long getNowuser() {
+        return nowuser;
+    }
+
+    public void setNowuser(Long nowuser) {
+        this.nowuser = nowuser;
+    }
+
+    public void setID(Long ID) {
+        this.ID = ID;
+    }
+
+    public String getTitlephoto() {
+        return titlephoto;
+    }
+
+    public void setTitlephoto(String titlephoto) {
+        this.titlephoto = titlephoto;
+    }
+
+    public Long getID() {
+        return ID;
+    }
+
+    public int getKind() {
+        return kind;
+    }
+
+    public void setKind(int kind) {
+        this.kind = kind;
     }
 
     public List<String> getPhotoLab() {
@@ -58,13 +87,6 @@ public class Camera_ {
         return title;
     }
 
-    public List<UUID> getParticipator() {
-        return participator;
-    }
-
-    public UUID getId() {
-        return id;
-    }
 
     public String getTimeofone() {
         String p = "" + timeofone + "天";
@@ -88,15 +110,15 @@ public class Camera_ {
 //        return User_Lab.get(context).getUser(participator.get(0)).getName();
 //    }
 
-    public int getMaxuser() {
+    public Long getMaxuser() {
         return maxuser;
     }
 
-    public UUID getCreatornow() {
+    public Long getCreatornow() {
         return creatornow;
     }
 
-    public void setCreatornow(UUID creatornow) {
+    public void setCreatornow(Long creatornow) {
         this.creatornow = creatornow;
     }
 

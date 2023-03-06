@@ -3,6 +3,7 @@ package android.bignerdranch.drifting.Book;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
+import android.bignerdranch.drifting.Camera.Camera_;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,10 +27,11 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
     private String title;
     private String person_number;
     private int number;
+    private Camera_ mCamera;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stranger_mode);
+        setContentView(R.layout.drifting_stranger_mode);
 
         //变量对应
         iv_image = (ImageView) findViewById(R.id.iv_image);
@@ -143,7 +145,6 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
         if (requestCode == 1) {
             Bundle bundle = data.getExtras();
             iv_image.setImageBitmap((Bitmap) bundle.get("data"));
-
         }
 
     }

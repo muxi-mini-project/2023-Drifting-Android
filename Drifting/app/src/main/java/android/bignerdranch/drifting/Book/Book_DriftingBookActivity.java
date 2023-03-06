@@ -8,10 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-/**
- * 选择进行熟人还是陌生人模式
- */
-
 public class Book_DriftingBookActivity extends AppCompatActivity {
 
     @Override

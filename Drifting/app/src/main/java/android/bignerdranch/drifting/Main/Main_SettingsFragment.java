@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ public class Main_SettingsFragment extends Fragment {
     public ConstraintLayout upload;
     public ConstraintLayout about;
     public ConstraintLayout quit;
+    public TextView informationtext;
     final String FRAGMENT_KEY = "id";
 
 
@@ -51,10 +53,12 @@ public class Main_SettingsFragment extends Fragment {
         upload = (ConstraintLayout) view.findViewById(R.id.upload);
         about = (ConstraintLayout) view.findViewById(R.id.about);
         quit = (ConstraintLayout) view.findViewById(R.id.quit);
+        informationtext = (TextView)view.findViewById(R.id.informationtext);
+        if(User_Now.getUserNow().getUser().isIfTongZhi())
+        informationtext.setText("通知栏提醒(已开启)");
+        else
+            informationtext.setText("通知栏提醒(已关闭)");
 
-
-        //UUID mUUID = (UUID) requireActivity().getIntent().getSerializableExtra(FRAGMENT_KEY);
-        User_ user = new User_();
 
         quit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +80,7 @@ public class Main_SettingsFragment extends Fragment {
                             target.delete();
                         //跳转登录界面，清空Activity栈
                         Intent intent = new Intent(requireContext(), Login_LoginActivity0.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                              .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
                 });
@@ -93,7 +97,7 @@ public class Main_SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Builder builder = new Builder(getContext());
-                builder.setIcon(android.R.drawable.ic_dialog_info);
+                builder.setIcon(R.drawable.logo);
                 builder.setTitle("意见反馈");
                 builder.setMessage("请联系QQ:");
                 builder.setPositiveButton("确定", new OnClickListener() {
@@ -108,16 +112,16 @@ public class Main_SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Builder builder = new Builder(getContext());
-                builder.setIcon(android.R.drawable.ic_dialog_info);
+                builder.setIcon(R.drawable.logo);
                 builder.setTitle("通知栏提醒");
-                if (user.isIfTongZhi()) {
-                    builder.setMessage("你已开启通知" + '\n' + "要关闭它吗?");
+                if (User_Now.getUserNow().getUser().isIfTongZhi()) {
+                    builder.setMessage("关闭通知提醒");
                     builder.setPositiveButton("确定", new OnClickListener() {  //这个是设置确定按钮
 
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
-                            Toast.makeText(getContext(), "已关闭通知提醒", Toast.LENGTH_SHORT).show();
-                            user.setIfTongZhi(false);
+                            User_Now.getUserNow().getUser().setIfTongZhi(false);
+                            informationtext.setText("通知栏提醒(已关闭)");
                         }
                     });
                     builder.setNegativeButton("取消", new OnClickListener() {  //取消按钮
@@ -127,13 +131,13 @@ public class Main_SettingsFragment extends Fragment {
                         }
                     });
                 } else {
-                    builder.setMessage("要开启通知提醒吗?");
+                    builder.setMessage("开启通知提醒");
                     builder.setPositiveButton("确定", new OnClickListener() {  //这个是设置确定按钮
 
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
-                            Toast.makeText(getContext(), "已开启通知提醒", Toast.LENGTH_SHORT).show();
-                            user.setIfTongZhi(true);
+                            User_Now.getUserNow().getUser().setIfTongZhi(true);
+                            informationtext.setText("通知栏提醒(已开启)");
                         }
                     });
                     builder.setNegativeButton("取消", new OnClickListener() {  //取消按钮
@@ -150,7 +154,7 @@ public class Main_SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Builder builder = new Builder(getContext());
-                builder.setIcon(android.R.drawable.ic_dialog_info);
+                builder.setIcon(R.drawable.logo);
                 builder.setTitle("关于我们");
                 builder.setMessage("制作团队:木犀互联网技术团队" + '\n');
                 //+"产品设计:张舒涵、叶晓芸"+'\n'+

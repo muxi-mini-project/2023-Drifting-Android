@@ -14,11 +14,14 @@
     <string name="login_failed">"Login failed"</string>
     <string name="inviting_title">来自XX的漂流XX</string>
     <string name="drifting_book_playing_method">玩法：\n游戏分为熟人模式和生人模式\n选择您所需的模式，进行漂流活动吧！\n注意：半途而废者，将受到系统的惩罚哦~</string>
+    <string name="drifting_camera_playing_method">玩法：\n游戏分为熟人模式和生人模式\n选择您所需的模式，进行漂流活动吧！\n注意：半途而废者，将受到系统的惩罚哦~</string>
     <string name="drifting_book_Ongoing">您当前正在进行的漂流本活动：\n《xxxxx》\n《xxxxxxx》</string>
+    <string name="drifting_camera_Ongoing">您当前正在进行的漂流相机活动：\n《xxxxx》\n《xxxxxxx》</string>
     <string name="drifting_book_over">您已经完成的漂流本活动:\n《xxxxxxx》\n《xxxxxxxx》</string>
+    <string name="drifting_camera_over">您已经完成的漂流相机活动:\n《xxxxxxx》\n《xxxxxxxx》</string>
     <string name="drifting_drafts">草稿箱：\n《xxxxxxx》\n《xxxxxxxxx》</string>
-    <string name="drifting_book_name">输入漂流本的名字</string>
-    <string name="drifting_book_theme">输入漂流本的主题</string>
+    <string name="drifting_book_name">输入名称</string>
+    <string name="drifting_book_theme">输入主题</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main2">MainActivity2</string>

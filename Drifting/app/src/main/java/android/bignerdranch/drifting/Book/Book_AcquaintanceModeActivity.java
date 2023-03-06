@@ -4,7 +4,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.bignerdranch.drifting.Inviting.Inviting_Friends;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,9 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-/**
- * 熟人模式，创建漂流本
- */
 public class Book_AcquaintanceModeActivity extends AppCompatActivity {
     private ImageView iv_image;
     private final int max_number = 9;
@@ -33,7 +29,7 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acquaintance_mode);
+        setContentView(R.layout.drifting_acquaintance_mode);
 
         iv_image = (ImageView) findViewById(R.id.iv_image);
         Button choose_cover = (Button) findViewById(R.id.acquaintance_choose_front_cover);
@@ -46,7 +42,7 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
         inviting_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Book_AcquaintanceModeActivity.this, Inviting_Friends.class));
+                Toast.makeText(Book_AcquaintanceModeActivity.this, "正在开发中", Toast.LENGTH_SHORT).show();
             }
         });
 

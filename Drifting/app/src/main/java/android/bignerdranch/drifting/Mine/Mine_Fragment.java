@@ -4,13 +4,13 @@ import static android.app.Activity.RESULT_OK;
 import static androidx.recyclerview.widget.RecyclerView.Adapter;
 import static androidx.recyclerview.widget.RecyclerView.OnClickListener;
 
+import android.bignerdranch.drifting.Camera.Camera_;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_;
 import android.bignerdranch.drifting.User.User_Now;
 import android.bignerdranch.drifting.User.User_connector;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,9 +37,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -56,9 +56,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Mine_Fragment extends Fragment {
     //正在进行以及已经结束面板
     RecyclerView mDoingNow;
-    Adapter DoingAdapter;
+    Adapter DoingAdapter = null;
     RecyclerView mDoneAgo;
-    Adapter DoneAdapter;
+    Adapter DoneAdapter = null;
 
     Button mZiliaoButton;
     TextView mSignText;
@@ -69,7 +69,7 @@ public class Mine_Fragment extends Fragment {
     boolean isRefuse = false;
     boolean Havpower = false;
 
-    public class User_returnformAvatar{
+    public class User_returnformAvatar {
         private Object message;
     }
 
@@ -90,44 +90,56 @@ public class Mine_Fragment extends Fragment {
         mSignText = (TextView) view.findViewById(R.id.sign_text);
         mPortrait = (ImageView) view.findViewById(R.id.portrait);
         mDoingNow = (RecyclerView) view.findViewById(R.id.gerenjinduing_view);
-        mDoingNow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mDoingNow.setLayoutManager(new LinearLayoutManager(getContext()));
         mDoneAgo = (RecyclerView) view.findViewById(R.id.gerenjinduover_view);
-        mDoneAgo.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        //更新网络用户头像
+        mDoneAgo.setLayoutManager(new LinearLayoutManager(getContext()));
+        ActivityResultLauncher<Intent> launcher3 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getData() != null) {
+                    // 得到图片的全路径
+                    Bitmap bit = result.getData().getParcelableExtra("data");
+                    String uri = null;
+                    try {
+                        uri = FileUtils.saveFile(bit, new Date().getTime() + ".png", null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "保存失败", Toast.LENGTH_SHORT).show();
+                    }
+                    if (result.getResultCode() == RESULT_OK) {
+                        mPortrait.setImageBitmap(bit);
+                        mUser.setPortrait(uri);
+                        putavatar(User_Now.getUserNow().getUser().getPortrait(), mUser.getToken());
+                    }
+                }
+            }
+        });
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == RESULT_OK) {
                     // 从相册返回的数据
                     if (result.getData() != null) {
-                        // 得到图片的全路径
-                        Bitmap bit = SaveFile.getPhotoBitmap(getContext(), result.getData());
-                        String uri = null;
-                        try {
-                            uri = SaveFile.saveFile(getContext(), bit, "myicon.JPG", "icon");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getContext(), "保存失败", Toast.LENGTH_SHORT).show();
-                        }
-                        mPortrait.setImageBitmap(bit);
-                        StringBuffer stringBuffer = new StringBuffer(uri);
-                        stringBuffer.insert(4,"s");
-                        mUser.setPortrait(stringBuffer.toString());
-                        putavatar(uri, mUser.getToken());
+
+                        Uri uri1 = result.getData().getData();
+                        Intent intent = new Intent("com.android.camera.action.CROP");
+                        intent.setDataAndType(uri1, "image/*");
+                        intent.putExtra("crop", "true");
+                        intent.putExtra("aspectX", 1);
+                        intent.putExtra("aspectY", 1);
+                        intent.putExtra("outputX", 150);
+                        intent.putExtra("outputY", 150);
+                        intent.putExtra("return-data", true);
+                        launcher3.launch(intent);
+
                     }
                 }
             }
         });
-
-
         ActivityResultLauncher<Intent> launcher1 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    // 检查是否有权限
-                    // 授权成功
-                    // 授权失败
                     isRefuse = !Environment.isExternalStorageManager();
                 }
             }
@@ -136,16 +148,20 @@ public class Mine_Fragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == RESULT_OK) {
-                mNameText.setText(User_Now.getUserNow().getUser().getName());
-                mSignText.setText(User_Now.getUserNow().getUser().getSignature());
+                    mNameText.setText(User_Now.getUserNow().getUser().getName());
+                    mSignText.setText(User_Now.getUserNow().getUser().getSignature());
                 }
             }
         });
 
-        try {
-            mPortrait.setImageBitmap(getImage(mUser.getPortrait()));
-        }catch (Exception e){
-            e.printStackTrace();
+        if (User_Now.getUserNow().getUser().getavatar() == null) {
+            try {
+                mPortrait.setImageBitmap(FileUtils.getImage(User_Now.getUserNow().getUser().getPortrait(), FileUtils.AVATAR));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            mPortrait.setImageBitmap(User_Now.getUserNow().getUser().getavatar());
         }
         mNameText.setText(mUser.getName());
         mSexText.setText("性别:" + mUser.getSex());
@@ -176,21 +192,21 @@ public class Mine_Fragment extends Fragment {
                 launcher2.launch(intent);
             }
         });
-        //     updateUI();
+        updateUI();
         return view;
     }
 
-    //  public void updateUI() {
-//        if (DoingAdapter == null) {
-//            DoingAdapter = new JinduAdaptering();//将案例组传给Adapter并创建Adapter
-//            mDoingNow.setAdapter(DoingAdapter);//将RecyclerView与Adapter绑定
+    public void updateUI() {
+        DoingAdapter = new JinduAdaptering();//将案例组传给Adapter并创建Adapter
+        mDoingNow.setAdapter(DoingAdapter);//将RecyclerView与Adapter绑定
 //            if (DoneAdapter == null) {
 //                DoneAdapter = new JinduAdapterover();
 //                mDoneAgo.setAdapter(DoneAdapter);
-    //         }
-    //    }
-    // }
+    }
 
+    /**
+     * 上传图片
+     */
     private void putavatar(String uri, String token) {
         File file = new File(uri);
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -199,84 +215,81 @@ public class Mine_Fragment extends Fragment {
         Retrofit retrofit = builder.build();
         User_connector user_connector = retrofit.create(User_connector.class);
         RequestBody requestFile =
-                RequestBody.create(file,MediaType.parse("multipart/form-data"));
+                RequestBody.create(file, MediaType.parse("multipart/form-data"));
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
         Call<User_returnformAvatar> call = user_connector.putUseravatar(body, token);
         call.enqueue(new Callback<User_returnformAvatar>() {
             @Override
             public void onResponse(Call<User_returnformAvatar> call, Response<User_returnformAvatar> response) {
-                if(response.isSuccessful())
-                Toast.makeText(getContext(), "保存成功", Toast.LENGTH_SHORT).show();
-                else
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "保存成功", Toast.LENGTH_SHORT).show();
+                    File file1 = new File(uri);
+                    User_Now.getUserNow().getUser().setPortrait("http://mini-project.muxixyz.com/drifting/user_avatar/" + file1.getName());
+                    file1.delete();
+                } else
                     Toast.makeText(getContext(), "保存失败", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onFailure(Call<User_returnformAvatar> call, Throwable t) {
                 Toast.makeText(getContext(), "错误", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    private static Bitmap getImage(String path) throws Exception{
-        URL url = new URL(path);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(5000);
-        conn.setRequestMethod("GET");
-        if(conn. getResponseCode() == 200){
-            InputStream inStream = conn. getInputStream();
-            Bitmap bitmap = BitmapFactory. decodeStream(inStream) ;
-            return bitmap;
-        }
-        return null;
-    }
+
     /**
      * 以下为Adapter和Holder
      */
-//    private class JinduAdaptering extends Adapter<ViewHolder> {
-//        private final List<String> namesing = GetAllItems.get(mUser.getUUID(), getContext()).getAllNameunderway();
-//        private final List<Integer> nowusering = GetAllItems.get(mUser.getUUID(), getContext()).getAllnowuserunderway();
-//        private final List<Integer> Maxusering = GetAllItems.get(mUser.getUUID(), getContext()).getAllMaxuserunderway();
-//        private final List<Boolean> Ifusering = GetAllItems.get(mUser.getUUID(), getContext()).getAllIfuserunderway();
-//        public JinduAdaptering() {
-//        }
-//
-//        @NonNull
-//        @Override
-//        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-//            if (viewType == 0)
-//                return new JinduHolder(layoutInflater, parent);
-//            else
-//                return new JinduHolder2(layoutInflater, parent);
-//        }
-//
-//        @Override
-//        public int getItemViewType(int position) {
-//            return Ifusering.get(position) ? 1 : 0;
-//            //看ViewHolder的创建先后来定顺序。例如CrimeHolder先创建，0就代表CrimeHolder，1代表CrimeHolder2
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//            String name = "《" + namesing.get(position) + "》";
-//            String number = nowusering.get(position) + "/" + Maxusering.get(position);
-//            if (holder instanceof JinduHolder)
-//                ((JinduHolder) holder).bind(name, number);
-//            else if (holder instanceof JinduHolder2)
-//                ((JinduHolder2) holder).bind(name, number);
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return namesing.size();//RecyclerView通过调用该方法确定一共有多少个Fragment
-//        }
-//
-//    }
-//
-//    private class JinduAdapterover extends Adapter<JinduHolder> {
-//        private final List<String> namesover = GetAllItems.get(mUser.getUUID(), getContext()).getAllNameover();
-//        private final List<Integer> nowuserover = GetAllItems.get(mUser.getUUID(), getContext()).getAllnowuserover();
-//        private final List<Integer> Maxuserover = GetAllItems.get(mUser.getUUID(), getContext()).getAllMaxuserover();
+    private class JinduAdaptering extends Adapter<RecyclerView.ViewHolder> {
+        private List<String> namesing;
+        private List<Long> nowusering;
+        private List<Long> Maxusering;
+
+        //    private final List<Boolean> Ifusering = GetAllItems.get(mUser.getUUID(), getContext()).getAllIfuserunderway();
+        public JinduAdaptering() {
+            namesing = GetAllItems.getGetAllItems().GetCamera_ownercrea_name();
+            nowusering = GetAllItems.getGetAllItems().GetCamera_ownercrea_nowuser();
+            Maxusering = GetAllItems.getGetAllItems().GetCamera_ownercrea_maxuser();
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            if (viewType == 0)
+                return new JinduHolder(layoutInflater, parent);
+            else
+                return new JinduHolder2(layoutInflater, parent);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            // return Ifusering.get(position) ? 1 : 0;
+            return 1;
+            //看ViewHolder的创建先后来定顺序。例如CrimeHolder先创建，0就代表CrimeHolder，1代表CrimeHolder2
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            String name = "《" + namesing.get(position) + "》";
+            String number = nowusering.get(position) + "/" + Maxusering.get(position);
+            if (holder instanceof JinduHolder)
+                ((JinduHolder) holder).bind(name, number);
+            else if (holder instanceof JinduHolder2)
+                ((JinduHolder2) holder).bind(name, number);
+        }
+
+        @Override
+        public int getItemCount() {
+            return namesing.size();//RecyclerView通过调用该方法确定一共有多少个Fragment
+        }
+
+    }
+
+    //    private class JinduAdapterover extends Adapter<JinduHolder> {
+//        private final List<String> name = GetAllItems.GetCamera_ownercrea_name(getContext());
+//        private final List<Integer> Maxuserover = GetAllItems.GetCamera_ownercrea_maxuser(getContext());
 //
 //        public JinduAdapterover() {
 //        }
@@ -290,47 +303,47 @@ public class Mine_Fragment extends Fragment {
 //
 //        @Override
 //        public void onBindViewHolder(@NonNull JinduHolder holder, int position) {
-//            String name = "《" + namesover.get(position) + "》";
-//            String number = nowuserover.get(position) + "/" + Maxuserover.get(position);
+//            String name = "《" + this.name.get(position) + "》";
+//            String number = Maxuserover.get(position) + "/" + Maxuserover.get(position);
 //            holder.bind(name, number);
 //        }
 //
 //        @Override
 //        public int getItemCount() {
-//            return namesover.size();//RecyclerView通过调用该方法确定一共有多少个Fragment
+//            return name.size();//RecyclerView通过调用该方法确定一共有多少个Fragment
 //        }
 //    }
-//    private static class JinduHolder extends ViewHolder {
-//        private TextView mJinduname;
-//        private TextView mJindurenshu;
-//
-//        public JinduHolder(LayoutInflater inflater, ViewGroup parent) {
-//            super(inflater.inflate(R.layout.mine_jindu1, parent, false));
-//            mJinduname = (TextView) itemView.findViewById(R.id.jinduname_text);
-//            mJindurenshu = (TextView) itemView.findViewById(R.id.jindurenshu_text);
-//        }
-//
-//        public void bind(String name, String number) {
-//            mJinduname.setText(name);
-//            mJindurenshu.setText(number);
-//        }
-//    }
-//
-//    private class JinduHolder2 extends ViewHolder {
-//        private TextView mJinduname;
-//        private TextView mJindurenshu;
-//
-//        public JinduHolder2(LayoutInflater inflater, ViewGroup parent) {
-//            super(inflater.inflate(R.layout.mine_jindu2, parent, false));
-//            mJinduname = (TextView) itemView.findViewById(R.id.jinduname_text);
-//            mJindurenshu = (TextView) itemView.findViewById(R.id.jindurenshu_text);
-//
-//        }
-//
-//        public void bind(String name, String number) {
-//            mJinduname.setText(name);
-//            mJindurenshu.setText(number);
-//        }
-//    }
+    private static class JinduHolder extends RecyclerView.ViewHolder {
+        private TextView mJinduname;
+        private TextView mJindurenshu;
+
+        public JinduHolder(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.mine_jindu1, parent, false));
+            mJinduname = (TextView) itemView.findViewById(R.id.jinduname_text);
+            mJindurenshu = (TextView) itemView.findViewById(R.id.jindurenshu_text);
+        }
+
+        public void bind(String name, String number) {
+            mJinduname.setText(name);
+            mJindurenshu.setText(number);
+        }
+    }
+
+    private class JinduHolder2 extends RecyclerView.ViewHolder {
+        private TextView mJinduname;
+        private TextView mJindurenshu;
+
+        public JinduHolder2(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.mine_jindu2, parent, false));
+            mJinduname = (TextView) itemView.findViewById(R.id.jinduname_text);
+            mJindurenshu = (TextView) itemView.findViewById(R.id.jindurenshu_text);
+
+        }
+
+        public void bind(String name, String number) {
+            mJinduname.setText(name);
+            mJindurenshu.setText(number);
+        }
+    }
 
 }

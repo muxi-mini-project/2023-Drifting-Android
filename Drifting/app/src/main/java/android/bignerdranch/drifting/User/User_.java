@@ -2,6 +2,10 @@ package android.bignerdranch.drifting.User;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 /**
  * 用户
  */
@@ -14,14 +18,6 @@ public class User_ {
     private Bitmap avatar;
     private String portrait;//头像
     private String token;//登录获取到的token
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getToken() {
         return token;
@@ -37,7 +33,13 @@ public class User_ {
         ifTongZhi = false;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getSignature() {
         return signature;

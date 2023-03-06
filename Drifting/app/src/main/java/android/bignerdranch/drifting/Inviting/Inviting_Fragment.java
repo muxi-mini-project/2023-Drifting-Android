@@ -1,11 +1,13 @@
 package android.bignerdranch.drifting.Inviting;
 
+import android.annotation.SuppressLint;
 import android.bignerdranch.drifting.Inviting.Loading.user_drawing_request;
 import android.bignerdranch.drifting.Inviting.Loading.user_drawing_request_return;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
 import android.bignerdranch.drifting.Main.Main_DiscoveringFragment;
 import android.bignerdranch.drifting.Main.Main_MainActivity;
 import android.bignerdranch.drifting.R;
+import android.bignerdranch.drifting.User.User_Now;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +43,7 @@ public class Inviting_Fragment extends Fragment {
         return new Inviting_Fragment();
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.inviting_fragment,null);
@@ -59,7 +62,7 @@ public class Inviting_Fragment extends Fragment {
                 = retrofit.create(android.bignerdranch.drifting.Inviting.Loading.user_drawing_request.class);
 
         Call<user_drawing_request_return> call
-                = user_drawing_request.request(Login_LoginActivity.getToken());
+                = user_drawing_request.request(User_Now.getUserNow().getUser().getToken());
 
         call.enqueue(new Callback<user_drawing_request_return>() {
             @Override

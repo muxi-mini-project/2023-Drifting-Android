@@ -1,8 +1,12 @@
 package android.bignerdranch.drifting.Login;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.bignerdranch.drifting.Main.Main_MainActivity;
 import android.bignerdranch.drifting.Mine.FileUtils;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
+import android.bignerdranch.drifting.User.AllItems;
 import android.bignerdranch.drifting.User.User_;
 import android.bignerdranch.drifting.User.User_Now;
 import android.bignerdranch.drifting.User.User_connector;
@@ -18,8 +22,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,16 +43,9 @@ public class Login_LoginActivity extends AppCompatActivity {
     private Integer account;
     private String password;
     User_ user = new User_();
-    private static String token;
 
-    public static String getToken() {
-        return token;
-    }
-
-    public static class User_returnAll{
-        private Long code;
+  public static class User_returnAll{
         private User_return data;
-        private Object message;
         public User_return getData() {
             return data;
         }
@@ -72,8 +67,7 @@ public class Login_LoginActivity extends AppCompatActivity {
                 FileInputStream fis = new FileInputStream(target.getAbsolutePath());
                 byte[] b = new byte[fis.available()];
                 fis.read(b);
-                String readStr = new String(b);
-                token = readStr;
+               String readStr = new String(b);
                 upload_User(readStr);
                 Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
                 startActivity(intent);
@@ -145,8 +139,7 @@ public class Login_LoginActivity extends AppCompatActivity {
                                 Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
                                 startActivity(intent);
                                 finish();
-                                token = response.body().getData();
-                                upload_User(token);
+                                upload_User(response.body().getData());
                                 try {
                                     FileUtils.savetoken( response.body().getData(), "mytoken.txt", "Drifting");
                                 }catch (IOException e){
@@ -165,6 +158,10 @@ public class Login_LoginActivity extends AppCompatActivity {
             }
         });
     }
+//    public void GetItems(){
+//        AllItems.getAllItems().setCamera_name_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_name());
+//        AllItems.getAllItems().getCamera_nowuser_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_nowuser());
+//    }
     public void upload_User(String token) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
@@ -187,6 +184,7 @@ public class Login_LoginActivity extends AppCompatActivity {
                 user.setPortrait("http://"+user1.getAvatar());
                 User_Now user_now = User_Now.getUserNow();
                 User_Now.getUserNow().setUser(user);
+              //  GetItems();
             }
 
             @Override
