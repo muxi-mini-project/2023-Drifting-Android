@@ -12,17 +12,17 @@ public class inviting_messageReturn {
         private long file_id;
         private String createdAt;
         private String fileKind;
-        private long honer_id;
+        private long owner_id;
         private String cover;
         private int kind;
         private String theme;
         private int number;
 
-        public data(long file_id, String createdAt, String fileKind, long honer_id, String cover, int kind, String theme, int number) {
+        public data(long file_id, String createdAt, String fileKind, long owner_id, String cover, int kind, String theme, int number) {
             this.file_id = file_id;
             this.createdAt = createdAt;
             this.fileKind = fileKind;
-            this.honer_id = honer_id;
+            this.owner_id = owner_id;
             this.cover = cover;
             this.kind = kind;
             this.theme = theme;
@@ -41,8 +41,8 @@ public class inviting_messageReturn {
             return number;
         }
 
-        public long getHoner_id() {
-            return honer_id;
+        public long getOwner_id() {
+            return owner_id;
         }
 
         public String getCover() {
@@ -67,7 +67,7 @@ public class inviting_messageReturn {
                     "file_id=" + file_id +
                     ", createdAt='" + createdAt + '\'' +
                     ", fileKind='" + fileKind + '\'' +
-                    ", honer_id=" + honer_id +
+                    ", owner_id=" + owner_id +
                     ", cover='" + cover + '\'' +
                     ", kind=" + kind +
                     ", theme='" + theme + '\'' +

@@ -74,10 +74,6 @@ public class FriendsNewActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-        AddnewFriendSend addnewFriendSend = new AddnewFriendSend();
-               addnewFriendSend.setAdderID(User_Now.getUserNow().getUser().getId());
-               addnewFriendSend.setTargetID(targetID);
-
         sent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

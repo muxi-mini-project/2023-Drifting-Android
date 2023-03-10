@@ -35,6 +35,7 @@ public class FriendsList_return {
    }
 
    public class Friends_Net{
+      private long studentID;
       private String name;
       private String sex;
       private String avatar;
@@ -43,6 +44,10 @@ public class FriendsList_return {
 
       public Friends_Net(Friends_Net friends_net) {
          mFriends_net = friends_net;
+      }
+
+      public long getStudentID() {
+         return studentID;
       }
 
       public String getNameN() {

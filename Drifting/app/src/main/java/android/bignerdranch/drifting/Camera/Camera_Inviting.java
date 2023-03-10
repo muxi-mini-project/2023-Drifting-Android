@@ -9,6 +9,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * 受到邀请后点击进入该界面
+ */
 public class Camera_Inviting extends AppCompatActivity {
     Button mStartButton;
     Button mFangqiButton;

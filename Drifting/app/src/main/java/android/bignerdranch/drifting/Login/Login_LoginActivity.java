@@ -1,8 +1,12 @@
 package android.bignerdranch.drifting.Login;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.bignerdranch.drifting.Main.Main_MainActivity;
 import android.bignerdranch.drifting.Mine.FileUtils;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
+import android.bignerdranch.drifting.User.AllItems;
 import android.bignerdranch.drifting.User.User_;
 import android.bignerdranch.drifting.User.User_Now;
 import android.bignerdranch.drifting.User.User_connector;
@@ -11,20 +15,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,21 +46,28 @@ public class Login_LoginActivity extends AppCompatActivity {
     private Button mLoginButton;
     private Integer account;
     private String password;
+    static String token;
     User_ user = new User_();
-    private static String token;
 
-    public static String getToken() {
-        return token;
-    }
-
-    public static class User_returnAll{
-        private Long code;
+    public static class User_returnAll {
         private User_return data;
-        private Object message;
+
         public User_return getData() {
             return data;
         }
     }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 200) {
+                Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
+                startActivity(intent);
+                finish();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,22 +77,17 @@ public class Login_LoginActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
-        File drifting = new File(file,"drifting");
-        File target = new File(drifting,"mytoken.txt");
-        if(target.exists()){
-            try{
+        File file = new File(getFilesDir().getAbsolutePath());
+        File drifting = new File(file, "Drifting");
+        File target = new File(drifting, "mytoken.txt");
+        if (target.exists()) {
+            try {
                 FileInputStream fis = new FileInputStream(target.getAbsolutePath());
                 byte[] b = new byte[fis.available()];
                 fis.read(b);
                 String readStr = new String(b);
-                token = readStr;
-                Log.i("token",token);
                 upload_User(readStr);
-                Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
-                startActivity(intent);
-                finish();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -127,10 +134,9 @@ public class Login_LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Login_student student = new Login_student();
-                if( account == null||password == null){
+                if (account == null || password == null) {
                     Toast.makeText(Login_LoginActivity.this, "请输入账号或密码", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     student.setStudentID(account);
                     student.setPassWord(password);
                     Retrofit.Builder builder = new Retrofit.Builder()
@@ -142,22 +148,20 @@ public class Login_LoginActivity extends AppCompatActivity {
                     call.enqueue(new Callback<Login_return>() {
                         @Override
                         public void onResponse(Call<Login_return> call, Response<Login_return> response) {
+                            token = response.body().getData();
                             if (response.isSuccessful()) {
                                 Toast.makeText(Login_LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                Intent intent = Main_MainActivity.newIntent(Login_LoginActivity.this);
-                                startActivity(intent);
-                                finish();
-                                token = response.body().getData();
-                                upload_User(token);
                                 try {
-                                    FileUtils.savetoken( response.body().getData(), "mytoken.txt", "Drifting");
-                                }catch (IOException e){
+                                    FileUtils.savetoken(getApplicationContext(), response.body().getData(), "mytoken.txt", "Drifting");
+                                } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                                upload_User(response.body().getData());
                             } else {
                                 Toast.makeText(getApplicationContext(), "身份认证失败，请重新登录", Toast.LENGTH_SHORT).show();
                             }
                         }
+
                         @Override
                         public void onFailure(Call<Login_return> call, Throwable t) {
                             Toast.makeText(Login_LoginActivity.this, "网络或服务器错误", Toast.LENGTH_SHORT).show();
@@ -167,6 +171,11 @@ public class Login_LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    //    public void GetItems(){
+//        AllItems.getAllItems().setCamera_name_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_name());
+//        AllItems.getAllItems().getCamera_nowuser_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_nowuser());
+//    }
     public void upload_User(String token) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
@@ -178,17 +187,25 @@ public class Login_LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<User_returnAll>() {
             @Override
             public void onResponse(Call<User_returnAll> call, Response<User_returnAll> response) {
-                User_returnAll user2 = response.body();
-               User_return user1 = user2.getData();
+                User_return user1 = response.body().getData();
                 //  Toast.makeText(getApplicationContext(),"用户数据获取成功",Toast.LENGTH_SHORT).show();
-                    user.setName(user1.getName());
+                user.setName(user1.getName());
                 if (user1.getSelfWord() != "" && user1.getSelfWord() != null)
                     user.setSignature(user1.getSelfWord());
                 user.setSex(user1.getSex());
                 user.setToken(token);
-                user.setPortrait("http://"+user1.getAvatar());
-                User_Now user_now = User_Now.getUserNow();
+                user.setId(user1.getStudentID().intValue());
+                user.setPortrait("http://" + user1.getAvatar());
+                try {
+                    FileUtils.getImage(user.getPortrait(), FileUtils.AVATAR);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 User_Now.getUserNow().setUser(user);
+                Message message = new Message();
+                message.what = 200;
+                handler.sendMessage(message);
+                //  GetItems();
             }
 
             @Override
@@ -196,5 +213,9 @@ public class Login_LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public static String getToken() {
+        return token;
     }
 }

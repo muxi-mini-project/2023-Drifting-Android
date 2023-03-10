@@ -38,7 +38,7 @@
 
     <EditText
         android:id="@+id/person_number_text"
-        android:hint="输入人数（0~9）"
+        android:hint="输入人数"
         android:layout_width="210dp"
         android:layout_height="50dp"
         android:layout_marginTop="32dp"

@@ -1,8 +1,12 @@
 package android.bignerdranch.drifting.Main;
 
 import android.bignerdranch.drifting.Book.Book_DriftingBookActivity;
+import android.bignerdranch.drifting.Book.Book_InvitingActivity;
+import android.bignerdranch.drifting.Camera.Camera_Inviting;
 import android.bignerdranch.drifting.Camera.Camera_Start;
+import android.bignerdranch.drifting.Camera.Camera_create;
 import android.bignerdranch.drifting.Drawing.Drawing_InvitingActivity;
+import android.bignerdranch.drifting.Novel.Novel_InvitingActivity;
 import android.bignerdranch.drifting.detail_request.messageReturn;
 import android.bignerdranch.drifting.detail_request.request;
 import android.bignerdranch.drifting.detail_request.request_body;
@@ -73,7 +77,7 @@ public class Main_DiscoveringFragment extends Fragment {
         drifting_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), Camera_Start.class));
+                startActivity(new Intent(getContext(), Camera_create.class));
             }
         });
         drifting_novel.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +127,7 @@ public class Main_DiscoveringFragment extends Fragment {
                                 }else if(request_return.getData().get(finalI).getKind() == 1){
                                     messageReturn.setInviter("密友");
                                 }
+                                messageReturn.setId(request_return.getData().get(finalI).getFile_id());
                                 Log.i("onResponse", messageReturn.toString());
                                 mMessageReturns.add(messageReturn);
                                 updateUI();
@@ -165,6 +170,7 @@ public class Main_DiscoveringFragment extends Fragment {
                                 }else if(request_return.getData().get(finalI).getKind() == 1){
                                     messageReturn.setInviter("密友");
                                 }
+                                messageReturn.setId(request_return.getData().get(finalI).getFile_id());
                                 mMessageReturns.add(messageReturn);
                                 Log.i("onResponse",mMessageReturns.toString());
                                 updateUI();
@@ -209,6 +215,7 @@ public class Main_DiscoveringFragment extends Fragment {
                                 }else if(request_return.getData().get(finalI).getKind() == 1){
                                     messageReturn.setInviter("密友");
                                 }
+                                messageReturn.setId(request_return.getData().get(finalI).getFile_id());
                                 mMessageReturns.add(messageReturn);
                                 Log.i("onResponse", mMessageReturns.toString());
                                 updateUI();
@@ -252,6 +259,7 @@ public class Main_DiscoveringFragment extends Fragment {
                                 }else if(request_return.getData().get(finalI).getKind() == 1){
                                     messageReturn.setInviter("密友");
                                 }
+                                messageReturn.setId(request_return.getData().get(finalI).getFile_id());
                                 mMessageReturns.add(messageReturn);
                                 Log.i("onResponse", mMessageReturns.toString());
                                 updateUI();
@@ -295,7 +303,6 @@ public class Main_DiscoveringFragment extends Fragment {
             mInviting = inviting;
             String type = mInviting.getZhonglei();
             String inviter = mInviting.getInviter();
-
             mTextView.setText("来自"+inviter+"的"+type);
             mImageButton.setImageResource(R.drawable.login_interface);
             mImageButton.setOnClickListener(new View.OnClickListener() {
@@ -303,19 +310,27 @@ public class Main_DiscoveringFragment extends Fragment {
                 public void onClick(View v) {
                     switch (type){
                         case "漂流本":{
-                            //inviting_type = "书";
+                            Intent intent = new Intent(getContext(), Book_InvitingActivity.class);
+                            intent.putExtra("file_id",mInviting.getId());
+                            startActivity(intent);
                             break;
                         }
                         case "漂流相机":{
-                            //inviting_type = "相机";
+                            Intent intent = new Intent(getContext(), Camera_Inviting.class);
+                            intent.putExtra("file_id",mInviting.getId());
+                            startActivity(intent);
                             break;
                         }
                         case "漂流画":{
-                            startActivity(new Intent(getContext(),Drawing_InvitingActivity.class));
+                            Intent intent = new Intent(getContext(),Drawing_InvitingActivity.class);
+                            intent.putExtra("file_id",mInviting.getId());
+                            startActivity(intent);
                             break;
                         }
                         case "漂流小说":{
-                            //inviting_type = "小说";
+                            Intent intent = new Intent(getContext(), Novel_InvitingActivity.class);
+                            intent.putExtra("file_id",mInviting.getId());
+                            startActivity(intent);
                             break;
                         }
                     }

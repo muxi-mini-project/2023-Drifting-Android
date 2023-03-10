@@ -71,20 +71,19 @@
         </TextView>
 
         <TextView
-            android:id="@+id/time_restrict"
+            android:id="@+id/people_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="单人用时设置：XX">
+            android:text="设定的总人数：xxx">
 
         </TextView>
 
         <TextView
-            android:id="@+id/people_before"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="此前接龙人（XX位）："
+            android:text="内容概览："
             android:textSize="12sp">
 
         </TextView>

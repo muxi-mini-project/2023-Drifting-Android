@@ -27,8 +27,8 @@ import java.net.URL;
  * 从URL中获取图片
  */
 public class FileUtils {
-    static final int AVATAR = 1000;//头像
-    static final int PICTURE = 1001;//普通照片
+    public static final int AVATAR = 1000;//头像
+    public static final int PICTURE = 1001;//普通照片
 
     /**
      * 保存图片文件到本地
@@ -68,12 +68,14 @@ public class FileUtils {
 
     /**
      * 保存token到本地
+     *
+     * @param applicationContext
      * @param token 需要保存的token
      * @param fileName 文件名称
      * @param path 外加地址
      * @throws IOException
      */
-    public static void savetoken(  String token, String fileName, String path) throws IOException {
+    public static void savetoken(Context applicationContext, String token, String fileName, String path) throws IOException {
         final String SAVE_TOKEN_PATH = Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED) ?
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() :
                 "/mnt/sdcard";
@@ -169,6 +171,7 @@ public class FileUtils {
         }
         return null;
     }
+
 
 }
 

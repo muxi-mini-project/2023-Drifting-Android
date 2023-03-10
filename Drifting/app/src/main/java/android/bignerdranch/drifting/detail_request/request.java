@@ -17,4 +17,7 @@ public interface request {
 
     @POST("api/v1/drifting_picture/detail")
     Call<messageReturn> cameraRequest(@Header("Authorization") String token, @Body request_body request_body);
+
+    @POST("api/v1/user/id_detail")
+    Call<getIdMessageReturn> idRequest(@Header("Authorization") String token, @Body getIdRequestBody requestBody);
 }
