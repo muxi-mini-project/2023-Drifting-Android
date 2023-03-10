@@ -87,4 +87,12 @@ public class FriendsList_return {
          this.selfWord = selfWord;
       }
    }
+   public String toString(){
+      String s = new String();
+      for (int i = 0; i< data.size();i++){
+         s = s.concat(data.get(i).name);
+      }
+
+      return s;
+   }
 }

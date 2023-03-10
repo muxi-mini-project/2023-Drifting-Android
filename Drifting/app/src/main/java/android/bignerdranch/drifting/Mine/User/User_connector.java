@@ -1,13 +1,10 @@
-package android.bignerdranch.drifting.User;
+package android.bignerdranch.drifting.Mine.User;
 
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
 import android.bignerdranch.drifting.Mine.Mine_BianJiActivity;
 import android.bignerdranch.drifting.Mine.Mine_Fragment;
 
-import java.util.Map;
-
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -46,4 +43,11 @@ public interface User_connector {
     @PUT("api/v1/user/update")
     Call<Mine_BianJiActivity.Return_fromdata> putUserdata(@Body() User_Putdata user_putdata,
                                                           @Header("Authorization") String token);
+
+    /**
+     * 通过id获得改用户的信息
+     */
+    @POST("api/v1/user/id_detail")
+    Call<android.bignerdranch.drifting.User.User_name_getFormID_return> getHostName(@Body android.bignerdranch.drifting.User.GetNameFormIDRequest getNameFormIDRequest,
+                                                                                    @Header("Authorization") String token);
 }

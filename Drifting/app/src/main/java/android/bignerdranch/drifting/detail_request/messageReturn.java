@@ -8,6 +8,15 @@ public class messageReturn {
     private data data;
     private String zhonglei;
     private String inviter;
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getMessage() {
         return message;
@@ -37,7 +46,7 @@ public class messageReturn {
         this.inviter = inviter;
     }
 
-    private static class data{
+    public static class data{
         private String Name;
         private long OwnerID;
         private ArrayList<Contacts> Contacts;

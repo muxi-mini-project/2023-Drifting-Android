@@ -1,6 +1,6 @@
 package android.bignerdranch.drifting.Camera;
 
-import java.net.Inet4Address;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,30 +12,30 @@ public class Camera_return_upload {
      */
     //上传类
   static public class Camera_upload_mes_body{
-        private Long id;
+        private Integer id;
 
-        public Long getid() { return id; }
-        public void setid(Long value) { this.id = value; }
+        public Integer getid() { return id; }
+        public void setid(Integer value) { this.id = value; }
     }
     //返回类
    static public class Camera_return_mes_body{
         private Long code;
-        private Object data;
-        private Camera_return_mes_body2 message;
+        private Object message;
+        private Camera_return_mes_body2 data;
 
         public Long getCode() { return code; }
         public void setCode(Long value) { this.code = value; }
 
-        public Object getData() { return data; }
-        public void setData(Object value) { this.data = value; }
+        public Camera_return_mes_body2 getData() { return data; }
+        public void setData(Camera_return_mes_body2 value) { this.data = value; }
 
-        public Camera_return_mes_body2 getMessage() { return message; }
-        public void setMessage(Camera_return_mes_body2 value) { this.message = value; }
+        public Object getMessage() { return message; }
+        public void setMessage(Object value) { this.message = value; }
     }
    static public class Camera_return_mes_body2{
         private String Name;
-        private Integer OwnerID;
-        private List<String> Contacts;
+        private Long OwnerID;
+        private ArrayList<Camera_return_mes_body3> Contacts;
 
         public String getName() {
             return Name;
@@ -45,20 +45,49 @@ public class Camera_return_upload {
             Name = name;
         }
 
-        public Integer getOwnerID() {
+        public Long getOwnerID() {
             return OwnerID;
         }
 
-        public void setOwnerID(Integer ownerID) {
+        public void setOwnerID(Long ownerID) {
             OwnerID = ownerID;
         }
 
-        public List<String> getContacts() {
+        public ArrayList<Camera_return_mes_body3> getContacts() {
             return Contacts;
         }
 
-        public void setContacts(List<String> contacts) {
+        public void setContacts(ArrayList<Camera_return_mes_body3> contacts) {
             Contacts = contacts;
+        }
+    }
+    static public class Camera_return_mes_body3{
+      private Long file_id;
+      private Long writer_id;
+      private String the_words;
+
+        public Long getFile_id() {
+            return file_id;
+        }
+
+        public void setFile_id(Long file_id) {
+            this.file_id = file_id;
+        }
+
+        public Long getWriter_id() {
+            return writer_id;
+        }
+
+        public void setWriter_id(Long writer_id) {
+            this.writer_id = writer_id;
+        }
+
+        public String getThe_words() {
+            return the_words;
+        }
+
+        public void setThe_words(String the_words) {
+            this.the_words = the_words;
         }
     }
     /**
@@ -152,14 +181,14 @@ public class Camera_return_upload {
     //返回类
    static public class Camera_return_create{
         private Long code;
-        private Object data;
+        private Long data;
         private Object message;
 
         public Long getCode() { return code; }
         public void setCode(Long value) { this.code = value; }
 
-        public Object getData() { return data; }
-        public void setData(Object value) { this.data = value; }
+        public Long getData() { return data; }
+        public void setData(Long value) { this.data = value; }
 
         public Object getMessage() { return message; }
         public void setMessage(Object value) { this.message = value; }
@@ -304,28 +333,48 @@ public class Camera_return_upload {
      */
     //上传类
    static public class Camera_upload_inviting_friend{
-        private long fileid;
-        private String fileKind;
-        private Long friendid;
-        private Long hostid;
+        private Long file_id;
+        private String file_Kind;
+        private Long friend_id;
+        private Long host_id;
 
-        public long getFileid() { return fileid; }
-        public void setFileid(long value) { this.fileid = value; }
+        public Long getFile_id() {
+            return file_id;
+        }
 
-        public String getFileKind() { return fileKind; }
-        public void setFileKind(String value) { this.fileKind = value; }
+        public void setFile_id(Long file_id) {
+            this.file_id = file_id;
+        }
 
-        public Long getFriendid() { return friendid; }
-        public void setFriendid(Long value) { this.friendid = value; }
+        public String getFile_Kind() {
+            return file_Kind;
+        }
 
-        public Long getHostid() { return hostid; }
-        public void setHostid(Long value) { this.hostid = value; }
+        public void setFile_Kind(String file_Kind) {
+            this.file_Kind = file_Kind;
+        }
+
+        public Long getFriend_id() {
+            return friend_id;
+        }
+
+        public void setFriend_id(Long friend_id) {
+            this.friend_id = friend_id;
+        }
+
+        public Long getHost_id() {
+            return host_id;
+        }
+
+        public void setHost_id(Long host_id) {
+            this.host_id = host_id;
+        }
     }
     //返回类
    static public class Camera_return_inviting_friend{
         private Long code;
         private Object data;
-        private Camera_return_inviting_friend2 message;
+        private Object message;
 
         public Long getCode() { return code; }
         public void setCode(Long value) { this.code = value; }
@@ -334,27 +383,7 @@ public class Camera_return_upload {
         public void setData(Object value) { this.data = value; }
 
         public Object getMessage() { return message; }
-        public void setMessage(Camera_return_inviting_friend2 value) { this.message = value; }
-    }
-   static public class Camera_return_inviting_friend2{
-        private Long Code;
-        private Object Message;
-
-        public Long getCode() {
-            return Code;
-        }
-
-        public void setCode(Long code) {
-            Code = code;
-        }
-
-        public Object getMessage() {
-            return Message;
-        }
-
-        public void setMessage(Object message) {
-            Message = message;
-        }
+        public void setMessage(Object value) { this.message = value; }
     }
 
     /**

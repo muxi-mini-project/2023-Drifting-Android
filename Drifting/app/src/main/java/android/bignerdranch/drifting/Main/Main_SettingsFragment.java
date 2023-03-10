@@ -1,11 +1,9 @@
 package android.bignerdranch.drifting.Main;
 
 import android.app.AlertDialog.Builder;
-import android.bignerdranch.drifting.Login.Login_LoginActivity;
 import android.bignerdranch.drifting.Login.Login_LoginActivity0;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_;
-import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_Now;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;

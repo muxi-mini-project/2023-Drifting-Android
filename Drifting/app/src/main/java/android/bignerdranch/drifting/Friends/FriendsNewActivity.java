@@ -5,9 +5,11 @@ import android.bignerdranch.drifting.Friends.AddnewFriends.ApiFriendsInterface;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddFriends_return;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddnewFriendSend;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -26,6 +28,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,7 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FriendsNewActivity extends AppCompatActivity {
 
     private EditText newFriendsID;
-    private Button sent;
+    private Button sent;  //发送好友申请
     private Integer targetID;
     private String token = User_Now.getUserNow().getUser().getToken();
     private RecyclerView FriendsWillBe;
@@ -140,12 +145,16 @@ public class FriendsNewActivity extends AppCompatActivity {
         private ImageView headImage;
         private TextView friendName;
         private TextView friendAuto;
-        private Button agreeBtn;
+        private Button agreeBtn;  //同意添加按钮
         private FriendsList_return.Friends_Net mFriends;
 
         public void bind(FriendsList_return.Friends_Net friends){
             mFriends = friends;
-            headImage.setImageResource(R.drawable.book);
+            try {
+                headImage.setImageBitmap(getImage("http://"+mFriends.getAvatar()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             friendName.setText(mFriends.getNameN());
             friendAuto.setText(mFriends.getSelfWord());
 
@@ -155,6 +164,7 @@ public class FriendsNewActivity extends AppCompatActivity {
                     AddnewFriendSend agreeNew = new AddnewFriendSend();
                     agreeNew.setAdderID(friends.getStudentID());
                     agreeNew.setTargetID(User_Now.getUserNow().getUser().getId());
+
 
                     Retrofit.Builder builder = new Retrofit.Builder()
                             .baseUrl("http://116.204.121.9:61583/")
@@ -239,6 +249,17 @@ public class FriendsNewActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+    private static Bitmap getImage(String path) throws Exception{
+        URL url = new URL(path);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(5000);
+        conn.setRequestMethod("GET");
+        if(conn. getResponseCode() == 200){
+            InputStream inStream = conn. getInputStream();
+            Bitmap bitmap = BitmapFactory. decodeStream(inStream) ;
+            return bitmap;
+        }else return null;
     }
 
 

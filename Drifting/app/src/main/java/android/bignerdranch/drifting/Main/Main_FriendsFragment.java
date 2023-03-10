@@ -3,24 +3,19 @@ package android.bignerdranch.drifting.Main;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddFriends_return;
-import android.bignerdranch.drifting.Friends.AddnewFriends.AddnewFriendSend;
 import android.bignerdranch.drifting.Friends.AddnewFriends.ApiFriendsInterface;
 import android.bignerdranch.drifting.Friends.DeleteFriend_call;
 import android.bignerdranch.drifting.Friends.FriendListInterface;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
 import android.bignerdranch.drifting.Friends.FriendsNewActivity;
-import android.bignerdranch.drifting.Friends.Friends_;
-import android.bignerdranch.drifting.Friends.Friends_Lab;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +25,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.InputStream;
@@ -181,7 +173,7 @@ public class Main_FriendsFragment extends Fragment {
                     case 0: {
 
                         DeleteFriend_call deleteFriend_call = new DeleteFriend_call();
-                        deleteFriend_call.setFriendId(friends.getStudentID());
+                        deleteFriend_call.setFriendId(new Long(friends.getStudentID()).intValue());
                         deleteFriend_call.setUserId(User_Now.getUserNow().getUser().getId());
 
                         Retrofit.Builder builder = new Retrofit.Builder()

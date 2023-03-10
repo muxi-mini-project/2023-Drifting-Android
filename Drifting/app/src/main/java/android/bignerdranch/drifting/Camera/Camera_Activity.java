@@ -7,31 +7,63 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.bignerdranch.drifting.Mine.FileUtils;
 import android.bignerdranch.drifting.R;
+import android.bignerdranch.drifting.Mine.User.User_Now;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Date;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Camera_Activity extends AppCompatActivity {
     Button mTakephotoButton;
     Button mPhotoButton;
     Camera_ZoomImageView picture;
-    private Uri imageUri;
-    public static final int TAKE_PHOTO = 1;
-    final String PHOTO_RETURN = "photo_return";
+    private Uri imageUri;//获取到的uri
+    private String FileUri;//本地保存的地址
+    Integer id;//传来的项目id
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_paishe);
+        id = getIntent().getIntExtra("camera_id", 2);
+        Log.d("camera_bug", id.toString());
+        ActivityResultLauncher launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                Bitmap bit = result.getData().getParcelableExtra("data");
+                if (result.getResultCode() == RESULT_OK) {
+                    mTakephotoButton.setText("确定");
+                    mPhotoButton.setText("更换");
+                    try {
+                        FileUri = FileUtils.saveFile(getApplicationContext(), bit, new Date().getTime() + ".png", "camera_data");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.d("camera_bug", "图片保存失败");
+                    }
+                    picture.setImageBitmap(bit);
+                }
+            }
+        });
 
         ActivityResultLauncher launcher1 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -39,11 +71,19 @@ public class Camera_Activity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK) {
                     //将拍摄的照片显示出来
                     try {
-                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                        picture.setImageBitmap(bitmap);
+                        picture.setImageURI(imageUri);
+                        Intent intent = new Intent("com.android.camera.action.CROP");
+                        intent.setDataAndType(imageUri, "image/*");
+                        intent.putExtra("crop", "true");
+                        intent.putExtra("aspectX", 1);
+                        intent.putExtra("aspectY", 1);
+                        intent.putExtra("outputX", 150);
+                        intent.putExtra("outputY", 150);
+                        intent.putExtra("return-data", true);
+                        launcher.launch(intent);
                         mTakephotoButton.setText("确定");
                         mPhotoButton.setText("更换");
-                    } catch (FileNotFoundException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -58,9 +98,16 @@ public class Camera_Activity extends AppCompatActivity {
                         // 得到图片的全路径
                         Uri uri = result.getData().getData();
                         imageUri = uri;
-                        picture.setImageURI(uri);
-                        mTakephotoButton.setText("确定");
-                        mPhotoButton.setText("更换");
+                        Intent intent = new Intent("com.android.camera.action.CROP");
+                        intent.setDataAndType(uri, "image/*");
+                        intent.putExtra("crop", "true");
+                        intent.putExtra("aspectX", 1);
+                        intent.putExtra("aspectY", 1);
+                        intent.putExtra("outputX", 150);
+                        intent.putExtra("outputY", 150);
+                        intent.putExtra("return-data", true);
+                        launcher.launch(intent);
+
                     }
                 }
 
@@ -96,10 +143,7 @@ public class Camera_Activity extends AppCompatActivity {
                     launcher1.launch(intent);
 
                 } else if (mTakephotoButton.getText().equals("确定")) {
-                    Intent intent = new Intent(Camera_Activity.this, Camera_Start.class);
-                    intent.putExtra(PHOTO_RETURN, imageUri.toString());
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    uploadPicture(FileUri, User_Now.getUserNow().getUser().getToken(), id);
                 }
             }
         });
@@ -114,6 +158,40 @@ public class Camera_Activity extends AppCompatActivity {
                     mTakephotoButton.setText("拍摄");
                     mPhotoButton.setText("相册");
                 }
+            }
+        });
+    }
+
+    private void uploadPicture(String fileuri, String token, Integer id) {
+        File file = new File(fileuri);
+        Log.d("camera_bug", "开始上传");
+        RequestBody requestBody = RequestBody.create(file, MediaType.parse("multipart/form-data"));
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("picture", file.getName(), requestBody);
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://116.204.121.9:61583/")
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = builder.build();
+        Camera_connector camera_connector = retrofit.create(Camera_connector.class);
+        Log.d("camera_bug", id.toString() + "/" + User_Now.getUserNow().getUser().getToken() + "/");
+        Call<Camera_return_upload.Camera_return_make> call = camera_connector.MakeCamera(body, new Long(id), token);
+        call.enqueue(new Callback<Camera_return_upload.Camera_return_make>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Camera_return_make> call, Response<Camera_return_upload.Camera_return_make> response) {
+                if (response.isSuccessful()) {
+                    Log.d("camera_bug", "图片上传成功");
+                    Intent intent = new Intent(Camera_Activity.this, Camera_Start.class);
+                    intent.putExtra("camera_id", id);
+                    startActivity(intent);
+                    finish();
+                    file.delete();
+                } else
+                    Log.d("camera_bug", "上传失败");
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Camera_return_make> call, Throwable t) {
+                Log.d("camera_bug", t.toString());
             }
         });
     }

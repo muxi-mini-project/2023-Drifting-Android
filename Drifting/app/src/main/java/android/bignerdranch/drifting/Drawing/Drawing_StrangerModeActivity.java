@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Camera.Camera_Activity;
+import android.bignerdranch.drifting.Login.Login_LoginActivity;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,17 +15,24 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class Drawing_StrangerModeActivity extends AppCompatActivity {
     private ImageView iv_image;
-    private final int max_number = 9;
+    private String cover_url;
     private String name;
-    private String title;
+    private String theme;
     private String person_number;
     private int number;
 
@@ -40,53 +48,43 @@ public class Drawing_StrangerModeActivity extends AppCompatActivity {
         Button choose_cover = (Button) findViewById(R.id.stranger_choose_front_cover);
         Button start = (Button) findViewById(R.id.stranger_start);
         EditText name_text = (EditText) findViewById(R.id.name_text);
-        EditText title_text = (EditText) findViewById(R.id.title_text);
+        EditText theme_text = (EditText) findViewById(R.id.title_text);
         EditText person_number_text = (EditText) findViewById(R.id.person_number_text);
 
         //按钮响应
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(name == null || title == null || person_number == null){
+                if(name == null || theme == null || person_number == null || person_number.equals("")){
                     Toast.makeText(Drawing_StrangerModeActivity.this, "请输入名字，主题和人数", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    if(isNumeric(person_number)) {
-                        number = Integer.parseInt(person_number);
-                        if(number <= max_number){
-//                            Image_create_message message = new Image_create_message(cover,kind,name,number);
-//                            Retrofit.Builder builder = new Retrofit.Builder()
-//                                    .baseUrl("/api/v1/drifting_drawing/create")
-//                                    .addConverterFactory(GsonConverterFactory.create());
-//                            Retrofit retrofit = builder.build();
-//                            Image_create image_create = retrofit.create(Image_create.class);
-//                            Call<upload_return> call = image_create.create(Login_LoginActivity.getToken(),message);
-//                            call.enqueue(new Callback<upload_return>() {
-//                                @Override
-//                                public void onResponse(Call<upload_return> call, Response<upload_return> response) {
-//                                    Toast.makeText(Drawing_StrangerModeActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
-//
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<upload_return> call, Throwable t) {
-//                                    Toast.makeText(Drawing_StrangerModeActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-                            Intent intent = new Intent(Drawing_StrangerModeActivity.this, Drawing_Start.class);
-                            intent.putExtra(PHOTO_RETURN, imageUri.toString());
-                            setResult(RESULT_OK, intent);
-                            finish();
-
-                            startActivity(new Intent(Drawing_StrangerModeActivity.this, Camera_Activity.class));
+                    Retrofit.Builder builder = new Retrofit.Builder()
+                            .baseUrl("http://116.204.121.9:61583/")
+                            .addConverterFactory(GsonConverterFactory.create());
+                    Retrofit retrofit = builder.build();
+                    create_message message = new create_message(cover_url,1,name,Integer.parseInt(person_number),theme);
+                    Api api = retrofit.create(Api.class);
+                    Call<create_return> call = api.create(Login_LoginActivity.getToken(),message);
+                    call.enqueue(new Callback<create_return>() {
+                        @Override
+                        public void onResponse(Call<create_return> call, Response<create_return> response) {
+                            create_return create_return = response.body();
+                            if(create_return != null){
+                                if(create_return.getCode() == 200){
+                                    Toast.makeText(Drawing_StrangerModeActivity.this, "创建成功！", Toast.LENGTH_SHORT).show();
+                                    Log.i("onResponse",create_return.toString());
+                                    startActivity(new Intent(Drawing_StrangerModeActivity.this, Camera_Activity.class));
+                                }
+                            }else{
+                                Toast.makeText(Drawing_StrangerModeActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else {
-                            Toast.makeText(Drawing_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onFailure(Call<create_return> call, Throwable t) {
+                            Toast.makeText(Drawing_StrangerModeActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else {
-                        Toast.makeText(Drawing_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
-                    }
+                    });
                 }
             }
         });
@@ -114,7 +112,7 @@ public class Drawing_StrangerModeActivity extends AppCompatActivity {
                 name = s.toString();
             }
         });
-        title_text.addTextChangedListener(new TextWatcher() {
+        theme_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -127,7 +125,7 @@ public class Drawing_StrangerModeActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                title = s.toString();
+                theme = s.toString();
             }
         });
         person_number_text.addTextChangedListener(new TextWatcher() {
@@ -148,14 +146,6 @@ public class Drawing_StrangerModeActivity extends AppCompatActivity {
         });
 
 
-    }
-    private boolean isNumeric(String str) {
-        for (int i = 0; i < str.length(); i++) {
-            if (!Character.isDigit(str.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

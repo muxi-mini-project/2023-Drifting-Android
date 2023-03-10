@@ -3,7 +3,7 @@ package android.bignerdranch.drifting.Inviting.Loading;
 import java.util.ArrayList;
 
 public class inviting_messageReturn {
-    private Integer code;
+    private Long code;
     private String message;
     private ArrayList<data> data;
 
@@ -12,17 +12,17 @@ public class inviting_messageReturn {
         private long file_id;
         private String createdAt;
         private String fileKind;
-        private long honer_id;
+        private long owner_id;
         private String cover;
         private int kind;
         private String theme;
-        private int number;
+        private Integer number;
 
         public data(long file_id, String createdAt, String fileKind, long honer_id, String cover, int kind, String theme, int number) {
             this.file_id = file_id;
             this.createdAt = createdAt;
             this.fileKind = fileKind;
-            this.honer_id = honer_id;
+            this.owner_id = honer_id;
             this.cover = cover;
             this.kind = kind;
             this.theme = theme;
@@ -42,7 +42,7 @@ public class inviting_messageReturn {
         }
 
         public long getHoner_id() {
-            return honer_id;
+            return owner_id;
         }
 
         public String getCover() {
@@ -67,7 +67,7 @@ public class inviting_messageReturn {
                     "file_id=" + file_id +
                     ", createdAt='" + createdAt + '\'' +
                     ", fileKind='" + fileKind + '\'' +
-                    ", honer_id=" + honer_id +
+                    ", honer_id=" + owner_id +
                     ", cover='" + cover + '\'' +
                     ", kind=" + kind +
                     ", theme='" + theme + '\'' +
@@ -84,7 +84,7 @@ public class inviting_messageReturn {
         return message;
     }
 
-    public Integer getCode() {
+    public Long getCode() {
         return code;
     }
 

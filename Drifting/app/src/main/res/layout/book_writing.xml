@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/book_writingAll"
     android:background="@drawable/u5">
 
     <LinearLayout
@@ -34,7 +35,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/book_writingText"
         android:layout_width="300dp"
         android:layout_height="590dp"
         android:layout_marginTop="60dp"
@@ -59,14 +60,14 @@
             android:layout_margin="10dp"/>
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/book_creatingToed"
             android:layout_width="70dp"
             android:layout_height="50dp"
             android:text="发布"
             android:layout_margin="10dp"/>
+
+
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

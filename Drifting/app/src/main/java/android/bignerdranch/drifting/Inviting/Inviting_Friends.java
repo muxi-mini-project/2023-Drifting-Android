@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.bignerdranch.drifting.Friends.FriendListInterface;
+import android.bignerdranch.drifting.Friends.FriendsBeInvitedID;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
 import android.bignerdranch.drifting.Main.Main_FriendsFragment;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_Now;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,13 +40,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Inviting_Friends extends AppCompatActivity {
     private RecyclerView friendsList;
     private FriendAdapterI mFriendAdapter;
+    private List<Integer> InvitingStudentsID = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inviting_friends);
-
         friendsList = findViewById(R.id.friend_list);
         friendsList.setLayoutManager(new LinearLayoutManager(this));
         updateUI();
@@ -101,12 +103,22 @@ public class Inviting_Friends extends AppCompatActivity {
             friendName = itemView.findViewById(R.id.friend_name);
             friendAuto = itemView.findViewById(R.id.friend_autograph);
 
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(Inviting_Friends.this, "邀请好友", Toast.LENGTH_SHORT).show();
+                    InvitingStudentsID.add(mFriends.getStudentID());
+                    FriendsBeInvitedID.setStudentsID(InvitingStudentsID);
+                    itemView.setEnabled(false);
+                }
+            });
+
+
         }
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(Inviting_Friends.this, "邀请好友", Toast.LENGTH_SHORT).show();
+
 
         }
     }
