@@ -6,12 +6,15 @@
     android:orientation="horizontal">
 
     <TextView
+        android:textColor="#D5DAF1"
         android:id="@+id/parter_name"
         android:text="www"
+        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.2"/>
     <TextView
+        android:gravity="center_vertical"
         android:id="@+id/body_oflist"
         android:text="abfasbfajkfhakf"
         android:layout_width="0dp"

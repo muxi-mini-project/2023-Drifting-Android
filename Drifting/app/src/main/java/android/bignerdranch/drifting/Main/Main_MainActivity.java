@@ -1,8 +1,5 @@
 package android.bignerdranch.drifting.Main;
 
-import static androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE;
-import static androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,8 +8,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.bignerdranch.drifting.Inviting.Inviting_Fragment;
 import android.bignerdranch.drifting.Mine.Mine_Fragment;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_;
-import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_;
+import android.bignerdranch.drifting.Mine.User.User_Now;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

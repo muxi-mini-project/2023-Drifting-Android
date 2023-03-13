@@ -8,9 +8,14 @@ public class messageReturn {
     private data data;
     private String zhonglei;
     private String inviter;
+    private long id;
 
-    public void setData(messageReturn.data data) {
-        this.data = data;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getMessage() {
@@ -24,6 +29,7 @@ public class messageReturn {
     public messageReturn.data getData() {
         return data;
     }
+
     public void setZhonglei(String zhonglei) {
         this.zhonglei = zhonglei;
     }
@@ -45,18 +51,6 @@ public class messageReturn {
         private long OwnerID;
         private ArrayList<Contacts> Contacts;
 
-        public void setName(String name) {
-            Name = name;
-        }
-
-        public void setOwnerID(long ownerID) {
-            OwnerID = ownerID;
-        }
-
-        public void setContacts(ArrayList<messageReturn.data.Contacts> contacts) {
-            Contacts = contacts;
-        }
-
         public String getName() {
             return Name;
         }
@@ -70,19 +64,6 @@ public class messageReturn {
         }
 
         public static class Contacts{
-
-            public void setFile_id(long file_id) {
-                this.file_id = file_id;
-            }
-
-            public void setWriter_id(long writer_id) {
-                this.writer_id = writer_id;
-            }
-
-            public void setThe_words(String the_words) {
-                this.the_words = the_words;
-            }
-
             private long file_id;
             private long writer_id;
             private String the_words;

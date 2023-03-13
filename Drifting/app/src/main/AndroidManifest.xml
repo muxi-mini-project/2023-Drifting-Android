@@ -1,78 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-<!--文件访问存储权限-->
+    <!-- 文件访问存储权限 -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-    <!--添加读取权限-->
+        tools:ignore="ScopedStorage" /> <!-- 添加读取权限 -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    <!--API >=32 访问image权限-->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <!--调用相机权限-->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!--添加写入权限-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--通知栏权限-->
+        android:maxSdkVersion="32" /> <!-- API >=32 访问image权限 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- 调用相机权限 -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 添加写入权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 通知栏权限 -->
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
-
-    <!--添加网络请求权限-->
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" /> <!-- 添加网络请求权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo"
         android:label="漂流"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:targetApi="32">
-        <activity android:name=".Drawing.Drawing_switch_mode"/>
-        <activity android:name=".Drawing.Drawing_InvitingActivity"/>
-        <activity android:name=".Drawing.Drawing_AcquaintanceModeActivity"/>
-        <activity android:name=".Inviting.Inviting_Friends"/>
-        <activity android:name=".Friends.FriendsNewActivity"
-            android:exported="false" >
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value=""/>
-        </activity>
-        <activity android:name=".Camera.Camera_setting_acquaintance"
-            android:exported="false">
-        <meta-data
-            android:name="android.app.lib_name"
-            android:value=""/>
-        </activity>
-        <activity android:name=".Camera.Camera_create"
+        <activity
+            android:name=".FriendsNotingActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
         </activity>
-        <activity android:name=".Camera.Camera_setting_stranger"
+        <activity android:name=".Friends.FriendsNotingActivity"/>
+        <activity android:name=".Inviting.Inviting_Friends" />
+        <activity android:name=".Book.Book_InvitingActivity" />
+        <activity android:name=".Novel.Novel_InvitingActivity" />
+        <activity android:name=".Mine.User.USer_items_Manager" />
+        <activity android:name=".Drawing.Drawing_switch_mode" />
+        <activity android:name=".Drawing.Drawing_InvitingActivity" />
+        <activity android:name=".Drawing.Drawing_AcquaintanceModeActivity" />
+        <activity android:name=".Camera.Camera_Inviting" />
+        <activity
+            android:name=".Friends.FriendsNewActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
         </activity>
-        <activity android:name=".Mine.Mine_BianJiActivity"
+        <activity
+            android:name=".Camera.Camera_setting_acquaintance"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Camera.Camera_create"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Camera.Camera_setting_stranger"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Mine.Mine_BianJiActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
         <activity
             android:name=".Drawing.Drawing_Album"
@@ -106,6 +114,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".Camera.Camera_Start"
             android:exported="false">
@@ -182,6 +191,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
     </application>
 
 </manifest>

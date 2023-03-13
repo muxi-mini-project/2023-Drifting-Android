@@ -5,57 +5,102 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.CursorLoader;
 
+import android.bignerdranch.drifting.Camera.Camera_ZoomImageView;
+import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.Mine.FileUtils;
 import android.bignerdranch.drifting.R;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Drawing_Activity extends AppCompatActivity {
-
-    private ImageView mImageView1;
-    private ImageView mImageView2;
-    private ImageView mImageView3;
-    private ImageView mImageView4;
+    private Button mPhotoButton;
     private Button commit;
-    private Button refuse;
+    private Button change;
+    private Camera_ZoomImageView picture;
+    private String uri;
+    private String path;
+    private long file_id;
+    final String PHOTO_RETURN = "photo_return";
+    private static final OkHttpClient client = new OkHttpClient.Builder().
+            connectTimeout(60, TimeUnit.SECONDS).
+            readTimeout(60, TimeUnit.SECONDS).
+            writeTimeout(60, TimeUnit.SECONDS).build();
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drawing_inviting);
+        setContentView(R.layout.activity_drawing);
+        picture = (Camera_ZoomImageView) findViewById(R.id.picture);
+        mPhotoButton = (Button) findViewById(R.id.album);
+        commit = (Button) findViewById(R.id.commit);
+        change = (Button) findViewById(R.id.change);
+        file_id = getIntent().getLongExtra("file_id",0);
 
-        mImageView1 = (ImageView) findViewById(R.id.mImageview1);
-        mImageView2 = (ImageView) findViewById(R.id.mImageview2);
-        mImageView3 = (ImageView) findViewById(R.id.mImageview3);
-        mImageView4 = (ImageView) findViewById(R.id.mImageview4);
-        commit = (Button) findViewById(R.id.commit_button);
-        refuse = (Button) findViewById(R.id.refuse_button);
-
-        ActivityResultLauncher launcher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        ActivityResultLauncher<Intent> launcher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == RESULT_OK) {
                     // 从相册返回的数据
                     if (result.getData() != null) {
                         // 得到图片的全路径
-                        Uri uri = result.getData().getData();
-//                        imageUri = uri;
-//                        picture.setImageURI(uri);
-//                        mTakephotoButton.setText("确定");
-//                        mPhotoButton.setText("更换");
+//                        Bitmap bit = SaveFile.getPhotoBitmap(getApplicationContext(), result.getData());
+//                        try {
+//                            uri = SaveFile.saveFile(getApplicationContext(), bit, ".JPG", "drawing");
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+                        Uri uri0 = result.getData().getData();
+                        path = getRealPathFromURI(uri0);
+                        picture.setImageURI(uri0);
+                        commit.setVisibility(View.VISIBLE);
+                        change.setVisibility(View.VISIBLE);
+                        mPhotoButton.setVisibility(View.INVISIBLE);
+
+
                     }
                 }
 
             }
         });
 
-        commit.setOnClickListener(new View.OnClickListener() {
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, null);
@@ -63,11 +108,59 @@ public class Drawing_Activity extends AppCompatActivity {
                 launcher2.launch(intent);
             }
         });
-        refuse.setOnClickListener(new View.OnClickListener() {
+
+        commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                File file = new File(path);
+
+                RequestBody requestFile = RequestBody.create(file,MediaType.parse("image/*"));
+                ArrayList<MultipartBody.Part> body = new ArrayList<>();
+                body.add(MultipartBody.Part.createFormData("picture", file.getName(), requestFile));
+                body.add(MultipartBody.Part.createFormData("file_id",String.valueOf(file_id)));
+                Retrofit.Builder builder = new Retrofit.Builder()
+                        .baseUrl("http://116.204.121.9:61583/")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create());
+                Retrofit retrofit = builder.build();
+                Image_upload image_upload = retrofit.create(Image_upload.class);
+                Call<create_return> call = image_upload.upload(body,Login_LoginActivity.getToken());
+                call.enqueue(new Callback<create_return>() {
+                    @Override
+                    public void onResponse(Call<create_return> call, Response<create_return> response) {
+                        create_return create_return = response.body();
+                        if(create_return.getCode() == 200){
+                            Toast.makeText(Drawing_Activity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }else{
+                            Toast.makeText(Drawing_Activity.this, "上传出现问题，请稍后重试", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<create_return> call, Throwable t) {
+                        Toast.makeText(Drawing_Activity.this, "上传出现问题，请稍后重试", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         });
+
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, null);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                launcher2.launch(intent);
+            }
+        });
+    }
+    private String getRealPathFromURI(Uri contentUri) { //传入图片uri地址
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 }

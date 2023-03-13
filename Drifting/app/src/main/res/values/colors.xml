@@ -11,4 +11,5 @@
     <color name="side_navigationBackground">#FBFBFD</color>
     <color name="friend_search_background">#F5F4F5</color>
     <color name="friend_background">#FAFAFC</color>
+    <color name="book">#D5DAF1</color>
 </resources>

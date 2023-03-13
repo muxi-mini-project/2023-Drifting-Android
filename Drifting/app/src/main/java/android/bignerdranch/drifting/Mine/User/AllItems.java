@@ -1,6 +1,4 @@
-package android.bignerdranch.drifting.User;
-
-import android.bignerdranch.drifting.Camera.Camera_;
+package android.bignerdranch.drifting.Mine.User;
 
 import java.util.List;
 

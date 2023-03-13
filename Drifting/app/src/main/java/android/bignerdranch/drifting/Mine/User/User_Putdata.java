@@ -1,4 +1,4 @@
-package android.bignerdranch.drifting.User;
+package android.bignerdranch.drifting.Mine.User;
 
 /**
  * 上传用户更改后的数据

@@ -1,21 +1,21 @@
-package android.bignerdranch.drifting.User;
+package android.bignerdranch.drifting.Mine.User;
 
 /**
  * 通过token请求用户信息所得到的数据
  */
 public class User_return {
+        private Long studentID;
         private String avatar;
         private String name;
         private String selfWord;
         private String sex;
-        private Integer StudentID;
 
-        public Integer getStudentID() {
-                return StudentID;
+        public Long getStudentID() {
+                return studentID;
         }
 
-        public void setStudentID(Integer studentID) {
-                StudentID = studentID;
+        public void setStudentID(Long studentID) {
+                this.studentID = studentID;
         }
 
         public String getAvatar() { return avatar; }

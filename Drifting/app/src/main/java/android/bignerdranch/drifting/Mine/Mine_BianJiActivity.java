@@ -1,26 +1,20 @@
 package android.bignerdranch.drifting.Mine;
 
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_;
-import android.bignerdranch.drifting.User.User_Now;
-import android.bignerdranch.drifting.User.User_Putdata;
-import android.bignerdranch.drifting.User.User_connector;
+import android.bignerdranch.drifting.Mine.User.User_;
+import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_Putdata;
+import android.bignerdranch.drifting.Mine.User.User_connector;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,6 +62,7 @@ public class Return_fromdata{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                User_Now.getUserNow().getUser().setName(s.toString());
                 mUser.setName(s.toString());
             }
 
@@ -83,7 +78,8 @@ public class Return_fromdata{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUser.setSignature("个性签名:"+s.toString());
+                User_Now.getUserNow().getUser().setSignature(s.toString());
+                mUser.setSignature(s.toString());
             }
 
             @Override
@@ -96,7 +92,6 @@ public class Return_fromdata{
                 User_Putdata user_putdata = new User_Putdata();
                 user_putdata.setName(mUser.getName());
                 user_putdata.setSelfWord(mUser.getSignature());
-                User_Now.getUserNow().setUser(mUser);
                 Retrofit.Builder builder = new Retrofit.Builder()
                         .baseUrl("http://116.204.121.9:61583/")
                         .addConverterFactory(GsonConverterFactory.create());

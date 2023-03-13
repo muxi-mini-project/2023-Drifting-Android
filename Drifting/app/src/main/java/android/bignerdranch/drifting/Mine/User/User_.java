@@ -1,4 +1,4 @@
-package android.bignerdranch.drifting.User;
+package android.bignerdranch.drifting.Mine.User;
 
 import android.graphics.Bitmap;
 
@@ -15,8 +15,8 @@ public class User_ {
     private String signature;//个性签名
     private String sex;
     private boolean ifTongZhi;//是否通知进度
-    private Bitmap avatar;
-    private String portrait;//头像
+    private Bitmap avatar;//头像图片
+    private String portrait;//头像URL
     private String token;//登录获取到的token
 
     public String getToken() {
@@ -33,11 +33,11 @@ public class User_ {
         ifTongZhi = false;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

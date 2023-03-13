@@ -1,12 +1,12 @@
 package android.bignerdranch.drifting.Camera;
 
 import android.app.AlertDialog;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -24,15 +24,15 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Camera_setting_stranger extends AppCompatActivity {
-    final int KIND = 0;
+    final Long KIND = new Long(0);
     EditText mName;
     EditText mTitle;
     EditText mNumber;
     String name;
     String theme;
     Long number;
-    ImageView iv_image;
     String mCoverURL;
+    ImageView iv_image;
     Button mSelectCover;
     Button mStart;
 
@@ -81,7 +81,8 @@ public class Camera_setting_stranger extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                number = Integer.valueOf(mNumber.getText().toString()).longValue();
+                if (s != null)
+                    number = Integer.valueOf(mNumber.getText().toString()).longValue();
             }
 
             @Override
@@ -98,36 +99,10 @@ public class Camera_setting_stranger extends AppCompatActivity {
         mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (number > 9 || number <= 0||theme == null||name == null||mCoverURL == null) {
+                if (number > 9 || number <= 0 || theme == null || name == null || mCoverURL == null) {
                     Toast.makeText(getApplicationContext(), "请输入正确的数据或选择封面", Toast.LENGTH_SHORT).show();
                 } else {
-                    Camera_return_upload.Camera_upload_create upload_create = new Camera_return_upload.Camera_upload_create();
-                    upload_create.setName(name);
-                    upload_create.setCover(mCoverURL);
-                    upload_create.setKind(new Long(KIND));
-                    upload_create.setTheme(theme);
-                    upload_create.setNumber(new Long(number));
-                    Retrofit.Builder builder = new Retrofit.Builder()
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .baseUrl("http://116.204.121.9:61583/");
-                    Retrofit retrofit = builder.build();
-                    Camera_connector camera_connector = retrofit.create(Camera_connector.class);
-                    Call<Camera_return_upload.Camera_return_create> call = camera_connector.CreateCamera_new(upload_create, User_Now.getUserNow().getUser().getToken());
-                    call.enqueue(new Callback<Camera_return_upload.Camera_return_create>() {
-                        @Override
-                        public void onResponse(Call<Camera_return_upload.Camera_return_create> call, Response<Camera_return_upload.Camera_return_create> response) {
-                            Toast.makeText(getApplicationContext(),"创建成功，现在开始创作吧！",Toast.LENGTH_SHORT).show();
-                            Camera_ camera = new Camera_(name,theme,number,mCoverURL,new Long(1));
-                            Camera_ready_create.getCamera_ready_create().setCamera(camera);
-                            Intent intent = new Intent(Camera_setting_stranger.this,Camera_Start.class);
-                            startActivity(intent);
-                        }
-
-                        @Override
-                        public void onFailure(Call<Camera_return_upload.Camera_return_create> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(),t.getMessage().toString(),Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    Create_Camera(name,mCoverURL,number,theme);
                 }
             }
         });
@@ -196,5 +171,36 @@ public class Camera_setting_stranger extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+    private void Create_Camera(String name,String mCoverURL,Long number,String theme){
+        Camera_return_upload.Camera_upload_create upload_create = new Camera_return_upload.Camera_upload_create();
+        upload_create.setName(name);
+        upload_create.setCover(mCoverURL);
+        upload_create.setKind(KIND);
+        upload_create.setTheme(theme);
+        upload_create.setNumber(number);
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://116.204.121.9:61583/");
+        Retrofit retrofit = builder.build();
+        Camera_connector camera_connector = retrofit.create(Camera_connector.class);
+        Call<Camera_return_upload.Camera_return_create> call = camera_connector.CreateCamera_new(upload_create, User_Now.getUserNow().getUser().getToken());
+        call.enqueue(new Callback<Camera_return_upload.Camera_return_create>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Camera_return_create> call, Response<Camera_return_upload.Camera_return_create> response) {
+                if(response.isSuccessful()){
+                GetAllItems.getGetAllItems().refreshMessage(GetAllItems.CAMERA);
+                Intent intent = new Intent(Camera_setting_stranger.this, Camera_Start.class);
+                intent.putExtra("camera_id", response.body().getData().intValue());
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "创建成功，现在开始创作吧！", Toast.LENGTH_SHORT).show();
+            }
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Camera_return_create> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

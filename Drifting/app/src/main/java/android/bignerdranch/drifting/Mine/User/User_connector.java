@@ -1,15 +1,11 @@
-package android.bignerdranch.drifting.User;
+package android.bignerdranch.drifting.Mine.User;
 
-import android.bignerdranch.drifting.Friends.FriendsList_return;
+import android.bignerdranch.drifting.Inviting.Loading.inviting_messageReturn;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
 import android.bignerdranch.drifting.Mine.Mine_BianJiActivity;
 import android.bignerdranch.drifting.Mine.Mine_Fragment;
-import android.bignerdranch.drifting.detail_request.request_body;
-
-import java.util.Map;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -53,6 +49,33 @@ public interface User_connector {
      * 通过id获得改用户的信息
      */
     @POST("api/v1/user/id_detail")
-    Call<User_name_getFormID_return> getHostName(@Body GetNameFormIDRequest getNameFormIDRequest,
-                                         @Header("Authorization") String token);
+    Call<android.bignerdranch.drifting.User.User_name_getFormID_return> getHostName(@Body android.bignerdranch.drifting.User.GetNameFormIDRequest getNameFormIDRequest,
+                                                                                    @Header("Authorization") String token);
+    /**
+     * 获得用户创建啊的漂流本
+     */
+    @GET("/api/v1/drifting_note/create")
+    Call<inviting_messageReturn>  getMyBook( @Header("Authorization") String token);
+
+    /**
+     * 获得创建的漂流小说
+     */
+    @GET("/api/v1/drifting_novel/create")
+    Call<inviting_messageReturn>  getMyNovel( @Header("Authorization") String token);
+
+    /**
+     * 漂流画创建的
+     * @param token
+     * @return
+     */
+    @GET("/api/v1/drifting_drawing/create")
+    Call<inviting_messageReturn>  getMyDraw( @Header("Authorization") String token);
+
+    /**
+     * 创建的漂流相机
+     * @param token
+     * @return
+     */
+    @GET("/api/v1/drifting_picture/create")
+    Call<inviting_messageReturn>  getMyPicture( @Header("Authorization") String token);
 }

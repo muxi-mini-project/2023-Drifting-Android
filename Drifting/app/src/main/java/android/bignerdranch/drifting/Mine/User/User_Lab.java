@@ -1,10 +1,9 @@
-package android.bignerdranch.drifting.User;
+package android.bignerdranch.drifting.Mine.User;
 
 import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class User_Lab {
     private static User_Lab sUserLab;

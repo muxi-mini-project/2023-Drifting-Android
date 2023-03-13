@@ -4,18 +4,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_Participate_request;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_request;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_return;
 import android.bignerdranch.drifting.Inviting.Inviting_Friends;
+import android.bignerdranch.drifting.Mine.User.User_Now;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -23,8 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.io.Serializable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,14 +80,15 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
                             Retrofit retrofit = builder.build();
                             ApiNote bookcreate = retrofit.create(ApiNote.class);
                             Call<Book_create_return> call = bookcreate.bookCreate(book_create_request
-                                    ,User_Now.getUserNow().getUser().getToken());
+                                    , User_Now.getUserNow().getUser().getToken());
                             call.enqueue(new Callback<Book_create_return>() {
                                 @Override
                                 public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
                                     Book_create_return book_create_return = response.body();
                                     Toast.makeText(Book_AcquaintanceModeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(Book_AcquaintanceModeActivity.this, Book_Writing.class);
-                                    intent.putExtra("data",response.body().getData());
+                                    intent.putExtra("data",String.valueOf(response.body().getData()));
+                                    intent.putExtra("cover",mCoverURL);
                                     startActivity(intent);
                                 }
 

@@ -4,8 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/book_writingAll"
-    android:background="@drawable/u5">
+    android:id="@+id/book_writingAll">
+
+    <ImageView
+        android:id="@+id/book_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/cover_8"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -35,6 +42,7 @@
     </LinearLayout>
 
     <EditText
+        android:background="@mipmap/book_writing_back"
         android:id="@+id/book_writingText"
         android:layout_width="300dp"
         android:layout_height="590dp"
@@ -68,6 +76,5 @@
 
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

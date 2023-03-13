@@ -1,30 +1,26 @@
 package android.bignerdranch.drifting.Camera;
 
-import android.bignerdranch.drifting.User.User_Lab;
-import android.content.Context;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 单个漂流相机项目
  */
 public class Camera_ {
-    private final String name;//项目名称
-    private final String title;//项目主题
+    private String name;//项目名称
+    private String title;//项目主题
     private String titlephoto;//项目主题图片(封面)
     private Long nowuser;//目前参与人数
-    private final String date;//发起时间
+    private String date;//发起时间
     private Long ID;//id
     private int timeofone;//单人用时,单位:天
-    private final List<String> photoLab;//项目所含图片
+    private List<String> photoLab;//项目所含图片URL
     private Long maxuser;//最大参与人数
     private Long creatornow; //当前创作人
     private Boolean Ifover;//是否结束
     private int kind;//0生人1熟人
+
 
     /**
      * 构造器
@@ -32,6 +28,7 @@ public class Camera_ {
      * @param name      项目名称
      * @param title     主题
      */
+
     public Camera_(String name, String title, Long maxuser, String titlephoto,Long nowuser) {
         if (title == null || title == "")
             this.title = "无主题";
@@ -46,7 +43,9 @@ public class Camera_ {
         this.Ifover = false;
         this.titlephoto = titlephoto;
     }
-
+    public Camera_(){
+    this.photoLab = new ArrayList<>();
+    }
     public Long getNowuser() {
         return nowuser;
     }
@@ -106,10 +105,6 @@ public class Camera_ {
         return name;
     }
 
-//    public String getinitiator(Context context) {
-//        return User_Lab.get(context).getUser(participator.get(0)).getName();
-//    }
-
     public Long getMaxuser() {
         return maxuser;
     }
@@ -128,6 +123,25 @@ public class Camera_ {
 
     public void setIfover(Boolean ifover) {
         Ifover = ifover;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setPhotoLab(List<String> photoLab) {
+        this.photoLab = photoLab;
+    }
+
+    public void setMaxuser(Long maxuser) {
+        this.maxuser = maxuser;
     }
 
 }

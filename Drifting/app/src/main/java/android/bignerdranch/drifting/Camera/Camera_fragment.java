@@ -31,7 +31,7 @@ public class Camera_fragment extends Fragment {
     mFriend.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getActivity(),Camera_Start.class);
+            Intent intent = new Intent(getActivity(),Camera_setting_acquaintance.class);
             startActivity(intent);
         }
     });

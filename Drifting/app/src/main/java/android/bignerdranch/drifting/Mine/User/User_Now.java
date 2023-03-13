@@ -1,4 +1,4 @@
-package android.bignerdranch.drifting.User;
+package android.bignerdranch.drifting.Mine.User;
 
 /**
  * 当前登录的user

@@ -1,27 +1,33 @@
 package android.bignerdranch.drifting.Mine;
 
 import static android.app.Activity.RESULT_OK;
+import static android.bignerdranch.drifting.Mine.GetAllItems.mCamera_connector;
 import static androidx.recyclerview.widget.RecyclerView.Adapter;
 import static androidx.recyclerview.widget.RecyclerView.OnClickListener;
 
+import android.annotation.SuppressLint;
 import android.bignerdranch.drifting.Camera.Camera_;
+import android.bignerdranch.drifting.Camera.Camera_return_upload;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.User_;
-import android.bignerdranch.drifting.User.User_Now;
-import android.bignerdranch.drifting.User.User_connector;
+import android.bignerdranch.drifting.Mine.User.USer_items_Manager;
+import android.bignerdranch.drifting.Mine.User.User_;
+import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_connector;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
-import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,8 +72,26 @@ public class Mine_Fragment extends Fragment {
     TextView mNameText;
     ImageView mPortrait;
     User_ mUser;
-    boolean isRefuse = false;
-    boolean Havpower = false;
+    LinearLayout mLayout_ing;
+    LinearLayout mLayout_over;
+    static List<Items> List_ItemsAll = new ArrayList<>();
+    Handler mHandler = new Handler(){
+      @SuppressLint("HandlerLeak")
+      @Override
+      public void handleMessage(Message msg){
+          if(msg.what == 200){
+              List<String> Namesing = new ArrayList<>();
+              List<Long> Nowusering = new ArrayList<>();
+              List<Long> Maxusering = new ArrayList<>();
+              for(int i = 0; i< List_ItemsAll.size(); i++){
+                  Namesing.add(List_ItemsAll.get(i).getName());
+                  Nowusering.add(List_ItemsAll.get(i).getNowamount());
+                  Maxusering.add(List_ItemsAll.get(i).getMaxamount());
+              }
+              updateUI(Namesing,Nowusering,Maxusering);
+          }
+      }
+    };
 
     public class User_returnformAvatar {
         private Object message;
@@ -93,6 +117,8 @@ public class Mine_Fragment extends Fragment {
         mDoingNow.setLayoutManager(new LinearLayoutManager(getContext()));
         mDoneAgo = (RecyclerView) view.findViewById(R.id.gerenjinduover_view);
         mDoneAgo.setLayoutManager(new LinearLayoutManager(getContext()));
+        mLayout_ing = (LinearLayout)view.findViewById(R.id.gerenlayout1);
+        mLayout_over = (LinearLayout)view.findViewById(R.id.gerenlayout3);
         ActivityResultLauncher<Intent> launcher3 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -101,14 +127,15 @@ public class Mine_Fragment extends Fragment {
                     Bitmap bit = result.getData().getParcelableExtra("data");
                     String uri = null;
                     try {
-                        uri = FileUtils.saveFile(bit, new Date().getTime() + ".png", null);
+                        uri = FileUtils.saveFile(getContext(),bit, new Date().getTime() + ".png", null);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Toast.makeText(getContext(), "保存失败", Toast.LENGTH_SHORT).show();
+                        Log.d("mine_bug","头像保存失败");
                     }
                     if (result.getResultCode() == RESULT_OK) {
                         mPortrait.setImageBitmap(bit);
                         mUser.setPortrait(uri);
+                        User_Now.getUserNow().getUser().setavatar(bit);
                         putavatar(User_Now.getUserNow().getUser().getPortrait(), mUser.getToken());
                     }
                 }
@@ -136,20 +163,20 @@ public class Mine_Fragment extends Fragment {
                 }
             }
         });
-        ActivityResultLauncher<Intent> launcher1 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    isRefuse = !Environment.isExternalStorageManager();
-                }
-            }
-        });
+//        ActivityResultLauncher<Intent> launcher1 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+//            @Override
+//            public void onActivityResult(ActivityResult result) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    isRefuse = !Environment.isExternalStorageManager();
+//                }
+//            }
+//        });
         ActivityResultLauncher<Intent> launcher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == RESULT_OK) {
                     mNameText.setText(User_Now.getUserNow().getUser().getName());
-                    mSignText.setText(User_Now.getUserNow().getUser().getSignature());
+                    mSignText.setText("个性签名:"+User_Now.getUserNow().getUser().getSignature());
                 }
             }
         });
@@ -157,6 +184,7 @@ public class Mine_Fragment extends Fragment {
         if (User_Now.getUserNow().getUser().getavatar() == null) {
             try {
                 mPortrait.setImageBitmap(FileUtils.getImage(User_Now.getUserNow().getUser().getPortrait(), FileUtils.AVATAR));
+                User_Now.getUserNow().getUser().setavatar(FileUtils.getImage(User_Now.getUserNow().getUser().getPortrait(), FileUtils.AVATAR));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -165,24 +193,24 @@ public class Mine_Fragment extends Fragment {
         }
         mNameText.setText(mUser.getName());
         mSexText.setText("性别:" + mUser.getSex());
-        mSignText.setText(mSignText.getText() + mUser.getSignature());
+        mSignText.setText( "个性签名:"+mUser.getSignature());
         mPortrait.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !isRefuse) {// android 11  且 不是已经被拒绝
-                    // 先判断有没有权限
-                    if (!Environment.isExternalStorageManager()) {
-                        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                        intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
-                        launcher1.launch(intent);
-                    } else
-                        Havpower = true;
-                }
-                if (Havpower) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !isRefuse) {// android 11  且 不是已经被拒绝
+//                    // 先判断有没有权限
+//                    if (!Environment.isExternalStorageManager()) {
+//                        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+//                        intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+//                        launcher1.launch(intent);
+//                    } else
+//                        Havpower = true;
+//                }
+//                if (Havpower) {
                     Intent intent = new Intent(Intent.ACTION_PICK, null);
                     intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                     launcher.launch(intent);
-                }
+               // }
             }
         });
         mZiliaoButton.setOnClickListener(new OnClickListener() {
@@ -192,18 +220,29 @@ public class Mine_Fragment extends Fragment {
                 launcher2.launch(intent);
             }
         });
-        updateUI();
+        mLayout_ing.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            startActivity(new Intent(getActivity(), USer_items_Manager.class));
+            }
+        });
+        mLayout_over.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), USer_items_Manager.class));
+            }
+        });
+        GetCamera_ownercrea();
         return view;
     }
 
-    public void updateUI() {
-        DoingAdapter = new JinduAdaptering();//将案例组传给Adapter并创建Adapter
+    public void updateUI(List<String> Namesing,List<Long> Nowusering,List<Long> Maxusering) {
+        DoingAdapter = new JinduAdaptering(Namesing,Nowusering,Maxusering);//将案例组传给Adapter并创建Adapter
         mDoingNow.setAdapter(DoingAdapter);//将RecyclerView与Adapter绑定
 //            if (DoneAdapter == null) {
 //                DoneAdapter = new JinduAdapterover();
 //                mDoneAgo.setAdapter(DoneAdapter);
     }
-
     /**
      * 上传图片
      */
@@ -244,13 +283,13 @@ public class Mine_Fragment extends Fragment {
     private class JinduAdaptering extends Adapter<RecyclerView.ViewHolder> {
         private List<String> namesing;
         private List<Long> nowusering;
-        private List<Long> Maxusering;
+        private List<Long> maxusering;
 
         //    private final List<Boolean> Ifusering = GetAllItems.get(mUser.getUUID(), getContext()).getAllIfuserunderway();
-        public JinduAdaptering() {
-            namesing = GetAllItems.getGetAllItems().GetCamera_ownercrea_name();
-            nowusering = GetAllItems.getGetAllItems().GetCamera_ownercrea_nowuser();
-            Maxusering = GetAllItems.getGetAllItems().GetCamera_ownercrea_maxuser();
+        public JinduAdaptering(List<String> Namesing,List<Long> Nowusering,List<Long> Maxusering) {
+            namesing = Namesing;
+            nowusering = Nowusering;
+            maxusering = Maxusering;
         }
 
         @NonNull
@@ -273,7 +312,7 @@ public class Mine_Fragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             String name = "《" + namesing.get(position) + "》";
-            String number = nowusering.get(position) + "/" + Maxusering.get(position);
+            String number = nowusering.get(position) + "/" + maxusering.get(position);
             if (holder instanceof JinduHolder)
                 ((JinduHolder) holder).bind(name, number);
             else if (holder instanceof JinduHolder2)
@@ -286,33 +325,32 @@ public class Mine_Fragment extends Fragment {
         }
 
     }
+        private class JinduAdapterover extends Adapter<JinduHolder> {
+        private final List<String> name = new ArrayList<>();
+        private final List<Integer> Maxuserover = new ArrayList<>();
 
-    //    private class JinduAdapterover extends Adapter<JinduHolder> {
-//        private final List<String> name = GetAllItems.GetCamera_ownercrea_name(getContext());
-//        private final List<Integer> Maxuserover = GetAllItems.GetCamera_ownercrea_maxuser(getContext());
-//
-//        public JinduAdapterover() {
-//        }
-//
-//        @NonNull
-//        @Override
-//        public JinduHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-//            return new JinduHolder(layoutInflater, parent);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull JinduHolder holder, int position) {
-//            String name = "《" + this.name.get(position) + "》";
-//            String number = Maxuserover.get(position) + "/" + Maxuserover.get(position);
-//            holder.bind(name, number);
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return name.size();//RecyclerView通过调用该方法确定一共有多少个Fragment
-//        }
-//    }
+        public JinduAdapterover() {
+        }
+
+        @NonNull
+        @Override
+        public JinduHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            return new JinduHolder(layoutInflater, parent);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull JinduHolder holder, int position) {
+            String name = "《" + this.name.get(position) + "》";
+            String number = Maxuserover.get(position) + "/" + Maxuserover.get(position);
+            holder.bind(name, number);
+        }
+
+        @Override
+        public int getItemCount() {
+            return name.size();//RecyclerView通过调用该方法确定一共有多少个Fragment
+        }
+    }
     private static class JinduHolder extends RecyclerView.ViewHolder {
         private TextView mJinduname;
         private TextView mJindurenshu;
@@ -328,7 +366,6 @@ public class Mine_Fragment extends Fragment {
             mJindurenshu.setText(number);
         }
     }
-
     private class JinduHolder2 extends RecyclerView.ViewHolder {
         private TextView mJinduname;
         private TextView mJindurenshu;
@@ -346,4 +383,46 @@ public class Mine_Fragment extends Fragment {
         }
     }
 
+    /**
+     * 获取自己创建的漂流相机
+     * @return
+     */
+    public void GetCamera_ownercrea() {
+        if (List_ItemsAll.isEmpty()) {
+            List<Items> camera_list = new ArrayList<>();
+            String token = User_Now.getUserNow().getUser().getToken();
+            Call<Camera_return_upload.Camera_return_usermessage> call = mCamera_connector.GetCamera_mes_user(token);
+            call.enqueue(new Callback<Camera_return_upload.Camera_return_usermessage>() {
+                @Override
+                public void onResponse(Call<Camera_return_upload.Camera_return_usermessage> call, Response<Camera_return_upload.Camera_return_usermessage> response) {
+                    Camera_return_upload.Camera_return_usermessage message = response.body();
+                    List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+                    for (int i = 0; i < list.size(); i++) {
+                        Items item = new Items(list.get(i).getName(),
+                                list.get(i).getTheme(),
+                                list.get(i).getCover(),
+                                "漂流相机",
+                                list.get(i).getKind(),
+                                list.get(i).getWriter_number(),
+                                list.get(i).getNumber());
+                        camera_list.add(item);
+                    }
+                    List_ItemsAll = camera_list;
+                    Log.d("Mine_bug","漂流相机获取成功");
+                    Message message1 = new Message();
+                    message1.what = 200;
+                    mHandler.sendMessage(message1);
+                }
+
+                @Override
+                public void onFailure(Call<Camera_return_upload.Camera_return_usermessage> call, Throwable t) {
+                }
+            });
+        } else {
+            Message message1 = new Message();
+            message1.what = 200;
+            mHandler.sendMessage(message1);
+            Log.d("Mine_bug","漂流相机获取成功");
+        }
+    }
 }

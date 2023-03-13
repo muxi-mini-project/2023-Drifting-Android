@@ -8,12 +8,6 @@ public interface inviting_request {
         @GET("api/v1/drifting_drawing/invite")
         Call<inviting_messageReturn> drawing_request(@Header ("Authorization") String token);
 
-
-        /**
-         * 获得漂流邀请
-         * @param token
-         * @return
-         */
         @GET("api/v1/drifting_note/invite")
         Call<inviting_messageReturn> book_request(@Header ("Authorization") String token);
 

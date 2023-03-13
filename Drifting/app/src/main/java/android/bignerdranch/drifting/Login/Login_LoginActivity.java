@@ -4,17 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.bignerdranch.drifting.Main.Main_MainActivity;
 import android.bignerdranch.drifting.Mine.FileUtils;
-import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.User.AllItems;
-import android.bignerdranch.drifting.User.User_;
-import android.bignerdranch.drifting.User.User_Now;
-import android.bignerdranch.drifting.User.User_connector;
-import android.bignerdranch.drifting.User.User_return;
+import android.bignerdranch.drifting.Mine.User.User_;
+import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.Mine.User.User_connector;
+import android.bignerdranch.drifting.Mine.User.User_return;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
@@ -28,8 +25,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -175,13 +170,13 @@ public class Login_LoginActivity extends AppCompatActivity {
 //        AllItems.getAllItems().setCamera_name_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_name());
 //        AllItems.getAllItems().getCamera_nowuser_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_nowuser());
 //    }
-    public void upload_User(String token) {
+    public void upload_User(String Token) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
         User_connector mine_connector = retrofit.create(User_connector.class);
-        Call<User_returnAll> call = mine_connector.getUserMes(token);
+        Call<User_returnAll> call = mine_connector.getUserMes(Token);
 
         call.enqueue(new Callback<User_returnAll>() {
             @Override
@@ -192,8 +187,9 @@ public class Login_LoginActivity extends AppCompatActivity {
                 if (user1.getSelfWord() != "" && user1.getSelfWord() != null)
                     user.setSignature(user1.getSelfWord());
                 user.setSex(user1.getSex());
-                user.setToken(token);
-                user.setId(user1.getStudentID());
+                user.setToken(Token);
+                token = Token;
+                user.setId(user1.getStudentID().intValue());
                 user.setPortrait("http://" + user1.getAvatar());
                 try {
                     FileUtils.getImage(user.getPortrait(), FileUtils.AVATAR);

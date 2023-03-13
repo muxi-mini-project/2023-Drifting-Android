@@ -1,4 +1,4 @@
-package android.bignerdranch.drifting.User;
+package android.bignerdranch.drifting.Mine.User;
 /**
  * 用于调用通知提醒
  * 后台实时提醒需要服务器，暂时不写
