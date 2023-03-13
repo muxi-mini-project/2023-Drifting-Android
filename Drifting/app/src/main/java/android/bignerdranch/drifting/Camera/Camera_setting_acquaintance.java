@@ -6,7 +6,7 @@ import android.bignerdranch.drifting.Friends.FriendListInterface;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
 import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -311,7 +311,7 @@ public class Camera_setting_acquaintance extends AppCompatActivity {
             @Override
             public void onResponse(Call<Camera_return_upload.Camera_return_create> call, Response<Camera_return_upload.Camera_return_create> response) {
                 if (response.isSuccessful()) {
-                    GetAllItems.getGetAllItems().refreshMessage(GetAllItems.CAMERA);
+                    GetAllItems.getGetAllItems().refreshMessage();
                     id = response.body().getData();
                     Message message = new Message();
                     message.what = 201;

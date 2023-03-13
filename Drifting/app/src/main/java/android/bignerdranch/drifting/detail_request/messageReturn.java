@@ -9,6 +9,15 @@ public class messageReturn {
     private String zhonglei;
     private String inviter;
     private long id;
+    private int position;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public long getId() {
         return id;

@@ -5,11 +5,13 @@
     android:layout_height="match_parent"
     android:background="#FEFEFE"
     android:orientation="vertical">
-
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
     <ImageView
         android:layout_width="300dp"
         android:layout_height="150dp"
-        android:layout_marginLeft="100dp"
+        android:layout_alignParentRight="true"
         android:layout_marginTop="180dp"
         android:background="@drawable/create_3" />
 
@@ -17,18 +19,19 @@
         android:layout_width="350dp"
         android:layout_height="200dp"
         android:layout_marginTop="50dp"
+        android:layout_alignParentLeft="true"
         android:background="@drawable/create_2" />
-
+</RelativeLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="200dp">
 
         <ImageView
             android:id="@+id/imageView12"
             android:layout_width="800dp"
             android:layout_height="350dp"
-            android:layout_marginEnd="200dp"
-            android:layout_marginBottom="550dp"
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="70dp"
             android:background="@drawable/create_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,20 +39,58 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
+    <RelativeLayout
         android:layout_width="330dp"
         android:layout_height="200dp"
-        android:layout_marginTop="530dp"
-        android:background="@drawable/create_6" />
+        android:layout_gravity="bottom">
+        <ImageView
+            android:layout_width="330dp"
+            android:layout_height="200dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/create_6" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:text="创建我的漂流xx:"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/acquaintance_mode"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="130dp"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/shape_drifting_book_text"
+            android:text="熟人模式"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/stranger_mode"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="130dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/shape_drifting_book_text"
+            android:text="生人模式"
+            android:textSize="20sp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:layout_marginLeft="200dp"
+        android:layout_alignParentRight="true"
         android:layout_marginTop="400dp"
         android:background="@drawable/create_5" />
-
+    </RelativeLayout>
     <ImageView
         android:layout_width="300dp"
         android:layout_height="150dp"
@@ -63,7 +104,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="140dp"
         android:text="@string/drifting_camera_playing_method"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/textView12"
@@ -72,7 +113,7 @@
         android:layout_marginLeft="150dp"
         android:layout_marginTop="230dp"
         android:text="@string/drifting_camera_Ongoing"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/textView13"
@@ -81,7 +122,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="350dp"
         android:text="@string/drifting_camera_over"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/textView14"
@@ -91,39 +132,6 @@
         android:layout_marginTop="440dp"
         android:gravity="center"
         android:text="@string/drifting_drafts"
-        android:textSize="15sp" />
-
-
-    <TextView
-
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="560dp"
-        android:text="创建我的漂流xx:"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/acquaintance_mode"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="130dp"
-        android:layout_marginTop="600dp"
-        android:background="@drawable/shape_drifting_book_text"
-        android:text="熟人模式"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/stranger_mode"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="130dp"
-        android:layout_marginTop="660dp"
-        android:background="@drawable/shape_drifting_book_text"
-        android:text="生人模式"
-        android:textSize="20sp" />
-
+        android:textSize="13sp" />
 
 </FrameLayout>

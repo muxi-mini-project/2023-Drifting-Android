@@ -6,8 +6,8 @@ import android.bignerdranch.drifting.Inviting.Loading.inviting_messageReturn;
 import android.bignerdranch.drifting.Inviting.Loading.inviting_request;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.GetNameFormIDRequest;
-import android.bignerdranch.drifting.Mine.User.User_Now;
-import android.bignerdranch.drifting.Mine.User.User_connector;
+import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.User.User_connector;
 import android.bignerdranch.drifting.User.User_name_getFormID_return;
 import android.bignerdranch.drifting.detail_request.messageReturn;
 import android.bignerdranch.drifting.detail_request.request;
@@ -44,8 +44,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  *用户参加漂流项目
- * 因为没给创建者的名字，
- *
  */
 public class Book_inviting extends AppCompatActivity {
     private TextView bookName;
@@ -53,6 +51,7 @@ public class Book_inviting extends AppCompatActivity {
     private TextView bookStartTime;
     private TextView bookHostName;
     private Button refuseBtn;
+    private Button agreeBtn;
     private String bookCover; //漂流封面
     private String timeCreate; //漂流创建时间
     private String theme; //漂流主题
@@ -166,6 +165,7 @@ public class Book_inviting extends AppCompatActivity {
                     }
                 });
 
+                //拒绝参加漂流本
                 refuseBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -175,14 +175,24 @@ public class Book_inviting extends AppCompatActivity {
                         returnCall.enqueue(new Callback<Book_create_return>() {
                             @Override
                             public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
-                                Toast.makeText(Book_inviting.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             }
-
                             @Override
                             public void onFailure(Call<Book_create_return> call, Throwable t) {
 
                             }
                         });
+
+                    }
+                });
+                //同意参加漂流项目
+                agreeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent1 = new Intent(Book_inviting.this,Book_Writing.class);
+                        intent1.putExtra("data",idn);
+                        intent1.putExtra("cover",bookCover);
+
+                        startActivity(intent1);
 
                     }
                 });
@@ -211,6 +221,7 @@ public class Book_inviting extends AppCompatActivity {
             mContacts  = contacts;
             GetNameFormIDRequest getNameFormIDRequest  = new GetNameFormIDRequest();
             getNameFormIDRequest.setStudentID(mContacts.getWriter_id());
+            content.setText(mContacts.getThe_words());
 
             Retrofit.Builder builder  = new Retrofit.Builder()
                     .baseUrl("http://116.204.121.9:61583/")
@@ -283,6 +294,7 @@ public class Book_inviting extends AppCompatActivity {
         bookStartTime  =findViewById(R.id.start_time);
         bookTheme = findViewById(R.id.book_theme);
         refuseBtn = findViewById(R.id.refuse_btn);
+        agreeBtn =findViewById(R.id.agreeToBtn);
     }
 
     private String cutTime(String s){

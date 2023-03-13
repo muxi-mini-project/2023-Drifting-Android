@@ -1,6 +1,6 @@
 package android.bignerdranch.drifting.Mine;
 
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;

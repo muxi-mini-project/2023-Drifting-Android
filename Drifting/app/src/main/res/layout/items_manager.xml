@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#FEFEFE"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#151212">
+        android:background="@drawable/jianbian"
+        android:alpha="0.7">
         <TextView
             android:id="@+id/return_Minefragment"
             android:layout_width="50dp"
@@ -19,29 +21,33 @@
             android:layout_height="wrap_content"
             android:textSize="30dp"
             android:textColor="@color/white"
-            android:text="管理"
+            android:text="管       理"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:background="#DBE2E4">
+        android:layout_height="35dp"
+        android:background="#E7EFF1">
     <Button
         android:id="@+id/all_items"
         android:layout_width="180dp"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:background="@drawable/yuanjiaojuxing"
-        android:backgroundTint="#DBE2E4"
-        android:text="全部"/>
+        android:backgroundTint="#E7EFF1"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:text="全    部"/>
     <Button
         android:id="@+id/my_items"
         android:layout_width="125dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:background="@drawable/yuanjiaojuxing"
-        android:backgroundTint="#DBE2E4"
+        android:backgroundTint="#E7EFF1"
+        android:textStyle="bold"
+        android:textSize="12dp"
         android:text="我创建的"/>
     <Button
         android:id="@+id/attend_items"
@@ -49,11 +55,15 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:background="@drawable/yuanjiaojuxing"
-        android:backgroundTint="#DBE2E4"
+        android:backgroundTint="#E7EFF1"
+        android:textStyle="bold"
+        android:textSize="12dp"
         android:text="我参与的"/>
     </RelativeLayout>
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:background="@drawable/manager_back"
+        android:alpha="0.7"
+        android:id="@+id/items_manager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_items_manager" />
+        android:layout_height="match_parent"/>
 </LinearLayout>

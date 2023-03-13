@@ -23,27 +23,30 @@
         android:id="@+id/imageView9"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#56030303"
+        android:background="#88030303"
         app:layout_constraintBottom_toTopOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.244">
 
     </ImageView>
 
+
     <ImageView
+        android:id="@+id/imageView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rectangle_back"
         app:layout_constraintBottom_toTopOf="@+id/discovering_recyclerview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintHorizontal_bias="0.081"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView9"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintVertical_bias="0.5">
 
     </ImageView>
-
 
     <ImageView
         android:id="@+id/imageView10"
@@ -66,16 +69,30 @@
         android:text="邀请"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.181"
+        app:layout_constraintHorizontal_bias="0.17"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 
     </TextView>
 
+    <ImageButton
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/refresh"
+        app:layout_constraintBottom_toTopOf="@+id/discovering_recyclerview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toBottomOf="@+id/imageView9"
+        app:layout_constraintVertical_bias="0.629">
+
+    </ImageButton>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/discovering_recyclerview"
-        android:layout_width="380dp"
-        android:layout_height="285dp"
+        android:layout_width="match_parent"
+        android:layout_height="239dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

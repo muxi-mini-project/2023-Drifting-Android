@@ -9,9 +9,10 @@ import androidx.core.content.FileProvider;
 
 import android.bignerdranch.drifting.Mine.FileUtils;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -47,45 +49,27 @@ public class Camera_Activity extends AppCompatActivity {
         setContentView(R.layout.camera_paishe);
         id = getIntent().getIntExtra("camera_id", 2);
         Log.d("camera_bug", id.toString());
-        ActivityResultLauncher launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                Bitmap bit = result.getData().getParcelableExtra("data");
-                if (result.getResultCode() == RESULT_OK) {
-                    mTakephotoButton.setText("确定");
-                    mPhotoButton.setText("更换");
-                    try {
-                        FileUri = FileUtils.saveFile(getApplicationContext(), bit, new Date().getTime() + ".png", "camera_data");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Log.d("camera_bug", "图片保存失败");
-                    }
-                    picture.setImageBitmap(bit);
-                }
-            }
-        });
 
         ActivityResultLauncher launcher1 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {//这里的result即为传回来的intent型变量
                 if (result.getResultCode() == RESULT_OK) {
                     //将拍摄的照片显示出来
+                    Bitmap bitmap = null;
                     try {
-                        picture.setImageURI(imageUri);
-                        Intent intent = new Intent("com.android.camera.action.CROP");
-                        intent.setDataAndType(imageUri, "image/*");
-                        intent.putExtra("crop", "true");
-                        intent.putExtra("aspectX", 1);
-                        intent.putExtra("aspectY", 1);
-                        intent.putExtra("outputX", 150);
-                        intent.putExtra("outputY", 150);
-                        intent.putExtra("return-data", true);
-                        launcher.launch(intent);
-                        mTakephotoButton.setText("确定");
-                        mPhotoButton.setText("更换");
-                    } catch (Exception e) {
+                        bitmap = BitmapFactory.decodeStream(getApplicationContext().getContentResolver().openInputStream(imageUri));
+                    } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
+                    picture.setImageBitmap(bitmap);
+                    try {
+                        FileUri = FileUtils.saveFile(getApplicationContext(), bitmap, new Date().getTime() + ".png", "camera_data");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.d("camera_bug", "图片保存失败");
+                    }
+                    mTakephotoButton.setText("确定");
+                    mPhotoButton.setText("更换");
                 }
             }
         });
@@ -98,16 +82,21 @@ public class Camera_Activity extends AppCompatActivity {
                         // 得到图片的全路径
                         Uri uri = result.getData().getData();
                         imageUri = uri;
-                        Intent intent = new Intent("com.android.camera.action.CROP");
-                        intent.setDataAndType(uri, "image/*");
-                        intent.putExtra("crop", "true");
-                        intent.putExtra("aspectX", 1);
-                        intent.putExtra("aspectY", 1);
-                        intent.putExtra("outputX", 150);
-                        intent.putExtra("outputY", 150);
-                        intent.putExtra("return-data", true);
-                        launcher.launch(intent);
-
+                        Bitmap bitmap = null;
+                        try {
+                            bitmap = BitmapFactory.decodeStream(getApplicationContext().getContentResolver().openInputStream(uri));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    picture.setImageBitmap(bitmap);
+                        try {
+                            FileUri = FileUtils.saveFile(getApplicationContext(), bitmap, new Date().getTime() + ".png", "camera_data");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Log.d("camera_bug", "图片保存失败");
+                        }
+                        mTakephotoButton.setText("确定");
+                        mPhotoButton.setText("更换");
                     }
                 }
 

@@ -1,5 +1,18 @@
 package android.bignerdranch.drifting.Drawing;
 
+import android.bignerdranch.drifting.Camera.Camera_ZoomImageView;
+import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.R;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -7,32 +20,13 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
 
-import android.bignerdranch.drifting.Camera.Camera_ZoomImageView;
-import android.bignerdranch.drifting.Login.Login_LoginActivity;
-import android.bignerdranch.drifting.Mine.FileUtils;
-import android.bignerdranch.drifting.R;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,33 +38,24 @@ public class Drawing_Activity extends AppCompatActivity {
     private Button mPhotoButton;
     private Button commit;
     private Button change;
+    private ImageButton back;
     private Camera_ZoomImageView picture;
-    private String uri;
     private String path;
     private long file_id;
-    final String PHOTO_RETURN = "photo_return";
     private static final OkHttpClient client = new OkHttpClient.Builder().
             connectTimeout(60, TimeUnit.SECONDS).
             readTimeout(60, TimeUnit.SECONDS).
             writeTimeout(60, TimeUnit.SECONDS).build();
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            moveTaskToBack(true);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawing);
+        setContentView(R.layout.drawing_activity);
         picture = (Camera_ZoomImageView) findViewById(R.id.picture);
         mPhotoButton = (Button) findViewById(R.id.album);
         commit = (Button) findViewById(R.id.commit);
         change = (Button) findViewById(R.id.change);
+        back = (ImageButton) findViewById(R.id.back);
         file_id = getIntent().getLongExtra("file_id",0);
 
         ActivityResultLauncher<Intent> launcher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -80,23 +65,22 @@ public class Drawing_Activity extends AppCompatActivity {
                     // 从相册返回的数据
                     if (result.getData() != null) {
                         // 得到图片的全路径
-//                        Bitmap bit = SaveFile.getPhotoBitmap(getApplicationContext(), result.getData());
-//                        try {
-//                            uri = SaveFile.saveFile(getApplicationContext(), bit, ".JPG", "drawing");
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
                         Uri uri0 = result.getData().getData();
                         path = getRealPathFromURI(uri0);
                         picture.setImageURI(uri0);
                         commit.setVisibility(View.VISIBLE);
                         change.setVisibility(View.VISIBLE);
                         mPhotoButton.setVisibility(View.INVISIBLE);
-
-
                     }
                 }
 
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -123,8 +107,8 @@ public class Drawing_Activity extends AppCompatActivity {
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create());
                 Retrofit retrofit = builder.build();
-                Image_upload image_upload = retrofit.create(Image_upload.class);
-                Call<create_return> call = image_upload.upload(body,Login_LoginActivity.getToken());
+                Drawing_Api drawingApi = retrofit.create(Drawing_Api.class);
+                Call<create_return> call = drawingApi.upload(body,Login_LoginActivity.getToken());
                 call.enqueue(new Callback<create_return>() {
                     @Override
                     public void onResponse(Call<create_return> call, Response<create_return> response) {

@@ -2,15 +2,15 @@ package android.bignerdranch.drifting.Book.ReturnAndReauest;
 
 public class Book_create_return {
 
-   private int data;
+   private Long data;
    private String message;
    private String code;
 
-    public int getData() {
+    public Long getData() {
         return data;
     }
 
-    public void setData(int data) {
+    public void setData(Long data) {
         this.data = data;
     }
 

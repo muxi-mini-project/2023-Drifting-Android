@@ -7,7 +7,7 @@ import android.app.AlertDialog;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_request;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_return;
 import android.bignerdranch.drifting.Inviting.Inviting_Friends;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -87,7 +87,8 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
                                     Book_create_return book_create_return = response.body();
                                     Toast.makeText(Book_AcquaintanceModeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(Book_AcquaintanceModeActivity.this, Book_Writing.class);
-                                    intent.putExtra("data",response.body().getData());
+                                    intent.putExtra("data",String.valueOf(response.body().getData()));
+                                    intent.putExtra("cover",mCoverURL);
                                     startActivity(intent);
                                 }
 

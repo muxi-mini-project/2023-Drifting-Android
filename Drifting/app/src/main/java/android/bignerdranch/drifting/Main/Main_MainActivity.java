@@ -8,8 +8,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.bignerdranch.drifting.Inviting.Inviting_Fragment;
 import android.bignerdranch.drifting.Mine.Mine_Fragment;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 public class Main_MainActivity extends AppCompatActivity {
     User_ mUser;
     int ctor = 0;//获取当前界面,防止重复点击
+    int ctr = 0;
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, Main_MainActivity.class);
@@ -31,14 +32,15 @@ public class Main_MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-
-        //默认进入邀请界面
-        Inviting_Fragment mFragment = new Inviting_Fragment();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        fragmentTransaction.add(R.id.content_container, mFragment);
-        fragmentTransaction.commit();
-
+        if (ctr == 0) {
+            //默认进入邀请界面
+            Inviting_Fragment mFragment = new Inviting_Fragment();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = manager.beginTransaction();
+            fragmentTransaction.add(R.id.content_container, mFragment);
+            fragmentTransaction.commit();
+            ctr = 1;
+        }
 
         //导航栏链接
         ImageButton mine = (ImageButton) findViewById(R.id.mine);

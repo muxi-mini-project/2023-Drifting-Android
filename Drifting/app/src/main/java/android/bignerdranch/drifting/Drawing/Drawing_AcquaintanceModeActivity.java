@@ -1,20 +1,16 @@
 package android.bignerdranch.drifting.Drawing;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
-import android.bignerdranch.drifting.friendsInvitingItem;
 import android.bignerdranch.drifting.Friends.FriendListInterface;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
+import android.bignerdranch.drifting.Inviting.inviting_reactionBody;
+import android.bignerdranch.drifting.Inviting.inviting_reactionReturn;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
-import android.bignerdranch.drifting.Inviting.*;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.friendsInvitingItem;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
@@ -117,8 +115,8 @@ public class Drawing_AcquaintanceModeActivity extends AppCompatActivity {
                             .addConverterFactory(GsonConverterFactory.create());
                     Retrofit retrofit = builder.build();
                     create_message message = new create_message(cover_url,1,name,Integer.parseInt(person_number),theme);
-                    Api api = retrofit.create(Api.class);
-                    Call<create_return> call = api.create(Login_LoginActivity.getToken(),message);
+                    Drawing_Api drawingApi = retrofit.create(Drawing_Api.class);
+                    Call<create_return> call = drawingApi.create(Login_LoginActivity.getToken(),message);
                     call.enqueue(new Callback<create_return>() {
                         @Override
                         public void onResponse(Call<create_return> call, Response<create_return> response) {
@@ -130,11 +128,12 @@ public class Drawing_AcquaintanceModeActivity extends AppCompatActivity {
                                     Intent intent = new Intent(Drawing_AcquaintanceModeActivity.this, Drawing_Activity.class);
                                     intent.putExtra("file_id",newDrawingId);
                                     startActivity(intent);
+                                    finish();
                                     for(int i = 0;i < target_friend.size();i++){
                                         User_Now user_now = User_Now.getUserNow();
                                         inviting_reactionBody invitingBody
                                                 = new inviting_reactionBody(newDrawingId,"漂流画",target_friend.get(i).getId(),User_Now.getUserNow().getUser().getId());
-                                        Call<inviting_reactionReturn> inviting_return = api.invite(Login_LoginActivity.getToken(),invitingBody);
+                                        Call<inviting_reactionReturn> inviting_return = drawingApi.invite(Login_LoginActivity.getToken(),invitingBody);
                                         inviting_return.enqueue(new Callback<inviting_reactionReturn>() {
                                             @Override
                                             public void onResponse(Call<inviting_reactionReturn> call, Response<inviting_reactionReturn> response) {
@@ -157,7 +156,7 @@ public class Drawing_AcquaintanceModeActivity extends AppCompatActivity {
                         }
                     });
                 }
-                finish();
+
             }
         });
 
@@ -218,61 +217,52 @@ public class Drawing_AcquaintanceModeActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2) {
-            // 从相册返回的数据
-            if (data != null) {
-                // 得到图片的全路径
-                Uri uri = data.getData();
-                iv_image.setImageURI(uri);
-            }
-        }
-        if (requestCode == 1) {
-            Bundle bundle = data.getExtras();
-            iv_image.setImageBitmap((Bitmap) bundle.get("data"));
-
-        }
-
-    }
-
     private void ChooseCover() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
-        final String[] choices = {"背景1","背景2","背景3","背景4","背景5","背景6","背景7","背景8"};
+        //    指定下拉列表的显示数据
+        final String[] choices = {"封面1", "封面2", "封面3", "封面4", "封面5", "封面6", "封面7", "封面8"};
+        //    设置一个下拉的列表选择项
         builder.setItems(choices, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case 0:{
+                switch (which) {
+                    case 0: {
+                        iv_image.setImageResource(R.drawable.cover_1);
                         cover_url = "mini-project.muxixyz.com/drifting/covers/点构图.jpg";
                         break;
                     }
-                    case 1:{
+                    case 1: {
+                        iv_image.setImageResource(R.drawable.cover_2);
                         cover_url = "mini-project.muxixyz.com/drifting/covers/抓拍，广场上玩滑板的少年.jpg";
                         break;
                     }
-                    case 2:{
+                    case 2: {
+                        iv_image.setImageResource(R.drawable.cover_3);
                         cover_url = "mini-project.muxixyz.com/drifting/covers/三分线，冷清的广场.jpg";
                         break;
                     }
-                    case 3:{
+                    case 3: {
+                        iv_image.setImageResource(R.drawable.cover_4);
                         cover_url = "mini-project.muxixyz.com/drifting/covers/三分线构图.jpg";
                         break;
                     }
-                    case 4:{
+                    case 4: {
+                        iv_image.setImageResource(R.drawable.cover_5);
                         cover_url = "mini-project.muxixyz.com/drifting/covers/4.jpg";
                         break;
                     }
-                    case 5:{
+                    case 5: {
+                        iv_image.setImageResource(R.drawable.cover_6);
                         cover_url = "mini-project.muxixyz.com/drifting/covers/3.jpg";
                         break;
                     }
-                    case 6:{
+                    case 6: {
+                        iv_image.setImageResource(R.drawable.cover_7);
                         cover_url = "mini-project.muxixyz.com/drifting/covers/2.jpg";
                         break;
                     }
-                    case 7:{
+                    case 7: {
+                        iv_image.setImageResource(R.drawable.cover_8);
                         cover_url = "mini-project.muxixyz.com/drifting/covers/1.jpg";
                         break;
                     }

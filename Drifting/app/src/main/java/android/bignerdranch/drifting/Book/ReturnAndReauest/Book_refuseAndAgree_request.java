@@ -7,6 +7,11 @@ public class Book_refuseAndAgree_request {
         private Long friend_id;
         private Long host_id;
 
+        public Book_refuseAndAgree_request(long file_id, String file_kind) {
+                this.file_id = file_id;
+                this.file_kind = file_kind;
+        }
+
         public Book_refuseAndAgree_request(long file_id, String file_kind, Long friend_id, Long host_id) {
                 this.file_id = file_id;
                 this.file_kind = file_kind;

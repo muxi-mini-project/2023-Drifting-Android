@@ -3,12 +3,11 @@ package android.bignerdranch.drifting.Main;
 import android.app.AlertDialog.Builder;
 import android.bignerdranch.drifting.Login.Login_LoginActivity0;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,8 +70,8 @@ public class Main_SettingsFragment extends Fragment {
                     public void onClick(DialogInterface arg0, int arg1) {
                         Toast.makeText(getContext(), "退出成功", Toast.LENGTH_SHORT).show();
                         //退出当前用户
-                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
-                        File drifting = new File(file,"drifting");
+                        File file = new File(getContext().getFilesDir().getAbsolutePath());
+                        File drifting = new File(file,"Drifting");
                         File target = new File(drifting,"mytoken.txt");
                         if(target.exists())
                             target.delete();

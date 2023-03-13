@@ -31,9 +31,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:targetApi="32" >
-        <activity android:name=".Book.Book_InvitingActivity"/>
+        <activity android:name=".Novel.Novel_StrangerModeActivity"/>
+        <activity android:name=".Novel.Novel_Activity"/>
+        <activity android:name=".Novel.Novel_AcquaintanceModeActivity"/>
         <activity android:name=".Novel.Novel_InvitingActivity"/>
-        <activity android:name=".Mine.User.USer_items_Manager"/>
+    <activity android:name=".Novel.Novel_switch_mode"/>
+        <activity
+            android:name=".Friends.FriendsNotingActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity android:name=".Inviting.Inviting_Friends" />
+        <activity android:name=".Book.Book_inviting"/>
+        <activity android:name=".Novel.Novel_InvitingActivity"/>
+        <activity android:name=".User.User_items_Manager"/>
         <activity android:name=".Drawing.Drawing_switch_mode" />
         <activity android:name=".Drawing.Drawing_InvitingActivity" />
         <activity android:name=".Drawing.Drawing_AcquaintanceModeActivity" />
@@ -67,13 +80,6 @@
         </activity>
         <activity
             android:name=".Mine.Mine_BianJiActivity"
-            android:exported="false" >
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".Drawing.Drawing_Album"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"

@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.bignerdranch.drifting.Main.Main_MainActivity;
 import android.bignerdranch.drifting.Mine.FileUtils;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_;
-import android.bignerdranch.drifting.Mine.User.User_Now;
-import android.bignerdranch.drifting.Mine.User.User_connector;
-import android.bignerdranch.drifting.Mine.User.User_return;
+import android.bignerdranch.drifting.User.User_;
+import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.User.User_return;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -166,16 +166,12 @@ public class Login_LoginActivity extends AppCompatActivity {
         });
     }
 
-    //    public void GetItems(){
-//        AllItems.getAllItems().setCamera_name_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_name());
-//        AllItems.getAllItems().getCamera_nowuser_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_nowuser());
-//    }
     public void upload_User(String Token) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
-        User_connector mine_connector = retrofit.create(User_connector.class);
+        android.bignerdranch.drifting.User.User_connector mine_connector = retrofit.create(android.bignerdranch.drifting.User.User_connector.class);
         Call<User_returnAll> call = mine_connector.getUserMes(Token);
 
         call.enqueue(new Callback<User_returnAll>() {
@@ -197,6 +193,7 @@ public class Login_LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 User_Now.getUserNow().setUser(user);
+                GetAllItems.getGetAllItems().GetAll_Items();
                 Message message = new Message();
                 message.what = 200;
                 handler.sendMessage(message);

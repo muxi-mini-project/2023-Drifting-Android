@@ -1,14 +1,12 @@
 package android.bignerdranch.drifting.Drawing;
 
-import static java.security.AccessController.getContext;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.bignerdranch.drifting.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Drawing_Start extends AppCompatActivity {
     private Button start_button;
@@ -26,7 +24,7 @@ public class Drawing_Start extends AppCompatActivity {
         start_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Drawing_Start.this,Drawing_Album.class));
+                startActivity(new Intent(Drawing_Start.this,Drawing_Activity.class));
             }
         });
         return_button.setOnClickListener(new View.OnClickListener() {
