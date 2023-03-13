@@ -194,10 +194,10 @@ public class Camera_return_upload {
         public void setMessage(Object value) { this.message = value; }
     }
     /**
-     *获取用户创建的漂流相机
+     *获取漂流项目
      */
     //返回类
-   static public class Camera_return_usermessage{
+   static public class Items_return_usermessage {
        private Long code;
        private List<Camera_return_usermessage2> data;
 
@@ -221,6 +221,15 @@ public class Camera_return_upload {
         private Long kind;
         private String theme;
         private Long writer_number;
+        private String CreatedAt;
+
+       public String getCreatedAt() {
+           return CreatedAt;
+       }
+
+       public void setCreatedAt(String createdAt) {
+           CreatedAt = createdAt;
+       }
 
        public Long getWriter_number() {
            return writer_number;
@@ -372,25 +381,6 @@ public class Camera_return_upload {
     }
     //返回类
    static public class Camera_return_inviting_friend{
-        private Long code;
-        private Object data;
-        private Object message;
-
-        public Long getCode() { return code; }
-        public void setCode(Long value) { this.code = value; }
-
-        public Object getData() { return data; }
-        public void setData(Object value) { this.data = value; }
-
-        public Object getMessage() { return message; }
-        public void setMessage(Object value) { this.message = value; }
-    }
-
-    /**
-     * 获取用户参加的漂流照片信息(不含自己创建的)
-     */
-    //返回类
-   static public class Camera_return_join_mes{
         private Long code;
         private Object data;
         private Object message;
@@ -611,6 +601,52 @@ public class Camera_return_upload {
 
         public void setMessage(Object message) {
             Message = message;
+        }
+    }
+
+    /**
+     * 删除项目
+     */
+    //上传
+    static public class Delete_upload{
+       private Long id;
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+    }
+    //返回
+    static public class Delete_return{
+        private Long code;
+        private Object data;
+        private Object message;
+
+        public Long getCode() {
+            return code;
+        }
+
+        public void setCode(Long code) {
+            this.code = code;
+        }
+
+        public Object getData() {
+            return data;
+        }
+
+        public void setData(Object data) {
+            this.data = data;
+        }
+
+        public Object getMessage() {
+            return message;
+        }
+
+        public void setMessage(Object message) {
+            this.message = message;
         }
     }
 }

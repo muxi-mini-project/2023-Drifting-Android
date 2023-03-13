@@ -1,10 +1,9 @@
 package android.bignerdranch.drifting.Mine;
 
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_;
-import android.bignerdranch.drifting.Mine.User.User_Now;
-import android.bignerdranch.drifting.Mine.User.User_Putdata;
-import android.bignerdranch.drifting.Mine.User.User_connector;
+import android.bignerdranch.drifting.User.User_;
+import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.User.User_Putdata;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -96,7 +95,7 @@ public class Return_fromdata{
                         .baseUrl("http://116.204.121.9:61583/")
                         .addConverterFactory(GsonConverterFactory.create());
                 Retrofit retrofit = builder.build();
-                User_connector user_connector = retrofit.create(User_connector.class);
+                android.bignerdranch.drifting.User.User_connector user_connector = retrofit.create(android.bignerdranch.drifting.User.User_connector.class);
                 Call<Return_fromdata> call = user_connector.putUserdata(user_putdata,
                         User_Now.getUserNow().getUser().getToken());
                 call.enqueue(new Callback<Return_fromdata>() {

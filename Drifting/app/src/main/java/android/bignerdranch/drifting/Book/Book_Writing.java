@@ -16,7 +16,7 @@ import android.bignerdranch.drifting.Friends.FriendsBeInvitedID;
 import android.bignerdranch.drifting.Main.Main_DiscoveringFragment;
 import android.bignerdranch.drifting.Main.Main_MainActivity;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;

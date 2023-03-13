@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
     <!-- 文件访问存储权限 -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -30,61 +30,57 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-        tools:targetApi="32">
+        tools:targetApi="32" >
+
         <activity
-            android:name=".FriendsNotingActivity"
+            android:name=".Friends.FriendsNotingActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".Friends.FriendsNotingActivity"/>
+        <activity android:name=".Novel.Novel_switch_mode"/>
+        <activity android:name=".Novel.Novel_StrangerModeActivity"/>
+        <activity android:name=".Novel.Novel_AcquaintanceModeActivity"/>
+        <activity android:name=".Novel.Novel_Activity"/>
         <activity android:name=".Inviting.Inviting_Friends" />
-        <activity android:name=".Book.Book_InvitingActivity" />
-        <activity android:name=".Novel.Novel_InvitingActivity" />
-        <activity android:name=".Mine.User.USer_items_Manager" />
+        <activity android:name=".Book.Book_inviting"/>
+        <activity android:name=".Novel.Novel_InvitingActivity"/>
+        <activity android:name=".User.User_items_Manager"/>
         <activity android:name=".Drawing.Drawing_switch_mode" />
         <activity android:name=".Drawing.Drawing_InvitingActivity" />
         <activity android:name=".Drawing.Drawing_AcquaintanceModeActivity" />
-        <activity android:name=".Camera.Camera_Inviting" />
         <activity
             android:name=".Friends.FriendsNewActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Camera.Camera_setting_acquaintance"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Camera.Camera_create"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Camera.Camera_setting_stranger"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Mine.Mine_BianJiActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".Drawing.Drawing_Album"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -92,14 +88,14 @@
         <activity
             android:name=".Drawing.Drawing_Start"
             android:exported="false"
-            android:label="@string/title_activity_drawing_start">
+            android:label="@string/title_activity_drawing_start" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Drawing.Drawing_Activity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -109,7 +105,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.drift.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
@@ -117,56 +113,56 @@
 
         <activity
             android:name=".Camera.Camera_Start"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Book.Book_Writing"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Book.Book_StrangerModeActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Book.Book_AcquaintanceModeActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Camera.Camera_Activity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Book.Book_DriftingBookActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Main.Main_MainActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".Login.Login_LoginActivity0"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -179,19 +175,11 @@
         </activity>
         <activity
             android:name=".Login.Login_LoginActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".Book.Book_inviting"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-
     </application>
 
 </manifest>

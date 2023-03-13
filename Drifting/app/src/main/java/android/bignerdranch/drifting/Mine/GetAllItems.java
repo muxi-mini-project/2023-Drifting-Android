@@ -1,9 +1,10 @@
 package android.bignerdranch.drifting.Mine;
 
-import android.bignerdranch.drifting.Camera.Camera_;
-import android.bignerdranch.drifting.Camera.Camera_connector;
 import android.bignerdranch.drifting.Camera.Camera_return_upload;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,21 +23,70 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * 目前测试阶段使用，连上接口后要改
  */
 public class GetAllItems extends AppCompatActivity {
-   public final static int BOOK = 1001;
-   public final static int CAMERA = 1002;
-   public final static int NOVEL = 1003;
-   public final static int DRAW = 1004;
+    public final static int BOOK = 1001;
+    public final static int CAMERA = 1002;
+    public final static int NOVEL = 1003;
+    public final static int DRAW = 1004;
     private static GetAllItems mGetAllItems;
+    static int update;
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 200 && update == 8) {
+                List_Items_userAll = new ArrayList<>();
+                List_Items_userAll.addAll(List_Camera_user_create);
+                List_Items_userAll.addAll(List_Camera_user_attend);
+                List_Items_userAll.addAll(List_Book_user_create);
+                List_Items_userAll.addAll(List_Book_user_attend);
+                List_Items_userAll.addAll(List_Drawing_user_create);
+                List_Items_userAll.addAll(List_Drawing_user_attend);
+                List_Items_userAll.addAll(List_Novel_user_create);
+                List_Items_userAll.addAll(List_Novel_user_attend);
+                List_Items_userAll_create.addAll(List_Camera_user_create);
+                List_Items_userAll_create.addAll(List_Book_user_create);
+                List_Items_userAll_create.addAll(List_Drawing_user_create);
+                List_Items_userAll_create.addAll(List_Novel_user_create);
+                List_Items_userAll_attend.addAll(List_Camera_user_attend);
+                List_Items_userAll_attend.addAll(List_Book_user_attend);
+                List_Items_userAll_attend.addAll(List_Drawing_user_attend);
+                List_Items_userAll_attend.addAll(List_Novel_user_attend);
+                Log.d("GetAllItems", "添加完成");
+                Get_message();
+                Log.d("GetAllItems", "管理器获取成功");
+            }
+            Log.d("GetAllItems", update + "");
+        }
+    };
     /**
      * 缓存，避免重复使用接口
      */
     //漂流相机
-    List<Camera_> List_Camera_userAll = new ArrayList<>();//获取用户参加的和自己创建的漂流相机
-    List<Camera_> List_Camera_ownercrea = new ArrayList<>();//获取用户自己创建的漂流相机
+    List<Items> List_Items_userAll = new ArrayList<>();//用户参加的和自己创建的所有项目
+
+    List<Items> List_Items_userAll_create = new ArrayList<>();//用户创建的所有项目
+    List<Items> List_Items_userAll_attend = new ArrayList<>();//用户参加的所有项目
+
+    List<Items> List_Items_All_ing = new ArrayList<>();//用户所有正在进行的项目
+    List<Items> List_Items_All_ed = new ArrayList<>();//用户所有已经结束的项目
+
+    List<Items> List_Items_All_create_ing = new ArrayList<>();//用户所有正在进行且由用户创建的项目
+    List<Items> List_Items_All_attend_ing = new ArrayList<>();//用户所有正在进行且用户参与的项目
+    List<Items> List_Items_All_create_ed = new ArrayList<>();//用户所有已经结束且由用户创建的项目
+    List<Items> List_Items_All_attend_ed = new ArrayList<>();//用户所有已经结束且用户参与的项目
+
+    List<Items> List_Camera_user_create = new ArrayList<>();//用户创建的漂流相机
+    List<Items> List_Camera_user_attend = new ArrayList<>();//用户参加的漂流相机
+    List<Items> List_Book_user_create = new ArrayList<>();//用户创建的漂流本
+    List<Items> List_Book_user_attend = new ArrayList<>();//用户参加的漂流本
+    List<Items> List_Drawing_user_create = new ArrayList<>();//用户创建的漂流画
+    List<Items> List_Drawing_user_attend = new ArrayList<>();//用户参加的漂流画
+    List<Items> List_Novel_user_create = new ArrayList<>();//用户创建的漂流小说
+    List<Items> List_Novel_user_attend = new ArrayList<>();//用户参加的漂流小说
 
     static public GetAllItems getGetAllItems() {
         if (mGetAllItems == null)
             mGetAllItems = new GetAllItems();
+        mGetAllItems.update = 0;
         return mGetAllItems;
     }
 
@@ -44,107 +94,497 @@ public class GetAllItems extends AppCompatActivity {
             .baseUrl("http://116.204.121.9:61583/")
             .addConverterFactory(GsonConverterFactory.create());
     static Retrofit retrofit = builder.build();
-    static Camera_connector mCamera_connector = retrofit.create(Camera_connector.class);
+    static Mine_items sMine_items = retrofit.create(Mine_items.class);
+
+    public void GetAll_Items() {
+        if (List_Items_userAll == null || List_Items_userAll.size() == 0) {
+            GetCamera_user_create();
+            GetCamera_user_attend();
+            GetBook_user_create();
+            GetBook_user_attend();
+            GetDrawing_user_create();
+            GetDrawing_user_attend();
+            GetNovel_user_create();
+            GetNovel_user_attend();
+        }
+    }
 
     /**
      * 获取用户自己创建的漂流相机
      */
     //项目
-    public List<Camera_> GetCamera_ownercrea() {
-        if (List_Camera_ownercrea.isEmpty()) {
-            List<Camera_> camera_list = new ArrayList<>();
-            String token = User_Now.getUserNow().getUser().getToken();
-            Call<Camera_return_upload.Camera_return_usermessage> call = mCamera_connector.GetCamera_mes_user(token);
-            call.enqueue(new Callback<Camera_return_upload.Camera_return_usermessage>() {
-                @Override
-                public void onResponse(Call<Camera_return_upload.Camera_return_usermessage> call, Response<Camera_return_upload.Camera_return_usermessage> response) {
-                    Camera_return_upload.Camera_return_usermessage message = response.body();
+    public void GetCamera_user_create() {
+        List<Items> camera_list = new ArrayList<>();
+        String token = User_Now.getUserNow().getUser().getToken();
+        Call<Camera_return_upload.Items_return_usermessage> call = sMine_items.GetCamera_user_create(token);
+        call.enqueue(new Callback<Camera_return_upload.Items_return_usermessage>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Items_return_usermessage> call, Response<Camera_return_upload.Items_return_usermessage> response) {
+                if (response.isSuccessful()) {
                     List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
-                    for (int i = 0; i < list.size(); i++) {
-                        Camera_ camera = new Camera_(list.get(i).getName(),
-                                list.get(i).getTheme(),
-                                list.get(i).getNumber(),
-                                list.get(i).getCover(),
-                                list.get(i).getWriter_number());
-                        camera_list.add(camera);
-                    }
-                    setList_Camera_ownercrea(camera_list);
+                    if (list != null)
+                        Log.d("manager_bug_list2", list.size() + "");
+                    if (list != null)
+                        for (int i = 0; i < list.size(); i++) {
+                            Items item = new Items(list.get(i).getName(),
+                                    list.get(i).getTheme(),
+                                    list.get(i).getCover(),
+                                    "漂流相机",
+                                    list.get(i).getKind(),
+                                    list.get(i).getWriter_number(),
+                                    list.get(i).getNumber(),
+                                    list.get(i).getCreatedAt(),
+                                    list.get(i).getID());
+                            camera_list.add(item);
+                        }
+                    List_Camera_user_create = camera_list;
+                    Log.d("GetAllItems", "漂流相机1获取成功");
+                    update++;
+                    Message message = new Message();
+                    message.what = 200;
+                    mHandler.sendMessageAtTime(message,0);
                 }
+            }
 
-                @Override
-                public void onFailure(Call<Camera_return_upload.Camera_return_usermessage> call, Throwable t) {
+            @Override
+            public void onFailure(Call<Camera_return_upload.Items_return_usermessage> call, Throwable t) {
+                Log.d("GetAllItems_camera", t.toString());
+            }
+        });
+    }
+
+    /**
+     * 获取用户参加的漂流相机（不包含自己创建的）
+     */
+    public void GetCamera_user_attend() {
+        List<Items> camera_list = new ArrayList<>();
+        String token = User_Now.getUserNow().getUser().getToken();
+        Call<Camera_return_upload.Items_return_usermessage> call = sMine_items.GetCamera_user_attend(token);
+        call.enqueue(new Callback<Camera_return_upload.Items_return_usermessage>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Items_return_usermessage> call, Response<Camera_return_upload.Items_return_usermessage> response) {
+                if (response.isSuccessful()) {
+                    List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+                    if (list != null)
+                        Log.d("manager_bug_list2", list.size() + "");
+                    if (list != null)
+                        for (int i = 0; i < list.size(); i++) {
+                            Items item = new Items(list.get(i).getName(),
+                                    list.get(i).getTheme(),
+                                    list.get(i).getCover(),
+                                    "漂流相机",
+                                    list.get(i).getKind(),
+                                    list.get(i).getWriter_number(),
+                                    list.get(i).getNumber(),
+                                    list.get(i).getCreatedAt(),
+                                    list.get(i).getID());
+                            camera_list.add(item);
+                        }
+                    List_Camera_user_attend = camera_list;
+                    Log.d("GetAllItems", "漂流相机2获取成功");
+                    update++;
+                    Message message = new Message();
+                    message.what = 200;
+                    mHandler.sendMessageAtTime(message,0);
                 }
-            });
-            return camera_list;
-        } else {
-            return List_Camera_ownercrea;
-        }
-    }
-
-    //项目名字
-    public List<String> GetCamera_ownercrea_name() {
-        if (getGetAllItems().getList_Camera_ownercrea().isEmpty())
-            GetCamera_ownercrea();
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < getList_Camera_ownercrea().size(); i++)
-            list.add(getList_Camera_ownercrea().get(i).getName());
-        return list;
-    }
-
-    //项目最大人数
-    public List<Long> GetCamera_ownercrea_maxuser() {
-        if (getGetAllItems().getList_Camera_ownercrea().isEmpty())
-            GetCamera_ownercrea();
-        List<Long> list = new ArrayList<>();
-        for (int i = 0; i < getGetAllItems().getList_Camera_ownercrea().size(); i++)
-            list.add(getGetAllItems().getList_Camera_ownercrea().get(i).getMaxuser());
-        return list;
-    }
-
-    //项目当前人数
-    public List<Long> GetCamera_ownercrea_nowuser() {
-        if (getGetAllItems().getList_Camera_ownercrea().isEmpty())
-            GetCamera_ownercrea();
-        List<Long> list = new ArrayList<>();
-        for (int i = 0; i < getGetAllItems().getList_Camera_ownercrea().size(); i++)
-            list.add(getGetAllItems().getList_Camera_ownercrea().get(i).getNowuser());
-        return list;
-    }
-
-    public void refreshMessage(int kind) {
-        switch (kind) {
-            case 1001: {
-
-                break;
             }
-            case 1002: {
-                List_Camera_ownercrea.clear();
-                List_Camera_userAll.clear();
-                break;
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Items_return_usermessage> call, Throwable t) {
+                Log.d("GetAllItems_camera", t.toString());
             }
-            case 1003: {
+        });
+    }
 
+    /**
+     * 获取用户自己创建的漂流本
+     */
+    public void GetBook_user_create() {
+        List<Items> book_list = new ArrayList<>();
+        String token = User_Now.getUserNow().getUser().getToken();
+        Call<Camera_return_upload.Items_return_usermessage> call = sMine_items.GetBook_user_create(token);
+        call.enqueue(new Callback<Camera_return_upload.Items_return_usermessage>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Items_return_usermessage> call, Response<Camera_return_upload.Items_return_usermessage> response) {
+                if (response.isSuccessful()) {
+                    List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+                    if (list != null)
+                        for (int i = 0; i < list.size(); i++) {
+                            Items item = new Items(list.get(i).getName(),
+                                    list.get(i).getTheme(),
+                                    list.get(i).getCover(),
+                                    "漂流本",
+                                    list.get(i).getKind(),
+                                    list.get(i).getWriter_number(),
+                                    list.get(i).getNumber(),
+                                    list.get(i).getCreatedAt(),
+                                    list.get(i).getID());
+                            book_list.add(item);
+                        }
+                    List_Book_user_create = book_list;
+                    Log.d("GetAllItems", "漂流本1获取成功");
+                    update++;
+                    Message message = new Message();
+                    message.what = 200;
+                    mHandler.sendMessageAtTime(message,0);
+                }
             }
-            case 1004: {
 
+            @Override
+            public void onFailure(Call<Camera_return_upload.Items_return_usermessage> call, Throwable t) {
+                Log.d("GetAllItems_book", t.toString());
             }
-        }
-
+        });
     }
 
-    public void setList_Camera_userAll(List<Camera_> list_Camera_userAll) {
-        List_Camera_userAll = list_Camera_userAll;
+    /**
+     * 获取用户参加的漂流本
+     */
+    public void GetBook_user_attend() {
+        List<Items> book_list = new ArrayList<>();
+        String token = User_Now.getUserNow().getUser().getToken();
+        Call<Camera_return_upload.Items_return_usermessage> call = sMine_items.GetBook_user_attend(token);
+        call.enqueue(new Callback<Camera_return_upload.Items_return_usermessage>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Items_return_usermessage> call, Response<Camera_return_upload.Items_return_usermessage> response) {
+                if (response.isSuccessful()) {
+                    List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+                    if (list != null)
+                        for (int i = 0; i < list.size(); i++) {
+                            Items item = new Items(list.get(i).getName(),
+                                    list.get(i).getTheme(),
+                                    list.get(i).getCover(),
+                                    "漂流本",
+                                    list.get(i).getKind(),
+                                    list.get(i).getWriter_number(),
+                                    list.get(i).getNumber(),
+                                    list.get(i).getCreatedAt(),
+                                    list.get(i).getID());
+                            book_list.add(item);
+                        }
+                    List_Book_user_attend = book_list;
+                    Log.d("GetAllItems", "漂流本2获取成功");
+                    update++;
+                    Message message = new Message();
+                    message.what = 200;
+                    mHandler.sendMessageAtTime(message,0);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Items_return_usermessage> call, Throwable t) {
+                Log.d("GetAllItems_book", t.toString());
+            }
+        });
     }
 
-    public void setList_Camera_ownercrea(List<Camera_> list_Camera_ownercrea) {
-        List_Camera_ownercrea = list_Camera_ownercrea;
+    /**
+     * 获取用户创建的漂流画
+     */
+    public void GetDrawing_user_create() {
+        List<Items> drawing_list = new ArrayList<>();
+        String token = User_Now.getUserNow().getUser().getToken();
+        Call<Camera_return_upload.Items_return_usermessage> call = sMine_items.GetDrawing_user_create(token);
+        call.enqueue(new Callback<Camera_return_upload.Items_return_usermessage>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Items_return_usermessage> call, Response<Camera_return_upload.Items_return_usermessage> response) {
+                if (response.isSuccessful()) {
+                    List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+                    if (list != null)
+                        for (int i = 0; i < list.size(); i++) {
+                            Items item = new Items(list.get(i).getName(),
+                                    list.get(i).getTheme(),
+                                    list.get(i).getCover(),
+                                    "漂流画",
+                                    list.get(i).getKind(),
+                                    list.get(i).getWriter_number(),
+                                    list.get(i).getNumber(),
+                                    list.get(i).getCreatedAt(),
+                                    list.get(i).getID());
+                            drawing_list.add(item);
+                        }
+                    List_Drawing_user_create = drawing_list;
+                    Log.d("GetAllItems", "漂流画1获取成功");
+                    update++;
+                    Message message = new Message();
+                    message.what = 200;
+                    mHandler.sendMessageAtTime(message,0);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Items_return_usermessage> call, Throwable t) {
+                Log.d("GetAllItems_drawing", t.toString());
+            }
+        });
     }
 
-    public List<Camera_> getList_Camera_userAll() {
-        return List_Camera_userAll;
+    /**
+     * 获取用户参与的漂流画
+     */
+    public void GetDrawing_user_attend() {
+        List<Items> drawing_list = new ArrayList<>();
+        String token = User_Now.getUserNow().getUser().getToken();
+        Call<Camera_return_upload.Items_return_usermessage> call = sMine_items.GetDrawing_user_attend(token);
+        call.enqueue(new Callback<Camera_return_upload.Items_return_usermessage>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Items_return_usermessage> call, Response<Camera_return_upload.Items_return_usermessage> response) {
+                if (response.isSuccessful()) {
+                    List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+                    if (list != null)
+                        for (int i = 0; i < list.size(); i++) {
+                            Items item = new Items(list.get(i).getName(),
+                                    list.get(i).getTheme(),
+                                    list.get(i).getCover(),
+                                    "漂流画",
+                                    list.get(i).getKind(),
+                                    list.get(i).getWriter_number(),
+                                    list.get(i).getNumber(),
+                                    list.get(i).getCreatedAt(),
+                                    list.get(i).getID());
+                            drawing_list.add(item);
+                        }
+                    List_Drawing_user_attend = drawing_list;
+                    Log.d("GetAllItems", "漂流画2获取成功");
+                    update++;
+                    Message message = new Message();
+                    message.what = 200;
+                    mHandler.sendMessageAtTime(message,0);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Items_return_usermessage> call, Throwable t) {
+                Log.d("GetAllItems_drawing", t.toString());
+            }
+        });
     }
 
-    public List<Camera_> getList_Camera_ownercrea() {
-        return List_Camera_ownercrea;
+    /**
+     * 获取用户创建的漂流小说
+     */
+    public void GetNovel_user_create() {
+        List<Items> novel_list = new ArrayList<>();
+        String token = User_Now.getUserNow().getUser().getToken();
+        Call<Camera_return_upload.Items_return_usermessage> call = sMine_items.GetNovel_user_create(token);
+        call.enqueue(new Callback<Camera_return_upload.Items_return_usermessage>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Items_return_usermessage> call, Response<Camera_return_upload.Items_return_usermessage> response) {
+                if (response.isSuccessful()) {
+                    List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+                    if (list != null)
+                        for (int i = 0; i < list.size(); i++) {
+                            Items item = new Items(list.get(i).getName(),
+                                    list.get(i).getTheme(),
+                                    list.get(i).getCover(),
+                                    "漂流小说",
+                                    list.get(i).getKind(),
+                                    list.get(i).getWriter_number(),
+                                    list.get(i).getNumber(),
+                                    list.get(i).getCreatedAt(),
+                                    list.get(i).getID());
+                            novel_list.add(item);
+                        }
+                    List_Novel_user_create = novel_list;
+                    Log.d("GetAllItems", "漂流小说1获取成功");
+                    update++;
+                    Message message = new Message();
+                    message.what = 200;
+                    mHandler.sendMessageAtTime(message,0);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Items_return_usermessage> call, Throwable t) {
+                Log.d("GetAllItems_novel", t.toString());
+            }
+        });
+    }
+
+    /**
+     * 获取用户参与的漂流小说
+     */
+    public void GetNovel_user_attend() {
+        List<Items> novel_list = new ArrayList<>();
+        String token = User_Now.getUserNow().getUser().getToken();
+        Call<Camera_return_upload.Items_return_usermessage> call = sMine_items.GetNovel_user_attend(token);
+        call.enqueue(new Callback<Camera_return_upload.Items_return_usermessage>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Items_return_usermessage> call, Response<Camera_return_upload.Items_return_usermessage> response) {
+                if (response.isSuccessful()) {
+                    List<Camera_return_upload.Camera_return_usermessage2> list = response.body().getData();
+                    if (list != null)
+                        for (int i = 0; i < list.size(); i++) {
+                            Items item = new Items(list.get(i).getName(),
+                                    list.get(i).getTheme(),
+                                    list.get(i).getCover(),
+                                    "漂流小说",
+                                    list.get(i).getKind(),
+                                    list.get(i).getWriter_number(),
+                                    list.get(i).getNumber(),
+                                    list.get(i).getCreatedAt(),
+                                    list.get(i).getID());
+                            novel_list.add(item);
+                        }
+                    List_Novel_user_attend = novel_list;
+                    Log.d("GetAllItems", "漂流小说2获取成功");
+                    update++;
+                    Message message = new Message();
+                    message.what = 200;
+                    mHandler.sendMessageAtTime(message,0);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Items_return_usermessage> call, Throwable t) {
+                Log.d("GetAllItems_novel", t.toString());
+            }
+        });
+    }
+
+    /**
+     * 新创建项目后引用来重新获取项目
+     */
+    public void refreshMessage() {
+        update = 0;
+        List_Items_userAll = new ArrayList<>();//用户参加的和自己创建的所有项目
+        List_Items_userAll_create = new ArrayList<>();//用户创建的所有项目
+        List_Items_userAll_attend = new ArrayList<>();//用户参加的所有项目
+        List_Items_All_ing = new ArrayList<>();//用户所有正在进行的项目
+        List_Items_All_ed = new ArrayList<>();//用户所有已经结束的项目
+        List_Items_All_create_ing = new ArrayList<>();//用户所有正在进行且由用户创建的项目
+        List_Items_All_attend_ing = new ArrayList<>();//用户所有正在进行且用户参与的项目
+        List_Items_All_create_ed = new ArrayList<>();//用户所有已经结束且由用户创建的项目
+        List_Items_All_attend_ed = new ArrayList<>();//用户所有已经结束且用户参与的项目
+        List_Camera_user_create = new ArrayList<>();//用户创建的漂流相机
+        List_Camera_user_attend = new ArrayList<>();//用户参加的漂流相机
+        List_Book_user_create = new ArrayList<>();//用户创建的漂流本
+        List_Book_user_attend = new ArrayList<>();//用户参加的漂流本
+        List_Drawing_user_create = new ArrayList<>();//用户创建的漂流画
+        List_Drawing_user_attend = new ArrayList<>();//用户参加的漂流画
+        List_Novel_user_create = new ArrayList<>();//用户创建的漂流小说
+        List_Novel_user_attend = new ArrayList<>();//用户参加的漂流小说
+        GetAll_Items();
+    }
+
+    /**
+     * 获取所有正在进行的项目
+     */
+    public void GetAll_items_ing() {
+        List<Items> ing = new ArrayList<>();
+        if (List_Items_userAll != null && List_Items_userAll.size() != 0)
+            for (int i = 0; i < List_Items_userAll.size(); i++)
+                if (!(List_Items_userAll.get(i).getNowamount() == List_Items_userAll.get(i).getMaxamount()))
+                    ing.add(List_Items_userAll.get(i));
+        List_Items_All_ing = ing;
+    }
+
+    /**
+     * 获取所有已经结束的项目
+     */
+    public void GetAll_items_ed() {
+        List<Items> ed = new ArrayList<>();
+        if (List_Items_userAll != null && List_Items_userAll.size() != 0)
+            for (int i = 0; i < List_Items_userAll.size(); i++)
+                if (List_Items_userAll.get(i).getNowamount() >= List_Items_userAll.get(i).getMaxamount())
+                    ed.add(List_Items_userAll.get(i));
+        Log.d("manager_bug_number2", ed.size() + "");
+        List_Items_All_ed = ed;
+    }
+
+    /**
+     * 获取所有正在进行且由用户创建的项目
+     */
+    public void GetAll_items_create_ing() {
+        List<Items> ing = new ArrayList<>();
+        if (List_Items_userAll_create != null && List_Items_userAll_create.size() != 0)
+            for (int i = 0; i < List_Items_userAll_create.size(); i++)
+                if (!(List_Items_userAll_create.get(i).getNowamount() == List_Items_userAll_create.get(i).getMaxamount()))
+                    ing.add(List_Items_userAll_create.get(i));
+        List_Items_All_create_ing = ing;
+    }
+
+    /**
+     * 获取所有已经结束且由用户创建的项目
+     */
+    public void GetAll_items_create_ed() {
+        List<Items> ed = new ArrayList<>();
+        if (List_Items_userAll_create != null && List_Items_userAll_create.size() != 0)
+            for (int i = 0; i < List_Items_userAll_create.size(); i++)
+                if (List_Items_userAll_create.get(i).getNowamount() >= List_Items_userAll_create.get(i).getMaxamount())
+                    ed.add(List_Items_userAll_create.get(i));
+        List_Items_All_create_ed = ed;
+    }
+
+    /**
+     * 获取所有正在进行且用户参与的项目
+     */
+    public void GetAll_items_attend_ing() {
+        List<Items> ing = new ArrayList<>();
+        if (List_Items_userAll_attend != null && List_Items_userAll_attend.size() != 0)
+            for (int i = 0; i < List_Items_userAll_attend.size(); i++)
+                if (!(List_Items_userAll_attend.get(i).getNowamount() == List_Items_userAll_attend.get(i).getMaxamount()))
+                    ing.add(List_Items_userAll_attend.get(i));
+        List_Items_All_attend_ing = ing;
+    }
+
+    /**
+     * 获取所有已经结束且用户参与的项目
+     */
+    public void GetAll_items_attend_ed() {
+        List<Items> ed = new ArrayList<>();
+        if (List_Items_userAll_attend != null && List_Items_userAll_attend.size() != 0)
+            for (int i = 0; i < List_Items_userAll_attend.size(); i++)
+                if (List_Items_userAll_attend.get(i).getNowamount() >= List_Items_userAll_attend.get(i).getMaxamount())
+                    ed.add(List_Items_userAll_attend.get(i));
+        List_Items_All_attend_ed = ed;
+    }
+
+    /**
+     * 获取管理器所需内容
+     */
+    public void Get_message() {
+        GetAll_items_ing();
+        GetAll_items_ed();
+        GetAll_items_create_ing();
+        GetAll_items_create_ed();
+        GetAll_items_attend_ing();
+        GetAll_items_attend_ed();
+    }
+
+    public List<Items> getList_Items_All_ing() {
+        return List_Items_All_ing;
+    }
+
+    public List<Items> getList_Items_All_ed() {
+        return List_Items_All_ed;
+    }
+
+    public List<Items> getList_Items_All_create_ing() {
+        return List_Items_All_create_ing;
+    }
+
+    public List<Items> getList_Items_All_attend_ing() {
+        return List_Items_All_attend_ing;
+    }
+
+    public List<Items> getList_Items_All_create_ed() {
+        return List_Items_All_create_ed;
+    }
+
+    public List<Items> getList_Items_All_attend_ed() {
+        return List_Items_All_attend_ed;
+    }
+
+    public List<Items> getList_Camera_userAll() {
+        return List_Items_userAll;
+    }
+
+    public List<Items> getList_Camera_user_create() {
+        return List_Camera_user_create;
+    }
+
+    public List<Items> getList_Items_userAll() {
+        return List_Items_userAll;
     }
 }

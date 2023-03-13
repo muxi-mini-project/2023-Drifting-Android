@@ -3,7 +3,7 @@ package android.bignerdranch.drifting.Camera;
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -81,8 +81,11 @@ public class Camera_setting_stranger extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s != null)
+                try{
                     number = Integer.valueOf(mNumber.getText().toString()).longValue();
+            }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -189,7 +192,7 @@ public class Camera_setting_stranger extends AppCompatActivity {
             @Override
             public void onResponse(Call<Camera_return_upload.Camera_return_create> call, Response<Camera_return_upload.Camera_return_create> response) {
                 if(response.isSuccessful()){
-                GetAllItems.getGetAllItems().refreshMessage(GetAllItems.CAMERA);
+                GetAllItems.getGetAllItems().refreshMessage();
                 Intent intent = new Intent(Camera_setting_stranger.this, Camera_Start.class);
                 intent.putExtra("camera_id", response.body().getData().intValue());
                 startActivity(intent);

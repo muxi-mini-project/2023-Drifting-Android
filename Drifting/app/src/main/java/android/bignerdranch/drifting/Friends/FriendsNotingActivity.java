@@ -3,8 +3,8 @@ package android.bignerdranch.drifting.Friends;
 
 
 import android.bignerdranch.drifting.Inviting.Loading.inviting_messageReturn;
-import android.bignerdranch.drifting.Mine.User.User_Now;
-import android.bignerdranch.drifting.Mine.User.User_connector;
+import android.bignerdranch.drifting.User.User_Now;
+import android.bignerdranch.drifting.User.User_connector;
 import android.bignerdranch.drifting.R;
 import android.os.Bundle;
 import android.util.Log;

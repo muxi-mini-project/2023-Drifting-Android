@@ -8,9 +8,8 @@ import android.bignerdranch.drifting.Friends.DeleteFriend_call;
 import android.bignerdranch.drifting.Friends.FriendListInterface;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
 import android.bignerdranch.drifting.Friends.FriendsNewActivity;
-import android.bignerdranch.drifting.Friends.FriendsNotingActivity;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -46,7 +45,6 @@ public class Main_FriendsFragment extends Fragment {
     private RecyclerView friendList;
     private FriendAdapter mFriendAdapter;
     private TextView newFriends;
-    private TextView notingUs;
 
     @SuppressLint("MissingInflatedId")
     @Nullable
@@ -56,18 +54,7 @@ public class Main_FriendsFragment extends Fragment {
 
         friendList = (RecyclerView) view.findViewById(R.id.friend_list);
         newFriends = view.findViewById(R.id.newFriend);
-        notingUs = view.findViewById(R.id.notingUs);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //通知界面
-        notingUs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getContext(),FriendsNotingActivity.class);
-                startActivity(intent);
-            }
-        });
-        //添加好友
         newFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

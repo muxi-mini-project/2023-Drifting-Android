@@ -5,7 +5,7 @@ import android.bignerdranch.drifting.Friends.AddnewFriends.ApiFriendsInterface;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddFriends_return;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddnewFriendSend;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;

@@ -8,13 +8,11 @@ import android.annotation.SuppressLint;
 import android.bignerdranch.drifting.Friends.FriendListInterface;
 import android.bignerdranch.drifting.Friends.FriendsBeInvitedID;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
-import android.bignerdranch.drifting.Main.Main_FriendsFragment;
 import android.bignerdranch.drifting.R;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +47,6 @@ public class Inviting_Friends extends AppCompatActivity {
         setContentView(R.layout.activity_inviting_friends);
         friendsList = findViewById(R.id.friend_list);
         friendsList.setLayoutManager(new LinearLayoutManager(this));
-
         updateUI();
     }
     private void updateUI() {
@@ -107,7 +104,7 @@ public class Inviting_Friends extends AppCompatActivity {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(Inviting_Friends.this, "邀请好友成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Inviting_Friends.this, "邀请好友", Toast.LENGTH_SHORT).show();
                     InvitingStudentsID.add(mFriends.getStudentID());
                     FriendsBeInvitedID.setStudentsID(InvitingStudentsID);
                     itemView.setEnabled(false);

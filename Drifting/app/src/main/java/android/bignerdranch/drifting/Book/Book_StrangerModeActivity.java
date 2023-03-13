@@ -6,7 +6,7 @@ import android.app.AlertDialog;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_request;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_return;
 import android.bignerdranch.drifting.Camera.Camera_;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.User.User_Now;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;

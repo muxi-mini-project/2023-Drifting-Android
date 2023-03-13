@@ -6,7 +6,9 @@ import android.bignerdranch.drifting.Book.Book_inviting;
 import android.bignerdranch.drifting.Camera.Camera_Inviting;
 import android.bignerdranch.drifting.Camera.Camera_create;
 import android.bignerdranch.drifting.Drawing.Drawing_InvitingActivity;
-import android.bignerdranch.drifting.Mine.User.User_Now;
+import android.bignerdranch.drifting.Novel.Novel_InvitingActivity;
+import android.bignerdranch.drifting.Novel.Novel_switch_mode;
+import android.bignerdranch.drifting.User.User_Now;
 import android.bignerdranch.drifting.detail_request.messageReturn;
 import android.bignerdranch.drifting.detail_request.request;
 import android.bignerdranch.drifting.detail_request.request_body;
@@ -17,11 +19,13 @@ import android.bignerdranch.drifting.R;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -54,12 +58,19 @@ public class Main_DiscoveringFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private InvitingAdapter mAdapter;
-    private ArrayList<messageReturn> mMessageReturns = new ArrayList<>();
-    private ArrayList<inviting_messageReturn.data> mDataArrayList = new ArrayList<>();
+    private static ArrayList<messageReturn> mMessageReturns = new ArrayList<>();
+    public static ArrayList<messageReturn> getMessageReturns() {
+        return mMessageReturns;
+    }
+    private static  ArrayList<inviting_messageReturn.data> mDataArrayList = new ArrayList<>();
     private int numberLine = 0;//判断次数，
+    private ImageButton refresh;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.discovering_fragment, null);
+
+        refresh = view.findViewById(R.id.refresh);
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.discovering_recyclerview);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -88,7 +99,7 @@ public class Main_DiscoveringFragment extends Fragment {
         drifting_novel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireActivity(), "开发中", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), Novel_switch_mode.class));
             }
         });
         drifting_drawing.setOnClickListener(new View.OnClickListener() {
@@ -97,8 +108,149 @@ public class Main_DiscoveringFragment extends Fragment {
                 startActivity(new Intent(getContext(), Drawing_switch_mode.class));
             }
         });
+        getViewInviting();
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getViewInviting();
+            }
+        });
 
 
+
+
+        return view;
+
+    }
+
+    private void updateUI() {
+        mAdapter = new InvitingAdapter(mMessageReturns,mDataArrayList);
+        mRecyclerView.setAdapter(mAdapter);
+
+
+    }
+
+    private class InvitingHolder extends RecyclerView.ViewHolder {
+        private messageReturn mInviting;
+        private inviting_messageReturn.data mData;
+        private ImageButton mImageButton;
+        private TextView mTextView;
+
+        public InvitingHolder(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.inviting_container, parent, false));
+
+            mImageButton = (ImageButton) itemView.findViewById(R.id.inviting_link);
+            mTextView = (TextView) itemView.findViewById(R.id.inviting_title);
+        }
+
+        public void bind(messageReturn inviting,inviting_messageReturn.data inviting_messageReturn) {
+            mInviting = inviting;
+            mData =  inviting_messageReturn;
+            String type = mInviting.getZhonglei();
+            String inviter = mInviting.getInviter();
+            if (mData.getCover() != null){
+                if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/点构图.jpg"))
+                    mImageButton.setImageResource(R.drawable.cover_1);
+                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/抓拍，广场上玩滑板的少年.jpg"))
+                    mImageButton.setImageResource(R.drawable.cover_2);
+                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/三分线，冷清的广场.jpg"))
+                    mImageButton.setImageResource(R.drawable.cover_3);
+                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/三分线构图.jpg"))
+                    mImageButton.setImageResource(R.drawable.cover_4);
+                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/4.jpg"))
+                    mImageButton.setImageResource(R.drawable.cover_5);
+                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/3.jpg"))
+                    mImageButton.setImageResource(R.drawable.cover_6);
+                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/2.jpg"))
+                    mImageButton.setImageResource(R.drawable.cover_7);
+                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/1.jpg"))
+                    mImageButton.setImageResource(R.drawable.cover_8);
+                else mImageButton.setImageResource(R.drawable.cover_8);
+            }else mImageButton.setImageResource(R.drawable.cover_7);
+
+
+            mTextView.setText("来自" + inviter + "的" + type);;
+            mImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (type) {
+                        case "漂流本": {
+                            Intent intent = new Intent(getContext(), Book_inviting.class);
+                            intent.putExtra("file_id",String.valueOf(mData.getFile_id()));
+                            startActivity(intent);
+                            //inviting_type = "书";
+                            break;
+                        }
+                        case "漂流相机": {
+                            Intent intent = new Intent(getContext(), Camera_Inviting.class);
+                            intent.putExtra("file_id",String.valueOf(mData.getFile_id()));
+                            startActivity(intent);
+                            break;
+                        }
+                        case "漂流画": {
+                            Intent intent = new Intent(getContext(),Drawing_InvitingActivity.class);
+                            intent.putExtra("file_id",mInviting.getId());
+                            intent.putExtra("position",mInviting.getPosition());
+                            startActivity(intent);
+                            break;
+                        }
+                        case "漂流小说": {
+                            Intent intent = new Intent(getContext(), Novel_InvitingActivity.class);
+                            intent.putExtra("file_id",mInviting.getId());
+                            intent.putExtra("position",mInviting.getPosition());
+                            startActivity(intent);
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+    }
+
+    private class InvitingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private ArrayList<messageReturn> mInviting_list;
+        private ArrayList<inviting_messageReturn.data> mInviting_messageReturns; //
+
+        public InvitingAdapter(ArrayList<messageReturn> inviting_list, ArrayList<inviting_messageReturn.data> data){
+            mInviting_list = inviting_list;
+            mInviting_messageReturns =data;
+        }
+        public InvitingAdapter(ArrayList<messageReturn> inviting_list)
+        {
+            mInviting_list = inviting_list;
+        }
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            return new InvitingHolder(layoutInflater, parent);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            messageReturn inviting = mInviting_list.get(position);
+            inviting_messageReturn.data  data = mInviting_messageReturns.get(position);
+            ((InvitingHolder)holder).bind(inviting,data);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mInviting_list.size();
+        }
+    }
+    private static Bitmap getImage(String path) throws Exception{
+        URL url = new URL(path);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(5000);
+        conn.setRequestMethod("GET");
+        if(conn. getResponseCode() == 200){
+            InputStream inStream = conn. getInputStream();
+            Bitmap bitmap = BitmapFactory. decodeStream(inStream) ;
+            return bitmap;
+        }else return null;
+    }
+    public void getViewInviting()
+    {
         //获取漂流计划内容
         Retrofit.Builder builder0 = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
@@ -298,318 +450,197 @@ public class Main_DiscoveringFragment extends Fragment {
         TimerTask timerTask1 = new TimerTask() {
             @Override
             public void run() {
-               Log.i("次数",String.valueOf(numberLine));
-               if (numberLine<10){
-                   Random random2 = new Random();
-                   for (int i = 0;i<(10-numberLine);i++){
-                       int a = random2.nextInt(4); //a为0，1，2，3决定是哪一个漂流项目
-                       Log.i("a",String.valueOf(a));
-                       Retrofit.Builder builder = new Retrofit.Builder()
-                               .baseUrl("http://116.204.121.9:61583/")
-                               .addConverterFactory(GsonConverterFactory.create());
-                       Retrofit retrofit = builder.build();
-                       ApiNote random = retrofit.create(ApiNote.class);
+                Log.i("次数",String.valueOf(numberLine));
+                if (numberLine<10){
+                    Random random2 = new Random();
+                    for (int i = 0;i<(10-numberLine);i++){
+                        int a = random2.nextInt(4); //a为0，1，2，3决定是哪一个漂流项目
+                        Log.i("a",String.valueOf(a));
+                        Retrofit.Builder builder = new Retrofit.Builder()
+                                .baseUrl("http://116.204.121.9:61583/")
+                                .addConverterFactory(GsonConverterFactory.create());
+                        Retrofit retrofit = builder.build();
+                        ApiNote random = retrofit.create(ApiNote.class);
 
-                       switch (a){
-                           case 0:{
-                               Call<inviting_messageReturn.data> call0 = random.getRandomBook(User_Now
-                                       .getUserNow().getUser().getToken());
-                               call0.enqueue(new Callback<inviting_messageReturn.data>() {
-                                   @Override
-                                   public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
-                                       inviting_messageReturn.data return_data =response.body();
-                                       long id = return_data.getFile_id();
-                                       request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                                       Call<messageReturn> messageReturnCall = request1.bookRequest(User_Now.getUserNow().getUser().getToken(),
-                                              new request_body(id));
-                                       messageReturnCall.enqueue(new Callback<messageReturn>() {
-                                           @Override
-                                           public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
-                                               messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
-                                               messageReturn.setZhonglei("漂流本");
-                                               if (return_data.getKind() == 0) {
-                                                   messageReturn.setInviter("随机");
-                                               } else if (return_data.getKind() == 1) {
-                                                   messageReturn.setInviter("密友");
-                                               }
-                                               mDataArrayList.add(return_data);
-                                               mMessageReturns.add(messageReturn);
-                                               updateUI();
+                        switch (a){
+                            case 0:{
+                                Call<inviting_messageReturn.data> call0 = random.getRandomBook(User_Now
+                                        .getUserNow().getUser().getToken());
+                                call0.enqueue(new Callback<inviting_messageReturn.data>() {
+                                    @Override
+                                    public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
+                                        inviting_messageReturn.data return_data =response.body();
+                                        long id = return_data.getFile_id();
+                                        request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                                        Call<messageReturn> messageReturnCall = request1.bookRequest(User_Now.getUserNow().getUser().getToken(),
+                                                new request_body(id));
+                                        messageReturnCall.enqueue(new Callback<messageReturn>() {
+                                            @Override
+                                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
+                                                messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
+                                                messageReturn.setZhonglei("漂流本");
+                                                if (return_data.getKind() == 0) {
+                                                    messageReturn.setInviter("随机");
+                                                } else if (return_data.getKind() == 1) {
+                                                    messageReturn.setInviter("密友");
+                                                }
+                                                mDataArrayList.add(return_data);
+                                                mMessageReturns.add(messageReturn);
+                                                updateUI();
 
-                                           }
+                                            }
 
-                                           @Override
-                                           public void onFailure(Call<messageReturn> call, Throwable t) {
-                                               Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void onFailure(Call<messageReturn> call, Throwable t) {
+                                                Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
 
-                                           }
-                                       });
+                                            }
+                                        });
 
-                                   }
+                                    }
 
-                                   @Override
-                                   public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
-                                       Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
+                                        Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
 
-                                   }
-                               });
+                                    }
+                                });
 
-                           }//漂流本
-                           case 1:{
-                               Call<inviting_messageReturn.data> call1 = random.getRandomPicture(User_Now
-                                       .getUserNow().getUser().getToken());
-                               call1.enqueue(new Callback<inviting_messageReturn.data>() {
-                                   @Override
-                                   public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
-                                       inviting_messageReturn.data return_data = response.body();
-                                       long id = return_data.getFile_id();
-                                       request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                                       Call<messageReturn> messageReturnCall = request1.cameraRequest(User_Now.getUserNow().getUser().getToken(),
-                                               new request_body(id));
-                                       messageReturnCall.enqueue(new Callback<messageReturn>() {
-                                           @Override
-                                           public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
-                                               messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
-                                               messageReturn.setZhonglei("漂流相机");
-                                               if (return_data.getKind() == 0) {
-                                                   messageReturn.setInviter("随机");
-                                               } else if (return_data.getKind() == 1) {
-                                                   messageReturn.setInviter("密友");
-                                               }
-                                               mDataArrayList.add(return_data);
-                                               mMessageReturns.add(messageReturn);
-                                               updateUI();
-                                           }
+                            }//漂流本
+                            case 1:{
+                                Call<inviting_messageReturn.data> call1 = random.getRandomPicture(User_Now
+                                        .getUserNow().getUser().getToken());
+                                call1.enqueue(new Callback<inviting_messageReturn.data>() {
+                                    @Override
+                                    public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
+                                        inviting_messageReturn.data return_data = response.body();
+                                        long id = return_data.getFile_id();
+                                        request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                                        Call<messageReturn> messageReturnCall = request1.cameraRequest(User_Now.getUserNow().getUser().getToken(),
+                                                new request_body(id));
+                                        messageReturnCall.enqueue(new Callback<messageReturn>() {
+                                            @Override
+                                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
+                                                messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
+                                                messageReturn.setZhonglei("漂流相机");
+                                                if (return_data.getKind() == 0) {
+                                                    messageReturn.setInviter("随机");
+                                                } else if (return_data.getKind() == 1) {
+                                                    messageReturn.setInviter("密友");
+                                                }
+                                                mDataArrayList.add(return_data);
+                                                mMessageReturns.add(messageReturn);
+                                                updateUI();
+                                            }
 
-                                           @Override
-                                           public void onFailure(Call<messageReturn> call, Throwable t) {
-                                               Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void onFailure(Call<messageReturn> call, Throwable t) {
+                                                Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
 
-                                           }
-                                       });
-                                   }
+                                            }
+                                        });
+                                    }
 
-                                   @Override
-                                   public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
-                                       Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
+                                        Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
 
-                                   }
-                               });
+                                    }
+                                });
 
-                           }//相机
-                           case 2:{
-                               Call<inviting_messageReturn.data> call2 = random.getRandomDraw(User_Now
-                                       .getUserNow().getUser().getToken());
-                               call2.enqueue(new Callback<inviting_messageReturn.data>() {
-                                   @Override
-                                   public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
-                                       inviting_messageReturn.data return_data = response.body();
-                                       long id = return_data.getFile_id();
-                                       request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                                       Call<messageReturn> messageReturnCall = request1.drawingRequest(User_Now.getUserNow().getUser().getToken(),
-                                               new request_body(id));
-                                       messageReturnCall.enqueue(new Callback<messageReturn>() {
-                                           @Override
-                                           public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
-                                               messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
-                                               messageReturn.setZhonglei("漂流画");
-                                               if (return_data.getKind() == 0) {
-                                                   messageReturn.setInviter("随机");
-                                               } else if (return_data.getKind() == 1) {
-                                                   messageReturn.setInviter("密友");
-                                               }
-                                               mDataArrayList.add(return_data);
-                                               mMessageReturns.add(messageReturn);
-                                               updateUI();
-                                           }
+                            }//相机
+                            case 2:{
+                                Call<inviting_messageReturn.data> call2 = random.getRandomDraw(User_Now
+                                        .getUserNow().getUser().getToken());
+                                call2.enqueue(new Callback<inviting_messageReturn.data>() {
+                                    @Override
+                                    public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
+                                        inviting_messageReturn.data return_data = response.body();
+                                        long id = return_data.getFile_id();
+                                        request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                                        Call<messageReturn> messageReturnCall = request1.drawingRequest(User_Now.getUserNow().getUser().getToken(),
+                                                new request_body(id));
+                                        messageReturnCall.enqueue(new Callback<messageReturn>() {
+                                            @Override
+                                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
+                                                messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
+                                                messageReturn.setZhonglei("漂流画");
+                                                if (return_data.getKind() == 0) {
+                                                    messageReturn.setInviter("随机");
+                                                } else if (return_data.getKind() == 1) {
+                                                    messageReturn.setInviter("密友");
+                                                }
+                                                mDataArrayList.add(return_data);
+                                                mMessageReturns.add(messageReturn);
+                                                updateUI();
+                                            }
 
-                                           @Override
-                                           public void onFailure(Call<messageReturn> call, Throwable t) {
-                                               Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void onFailure(Call<messageReturn> call, Throwable t) {
+                                                Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
 
-                                           }
-                                       });
-                                   }
+                                            }
+                                        });
+                                    }
 
-                                   @Override
-                                   public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
-                                       Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
+                                        Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
 
-                                   }
-                               });
-                           }//
-                           case 3:{
-                               Call<inviting_messageReturn.data> call3 = random.getRandomNovel(User_Now
-                                       .getUserNow().getUser().getToken());
-                               call3.enqueue(new Callback<inviting_messageReturn.data>() {
-                                   @Override
-                                   public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
-                                       inviting_messageReturn.data return_data = response.body();
-                                       long id = return_data.getFile_id();
-                                       request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                                       Call<messageReturn> messageReturnCall = request1.novelRequest(User_Now.getUserNow().getUser().getToken(),
-                                               new request_body(id));
-                                       messageReturnCall.enqueue(new Callback<messageReturn>() {
-                                           @Override
-                                           public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
-                                               messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
-                                               messageReturn.setZhonglei("漂流小说");
-                                               if (return_data.getKind() == 0) {
-                                                   messageReturn.setInviter("随机");
-                                               } else if (return_data.getKind() == 1) {
-                                                   messageReturn.setInviter("密友");
-                                               }
-                                               mDataArrayList.add(return_data);
-                                               mMessageReturns.add(messageReturn);
-                                               updateUI();
-                                           }
+                                    }
+                                });
+                            }//
+                            case 3:{
+                                Call<inviting_messageReturn.data> call3 = random.getRandomNovel(User_Now
+                                        .getUserNow().getUser().getToken());
+                                call3.enqueue(new Callback<inviting_messageReturn.data>() {
+                                    @Override
+                                    public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
+                                        inviting_messageReturn.data return_data = response.body();
+                                        long id = return_data.getFile_id();
+                                        request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                                        Call<messageReturn> messageReturnCall = request1.novelRequest(User_Now.getUserNow().getUser().getToken(),
+                                                new request_body(id));
+                                        messageReturnCall.enqueue(new Callback<messageReturn>() {
+                                            @Override
+                                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
+                                                messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
+                                                messageReturn.setZhonglei("漂流小说");
+                                                if (return_data.getKind() == 0) {
+                                                    messageReturn.setInviter("随机");
+                                                } else if (return_data.getKind() == 1) {
+                                                    messageReturn.setInviter("密友");
+                                                }
+                                                mDataArrayList.add(return_data);
+                                                mMessageReturns.add(messageReturn);
+                                                updateUI();
+                                            }
 
-                                           @Override
-                                           public void onFailure(Call<messageReturn> call, Throwable t) {
-                                               Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void onFailure(Call<messageReturn> call, Throwable t) {
+                                                Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
 
-                                           }
-                                       });
-                                   }
+                                            }
+                                        });
+                                    }
 
-                                   @Override
-                                   public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
-                                       Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
+                                        Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
 
-                                   }
-                               });
-                           }
-                       }//选项结束
+                                    }
+                                });
+                            }
+                        }//选项结束
 
-                   }
+                    }
 
-               }
+                }
 
             }
         };
         timer1.schedule(timerTask1,1000);
-        return view;
-
     }
 
-    private void updateUI() {
-        mAdapter = new InvitingAdapter(mMessageReturns,mDataArrayList);
-        mRecyclerView.setAdapter(mAdapter);
 
-
-    }
-
-    private class InvitingHolder extends RecyclerView.ViewHolder {
-        private messageReturn mInviting;
-        private inviting_messageReturn.data mData;
-        private ImageButton mImageButton;
-        private TextView mTextView;
-
-        public InvitingHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.inviting_container, parent, false));
-
-            mImageButton = (ImageButton) itemView.findViewById(R.id.inviting_link);
-            mTextView = (TextView) itemView.findViewById(R.id.inviting_title);
-        }
-
-        public void bind(messageReturn inviting,inviting_messageReturn.data inviting_messageReturn) {
-            mInviting = inviting;
-            mData =  inviting_messageReturn;
-            String type = mInviting.getZhonglei();
-            String inviter = mInviting.getInviter();
-            if (mData.getCover() != null){
-                if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/点构图.jpg"))
-                    mImageButton.setImageResource(R.drawable.cover_1);
-                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/抓拍，广场上玩滑板的少年.jpg"))
-                    mImageButton.setImageResource(R.drawable.cover_2);
-                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/三分线，冷清的广场.jpg"))
-                    mImageButton.setImageResource(R.drawable.cover_3);
-                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/三分线构图.jpg"))
-                    mImageButton.setImageResource(R.drawable.cover_4);
-                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/4.jpg"))
-                    mImageButton.setImageResource(R.drawable.cover_5);
-                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/3.jpg"))
-                    mImageButton.setImageResource(R.drawable.cover_6);
-                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/2.jpg"))
-                    mImageButton.setImageResource(R.drawable.cover_7);
-                else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/1.jpg"))
-                    mImageButton.setImageResource(R.drawable.cover_8);
-                else mImageButton.setImageResource(R.drawable.cover_8);
-            }else mImageButton.setImageResource(R.drawable.cover_7);
-
-
-            mTextView.setText("来自" + inviter + "的" + type);;
-            mImageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switch (type) {
-                        case "漂流本": {
-                            Intent intent = new Intent(getContext(), Book_inviting.class);
-                            intent.putExtra("file_id",String.valueOf(mData.getFile_id()));
-                            startActivity(intent);
-                            //inviting_type = "书";
-                            break;
-                        }
-                        case "漂流相机": {
-                            Intent intent = new Intent(getContext(), Camera_Inviting.class);
-                            intent.putExtra("file_id",String.valueOf(mData.getFile_id()));
-                            startActivity(intent);
-                            break;
-                        }
-                        case "漂流画": {
-                            startActivity(new Intent(getContext(), Drawing_InvitingActivity.class));
-                            break;
-                        }
-                        case "漂流小说": {
-                            //inviting_type = "小说";
-                            break;
-                        }
-                    }
-                }
-            });
-        }
-
-    }
-
-    private class InvitingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private ArrayList<messageReturn> mInviting_list;
-        private ArrayList<inviting_messageReturn.data> mInviting_messageReturns; //
-
-        public InvitingAdapter(ArrayList<messageReturn> inviting_list, ArrayList<inviting_messageReturn.data> data){
-            mInviting_list = inviting_list;
-            mInviting_messageReturns =data;
-        }
-        public InvitingAdapter(ArrayList<messageReturn> inviting_list)
-        {
-            mInviting_list = inviting_list;
-        }
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            return new InvitingHolder(layoutInflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            messageReturn inviting = mInviting_list.get(position);
-            inviting_messageReturn.data  data = mInviting_messageReturns.get(position);
-            ((InvitingHolder)holder).bind(inviting,data);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mInviting_list.size();
-        }
-    }
-    private static Bitmap getImage(String path) throws Exception{
-        URL url = new URL(path);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(5000);
-        conn.setRequestMethod("GET");
-        if(conn. getResponseCode() == 200){
-            InputStream inStream = conn. getInputStream();
-            Bitmap bitmap = BitmapFactory. decodeStream(inStream) ;
-            return bitmap;
-        }else return null;
-    }
 }
