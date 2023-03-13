@@ -1,15 +1,21 @@
 package android.bignerdranch.drifting.Main;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.bignerdranch.drifting.Friends.AddnewFriends.AddFriends_return;
+import android.bignerdranch.drifting.Friends.AddnewFriends.ApiFriendsInterface;
+import android.bignerdranch.drifting.Friends.DeleteFriend_call;
 import android.bignerdranch.drifting.Friends.FriendListInterface;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
 import android.bignerdranch.drifting.Friends.FriendsNewActivity;
-import android.bignerdranch.drifting.Friends.Friends_;
-import android.bignerdranch.drifting.Friends.Friends_Lab;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -21,10 +27,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,6 +51,7 @@ public class Main_FriendsFragment extends Fragment {
     private FriendAdapter mFriendAdapter;
     private TextView newFriends;
 
+    @SuppressLint("MissingInflatedId")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,10 +68,11 @@ public class Main_FriendsFragment extends Fragment {
             }
         });
         updateUI();
-
         return view;
     }
-
+    /**
+     * 更新好友列表
+     */
     private void updateUI() {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
@@ -71,11 +86,11 @@ public class Main_FriendsFragment extends Fragment {
                 //Toast.makeText(getActivity(), response.body().getDataN().get(0).getNameN(), Toast.LENGTH_SHORT).show();测试成功
                 FriendsList_return friendsList_return = response.body();
                 List<FriendsList_return.Friends_Net> friends_nets = friendsList_return.getDataN();
-                if(friends_nets != null){
-                    mFriendAdapter = new FriendAdapter(friends_nets);
-                    friendList.setAdapter(mFriendAdapter);
-                }
 
+               if (friends_nets != null){
+                   mFriendAdapter = new FriendAdapter(friends_nets);
+                   friendList.setAdapter(mFriendAdapter);
+               }
 
             }
 
@@ -94,9 +109,14 @@ public class Main_FriendsFragment extends Fragment {
         private TextView friendAuto;
         private FriendsList_return.Friends_Net mFriends;
 
-        public void bind(FriendsList_return.Friends_Net friends){
+        public void bind(FriendsList_return.Friends_Net friends)  {
             mFriends = friends;
-            headImage.setImageResource(R.drawable.book);
+
+           try {
+               headImage.setImageBitmap(getImage("http://"+mFriends.getAvatar()));
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
             friendName.setText(mFriends.getNameN());
             friendAuto.setText(mFriends.getSelfWord());
         }
@@ -114,7 +134,7 @@ public class Main_FriendsFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Toast.makeText(getActivity(), "是否删除好友", Toast.LENGTH_SHORT).show();
-            ShowChoices();
+            ShowChoices(mFriends);
         }
     }
     private class FriendAdapter extends RecyclerView.Adapter<FriendsHolder>{
@@ -140,7 +160,12 @@ public class Main_FriendsFragment extends Fragment {
             return mFriends.size();
         }
     }
-    private void ShowChoices() {
+
+    /**
+     * 删除好友的地方，后续可以在这里写写更多点击好友的功能
+     * @param friends
+     */
+    private void ShowChoices(FriendsList_return.Friends_Net friends) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Holo_Light_Dialog);
         //    指定下拉列表的显示数据
@@ -151,9 +176,32 @@ public class Main_FriendsFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0: {
-                        Intent intent = new Intent(Intent.ACTION_PICK, null);
-                        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                        startActivityForResult(intent, 2);
+
+                        DeleteFriend_call deleteFriend_call = new DeleteFriend_call();
+                        deleteFriend_call.setFriendId(new Long(friends.getStudentID()).intValue());
+                        deleteFriend_call.setUserId(User_Now.getUserNow().getUser().getId());
+
+                        Retrofit.Builder builder = new Retrofit.Builder()
+                                .baseUrl("http://116.204.121.9:61583/")
+                                .addConverterFactory(GsonConverterFactory.create());
+                        Retrofit retrofit = builder.build();
+                        ApiFriendsInterface delete = retrofit.create(ApiFriendsInterface.class);
+                        Call<AddFriends_return> call = delete.deleteFriends(deleteFriend_call,
+                                User_Now.getUserNow().getUser().getToken());
+
+                        call.enqueue(new Callback<AddFriends_return>() {
+                            @Override
+                            public void onResponse(Call<AddFriends_return> call, Response<AddFriends_return> response) {
+                                Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                updateUI();
+                            }
+
+                            @Override
+                            public void onFailure(Call<AddFriends_return> call, Throwable t) {
+
+                            }
+                        });
+
                     }
                     case 1: {
                         break;
@@ -163,4 +211,25 @@ public class Main_FriendsFragment extends Fragment {
         });
         builder.show();
     }
+    private static Bitmap getImage(String path) throws Exception{
+        URL url = new URL(path);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(5000);
+        conn.setRequestMethod("GET");
+        if(conn. getResponseCode() == 200){
+            InputStream inStream = conn. getInputStream();
+            Bitmap bitmap = BitmapFactory. decodeStream(inStream) ;
+            return bitmap;
+        }else return null;
+    }
+
+    private Uri fileToUri(File file){
+        if (file != null){
+            return Uri.fromFile(file);
+        }
+        return null;
+    }
+
+
+
 }

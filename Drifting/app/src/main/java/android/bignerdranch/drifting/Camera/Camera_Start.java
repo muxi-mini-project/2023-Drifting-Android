@@ -50,14 +50,15 @@ public class Camera_Start extends AppCompatActivity {
     ImageView photo3;
     ImageView photo4;
     static ArrayList<String> camera_picture_name = new ArrayList<>();
+    List<ImageView> imageViewList = new ArrayList<>();
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 4) {
-                photo1.setImageBitmap(bitmapslist.get(0));
-                photo2.setImageBitmap(bitmapslist.get(1));
-                photo3.setImageBitmap(bitmapslist.get(2));
-                photo4.setImageBitmap(bitmapslist.get(3));
+            if (msg.what == 200) {
+                Log.d("camera_bug",bitmapslist.size()+"");
+                for (int i = 0; i < bitmapslist.size(); i++)
+                    imageViewList.get(i).setImageBitmap(bitmapslist.get(i));
             }
         }
     };
@@ -66,12 +67,16 @@ public class Camera_Start extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Integer id = (Integer) getIntent().getIntExtra("camera_id", 2);
+        Log.d("camera_bug", id.toString());
         setContentView(R.layout.camera_start);
         photo1 = (ImageView) findViewById(R.id.photo1);
         photo2 = (ImageView) findViewById(R.id.photo2);
         photo3 = (ImageView) findViewById(R.id.photo3);
         photo4 = (ImageView) findViewById(R.id.photo4);
-
+        imageViewList.add(photo1);
+        imageViewList.add(photo2);
+        imageViewList.add(photo3);
+        imageViewList.add(photo4);
         SetCameraMes(id, User_Now.getUserNow().getUser().getToken());
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -106,6 +111,7 @@ public class Camera_Start extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Camera_Start.this, Camera_Activity.class);
+                intent.putExtra("camera_id",id);
                 launcher.launch(intent);
             }
         });
@@ -121,103 +127,43 @@ public class Camera_Start extends AppCompatActivity {
 
     private void GetPicture() {
         if (camera_picture_name.size() == 0) {
-        } else if (camera_picture_name.size() > 0 && camera_picture_name.size() < 4)
-            switch (camera_picture_name.size()) {
-                case 1: {
-                    new Thread("getphoto1") {
-                        @Override
-                        public void run() {
-                            try {
-                                List<Bitmap> list = new ArrayList<>();
-                                Log.d("camera_bug", "开始一次请求");
-                                list.add(FileUtils.getImage("http://" + camera_picture_name.get(0), FileUtils.PICTURE));
-                                Log.d("camera_bug", "获取成功");
-                                bitmapslist = list;
-                                Message message = new Message();
-                                message.what = 1;
-                                handler.sendMessage(message);
-                            } catch (Exception e) {
-                                Log.d("camera_bug", "发生错误");
-                                e.printStackTrace();
-                            }
-                        }
-                    }.start();
-                    break;
-                }
-                case 2: {
-                    new Thread("getphoto2") {
-                        @Override
-                        public void run() {
-                            try {
-                                List<Bitmap> list = new ArrayList<>();
-                                Log.d("camera_bug", "开始一次请求");
-                                list.add(FileUtils.getImage("http://" + camera_picture_name.get(0), FileUtils.PICTURE));
-                                Log.d("camera_bug", "获取成功");
-                                Log.d("camera_bug", "开始二次请求");
-                                list.add(FileUtils.getImage("http://" + camera_picture_name.get(1), FileUtils.PICTURE));
-                                Log.d("camera_bug", "获取成功");
-                                bitmapslist = list;
-                                Message message = new Message();
-                                message.what = 2;
-                                handler.sendMessage(message);
-                            } catch (Exception e) {
-                                Log.d("camera_bug", "发生错误");
-                                e.printStackTrace();
-                            }
-                        }
-                    }.start();
-                    break;
-                }
-                case 3: {
-                    new Thread("getphoto3") {
-                        @Override
-                        public void run() {
-                            try {
-                                List<Bitmap> list = new ArrayList<>();
-                                Log.d("camera_bug", "开始一次请求");
-                                list.add(FileUtils.getImage("http://" + camera_picture_name.get(0), FileUtils.PICTURE));
-                                Log.d("camera_bug", "获取成功");
-                                Log.d("camera_bug", "开始二次请求");
-                                list.add(FileUtils.getImage("http://" + camera_picture_name.get(1), FileUtils.PICTURE));
-                                Log.d("camera_bug", "获取成功");
-                                Log.d("camera_bug", "开始三次请求");
-                                list.add(FileUtils.getImage("http://" + camera_picture_name.get(2), FileUtils.PICTURE));
-                                Log.d("camera_bug", "获取成功");
-                                bitmapslist = list;
-                                Message message = new Message();
-                                message.what = 3;
-                                handler.sendMessage(message);
-                            } catch (Exception e) {
-                                Log.d("camera_bug", "发生错误");
-                                e.printStackTrace();
-                            }
-                        }
-                    }.start();
-                    break;
-                }
-                default:
-                    break;
-            }
-        else if (camera_picture_name.size() >= 4) {
-            new Thread("getphoto4") {
+        } else if (camera_picture_name.size() > 0 && camera_picture_name.size() < 4){
+            new Thread("getphoto") {
                 @Override
                 public void run() {
                     try {
-                        int p = camera_picture_name.size();
-                        Log.d("camera_bug", "开始一次请求");
-                        bitmapslist.add(FileUtils.getImage("http://" + camera_picture_name.get(p - 4), FileUtils.PICTURE));
-                        Log.d("camera_bug", "获取成功");
-                        Log.d("camera_bug", "开始二次请求");
-                        bitmapslist.add(FileUtils.getImage("http://" + camera_picture_name.get(p - 3), FileUtils.PICTURE));
-                        Log.d("camera_bug", "获取成功");
-                        Log.d("camera_bug", "开始三次请求");
-                        bitmapslist.add(FileUtils.getImage("http://" + camera_picture_name.get(p - 2), FileUtils.PICTURE));
-                        Log.d("camera_bug", "获取成功");
-                        Log.d("camera_bug", "开始四次请求");
-                        bitmapslist.add(FileUtils.getImage("http://" + camera_picture_name.get(p - 1), FileUtils.PICTURE));
-                        Log.d("camera_bug", "获取成功");
+                        List<Bitmap> list = new ArrayList<>();
+                        for (int i = 1; i<camera_picture_name.size()+1 ; i++) {
+                            Log.d("camera_bug", "开始" + i + "次请求");
+                            list.add(FileUtils.getImage("http://" + camera_picture_name.get(i-1), FileUtils.PICTURE));
+                            Log.d("camera_bug", "获取成功");
+                        }
+                        bitmapslist = list;
                         Message message = new Message();
-                        message.what = 4;
+                        message.what = 200;
+                        handler.sendMessage(message);
+                    } catch (Exception e) {
+                        Log.d("camera_bug", "发生错误");
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+            }
+        else if (camera_picture_name.size() >= 4) {
+            new Thread("getphoto") {
+                @Override
+                public void run() {
+                    try {
+                        List<Bitmap> list = new ArrayList<>();
+                        int p = camera_picture_name.size();
+                        for (int i = 4, j = 1; i > 0; i--, j++) {
+                            Log.d("camera_bug", "开始" + j + "次请求");
+                            list.add(FileUtils.getImage("http://" + camera_picture_name.get(p - i), FileUtils.PICTURE));
+                            Log.d("camera_bug", "获取成功");
+                        }
+                        bitmapslist = list;
+                        Message message = new Message();
+                        message.what = 200;
                         handler.sendMessage(message);
                     } catch (Exception e) {
                         Log.d("camera_bug", "发生错误");

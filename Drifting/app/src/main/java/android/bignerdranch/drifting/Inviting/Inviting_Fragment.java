@@ -4,6 +4,7 @@ import android.bignerdranch.drifting.Inviting.Loading.inviting_request;
 import android.bignerdranch.drifting.Inviting.Loading.inviting_messageReturn;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
 import android.bignerdranch.drifting.R;
+import android.bignerdranch.drifting.User.User_Now;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,14 +52,13 @@ public class Inviting_Fragment extends Fragment {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        String token = Login_LoginActivity.getToken();
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
         inviting_request request = retrofit.create(inviting_request.class);
 
-        Call<inviting_messageReturn> call0 = request.drawing_request(Login_LoginActivity.getToken());
+        Call<inviting_messageReturn> call0 = request.drawing_request(User_Now.getUserNow().getUser().getToken());
         call0.enqueue(new Callback<inviting_messageReturn>() {
             @Override
             public void onResponse(@NonNull Call<inviting_messageReturn> call, @NonNull Response<inviting_messageReturn> response) {
@@ -96,7 +96,7 @@ public class Inviting_Fragment extends Fragment {
             }
         });
 
-        Call<inviting_messageReturn> call1 = request.novel_request(Login_LoginActivity.getToken());
+        Call<inviting_messageReturn> call1 = request.novel_request(User_Now.getUserNow().getUser().getToken());
         call1.enqueue(new Callback<inviting_messageReturn>() {
             @Override
             public void onResponse(@NonNull Call<inviting_messageReturn> call, @NonNull Response<inviting_messageReturn> response) {
@@ -134,7 +134,7 @@ public class Inviting_Fragment extends Fragment {
             }
         });
 
-        Call<inviting_messageReturn> call2 = request.book_request(Login_LoginActivity.getToken());
+        Call<inviting_messageReturn> call2 = request.book_request(User_Now.getUserNow().getUser().getToken());
         call2.enqueue(new Callback<inviting_messageReturn>() {
             @Override
             public void onResponse(@NonNull Call<inviting_messageReturn> call, @NonNull Response<inviting_messageReturn> response) {
@@ -171,7 +171,7 @@ public class Inviting_Fragment extends Fragment {
             }
         });
 
-        Call<inviting_messageReturn> call3 = request.camera_request(Login_LoginActivity.getToken());
+        Call<inviting_messageReturn> call3 = request.camera_request(User_Now.getUserNow().getUser().getToken());
         call3.enqueue(new Callback<inviting_messageReturn>() {
             @Override
             public void onResponse(@NonNull Call<inviting_messageReturn> call, @NonNull Response<inviting_messageReturn> response) {
@@ -208,8 +208,6 @@ public class Inviting_Fragment extends Fragment {
                 Toast.makeText(getContext(), "获取邀请信息失败", Toast.LENGTH_SHORT).show();
             }
         });
-
-
         return view;
 
     }

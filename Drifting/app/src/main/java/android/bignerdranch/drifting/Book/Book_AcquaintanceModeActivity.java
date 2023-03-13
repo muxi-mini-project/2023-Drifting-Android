@@ -32,9 +32,9 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
         setContentView(R.layout.acquaintance_mode);
 
         iv_image = (ImageView) findViewById(R.id.iv_image);
-        Button choose_cover = (Button) findViewById(R.id.acquaintance_choose_front_cover);
-        Button start = (Button) findViewById(R.id.acquaintance_start);
-        Button inviting_friends = (Button) findViewById(R.id.acquaintance_inviting_friends);
+        Button choose_cover = (Button) findViewById(R.id.choose_front_cover);
+        Button start = (Button) findViewById(R.id.start);
+        Button inviting_friends = (Button) findViewById(R.id.inviting_friends);
         EditText name_text = (EditText) findViewById(R.id.name_text);
         EditText title_text = (EditText) findViewById(R.id.title_text);
         EditText person_number_text = (EditText) findViewById(R.id.person_number_text);

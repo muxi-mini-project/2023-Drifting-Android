@@ -86,6 +86,7 @@ public class Login_LoginActivity extends AppCompatActivity {
                 byte[] b = new byte[fis.available()];
                 fis.read(b);
                 String readStr = new String(b);
+                token = readStr;
                 upload_User(readStr);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -148,7 +149,6 @@ public class Login_LoginActivity extends AppCompatActivity {
                     call.enqueue(new Callback<Login_return>() {
                         @Override
                         public void onResponse(Call<Login_return> call, Response<Login_return> response) {
-                            token = response.body().getData();
                             if (response.isSuccessful()) {
                                 Toast.makeText(Login_LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                                 try {
@@ -176,13 +176,13 @@ public class Login_LoginActivity extends AppCompatActivity {
 //        AllItems.getAllItems().setCamera_name_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_name());
 //        AllItems.getAllItems().getCamera_nowuser_user(GetAllItems.getGetAllItems().GetCamera_ownercrea_nowuser());
 //    }
-    public void upload_User(String token) {
+    public void upload_User(String Token) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
         User_connector mine_connector = retrofit.create(User_connector.class);
-        Call<User_returnAll> call = mine_connector.getUserMes(token);
+        Call<User_returnAll> call = mine_connector.getUserMes(Token);
 
         call.enqueue(new Callback<User_returnAll>() {
             @Override
@@ -193,7 +193,7 @@ public class Login_LoginActivity extends AppCompatActivity {
                 if (user1.getSelfWord() != "" && user1.getSelfWord() != null)
                     user.setSignature(user1.getSelfWord());
                 user.setSex(user1.getSex());
-                user.setToken(token);
+                user.setToken(Token);
                 user.setId(user1.getStudentID().intValue());
                 user.setPortrait("http://" + user1.getAvatar());
                 try {

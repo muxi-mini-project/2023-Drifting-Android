@@ -3,12 +3,13 @@ package android.bignerdranch.drifting.Inviting.Loading;
 import java.util.ArrayList;
 
 public class inviting_messageReturn {
-    private Integer code;
+    private Long code;
     private String message;
     private ArrayList<data> data;
 
 
     public static class data{
+        private String name;
         private long file_id;
         private String createdAt;
         private String fileKind;
@@ -16,9 +17,10 @@ public class inviting_messageReturn {
         private String cover;
         private int kind;
         private String theme;
-        private int number;
+        private Integer number;
 
-        public data(long file_id, String createdAt, String fileKind, long owner_id, String cover, int kind, String theme, int number) {
+        public data(String name, long file_id, String createdAt, String fileKind, long owner_id, String cover, int kind, String theme, Integer number) {
+            this.name = name;
             this.file_id = file_id;
             this.createdAt = createdAt;
             this.fileKind = fileKind;
@@ -27,6 +29,14 @@ public class inviting_messageReturn {
             this.kind = kind;
             this.theme = theme;
             this.number = number;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public long getOwner_id() {
+            return owner_id;
         }
 
         public long getFile_id() {
@@ -41,7 +51,7 @@ public class inviting_messageReturn {
             return number;
         }
 
-        public long getOwner_id() {
+        public long getHoner_id() {
             return owner_id;
         }
 
@@ -64,7 +74,8 @@ public class inviting_messageReturn {
         @Override
         public String toString() {
             return "data{" +
-                    "file_id=" + file_id +
+                    "name='" + name + '\'' +
+                    ", file_id=" + file_id +
                     ", createdAt='" + createdAt + '\'' +
                     ", fileKind='" + fileKind + '\'' +
                     ", owner_id=" + owner_id +
@@ -84,7 +95,7 @@ public class inviting_messageReturn {
         return message;
     }
 
-    public Integer getCode() {
+    public Long getCode() {
         return code;
     }
 

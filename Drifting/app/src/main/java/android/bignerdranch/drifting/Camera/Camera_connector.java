@@ -1,7 +1,5 @@
 package android.bignerdranch.drifting.Camera;
 
-import java.util.List;
-
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -59,7 +57,7 @@ public interface Camera_connector {
     @Multipart
     @POST("api/v1/drifting_picture/draw")
     Call<Camera_return_upload.Camera_return_make> MakeCamera(@Part MultipartBody.Part body,
-                                                             @Part("id") String id,
+                                                             @Part("file_id") Long id,
                                                              @Header("Authorization") String token);
 
     /**

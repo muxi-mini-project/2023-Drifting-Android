@@ -1,10 +1,9 @@
 package android.bignerdranch.drifting.Friends;
 
 import android.app.AlertDialog;
-import android.bignerdranch.drifting.Friends.AddnewFriends.AddFriendsInterface;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddFriends_return;
 import android.bignerdranch.drifting.Friends.AddnewFriends.AddnewFriendSend;
-import android.bignerdranch.drifting.Main.Main_FriendsFragment;
+import android.bignerdranch.drifting.Friends.AddnewFriends.ApiFriendsInterface;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
@@ -84,7 +83,7 @@ public class FriendsNewActivity extends AppCompatActivity {
                         .baseUrl("http://116.204.121.9:61583/")
                         .addConverterFactory(GsonConverterFactory.create());
                 Retrofit retrofit = builder.build();
-                AddFriendsInterface addFriendsInterface = retrofit.create(AddFriendsInterface.class);
+                ApiFriendsInterface addFriendsInterface = retrofit.create(ApiFriendsInterface.class);
                 Call<AddFriends_return> call = addFriendsInterface.getNewFriendsID(addnewFriendSend,
                         token);
                 call.enqueue(new Callback<AddFriends_return>() {
@@ -110,7 +109,7 @@ public class FriendsNewActivity extends AppCompatActivity {
                 .baseUrl("http://116.204.121.9:61583/")
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
-        AddFriendsInterface friendListInterface = retrofit.create(AddFriendsInterface.class);
+        ApiFriendsInterface friendListInterface = retrofit.create(ApiFriendsInterface.class);
         Call<FriendsList_return> call = friendListInterface.getWhoWbeMyFriends(User_Now.getUserNow().getUser().getToken());
         call.enqueue(new Callback<FriendsList_return>() {
             @Override

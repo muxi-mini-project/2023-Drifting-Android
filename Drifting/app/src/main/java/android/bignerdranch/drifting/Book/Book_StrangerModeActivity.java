@@ -33,8 +33,8 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
 
         //变量对应
         iv_image = (ImageView) findViewById(R.id.iv_image);
-        Button choose_cover = (Button) findViewById(R.id.stranger_choose_front_cover);
-        Button start = (Button) findViewById(R.id.stranger_start);
+        Button choose_cover = (Button) findViewById(R.id.choose_front_cover);
+        Button start = (Button) findViewById(R.id.start);
         EditText name_text = (EditText) findViewById(R.id.name_text);
         EditText title_text = (EditText) findViewById(R.id.title_text);
         EditText person_number_text = (EditText) findViewById(R.id.person_number_text);

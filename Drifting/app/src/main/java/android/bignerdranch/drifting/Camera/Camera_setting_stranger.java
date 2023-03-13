@@ -31,22 +31,22 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Camera_setting_stranger extends AppCompatActivity {
-    final int KIND = 0;
+    final Long KIND = new Long(0);
     EditText mName;
     EditText mTitle;
     EditText mNumber;
     String name;
     String theme;
     Long number;
-    ImageView iv_image;
     String mCoverURL;
+    ImageView iv_image;
     Button mSelectCover;
     Button mStart;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stranger_mode);
+        setContentView(R.layout.drifting_stranger_mode);
         updateUI();
         mName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,43 +100,18 @@ public class Camera_setting_stranger extends AppCompatActivity {
         mSelectCover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  ShowChoices();
+                ShowChoices();
             }
         });
         mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        //        if (number > 9 || number <= 0 || theme == null || name == null || mCoverURL == null) {
-          //          Toast.makeText(getApplicationContext(), "请输入正确的数据或选择封面", Toast.LENGTH_SHORT).show();
-           //     } else {
-            //        Camera_return_upload.Camera_upload_create upload_create = new Camera_return_upload.Camera_upload_create();
-            //        upload_create.setName(name);
-            //        upload_create.setCover(mCoverURL);
-             //       upload_create.setKind(new Long(KIND));
-              //      upload_create.setTheme(theme);
-              //      upload_create.setNumber(new Long(number));
-              ////      Retrofit.Builder builder = new Retrofit.Builder()
-               //             .addConverterFactory(GsonConverterFactory.create())
-               //             .baseUrl("http://116.204.121.9:61583/");
-               //     Retrofit retrofit = builder.build();
-               //     Camera_connector camera_connector = retrofit.create(Camera_connector.class);
-                //    Call<Camera_return_upload.Camera_return_create> call = camera_connector.CreateCamera_new(upload_create, User_Now.getUserNow().getUser().getToken());
-                //    call.enqueue(new Callback<Camera_return_upload.Camera_return_create>() {
-                  //      @Override
-                  //      public void onResponse(Call<Camera_return_upload.Camera_return_create> call, Response<Camera_return_upload.Camera_return_create> response) {
-                  //          Camera_ camera = new Camera_(name, theme, number, mCoverURL, new Long(1));
-                   //         GetAllItems.getGetAllItems().refreshMessage(GetAllItems.CAMERA);
-                            Intent intent = new Intent(Camera_setting_stranger.this, Camera_Start.class);
-                            intent.putExtra("camera_id", 9);
-                            startActivity(intent);
-                            Toast.makeText(getApplicationContext(), "创建成功，现在开始创作吧！", Toast.LENGTH_SHORT).show();
-                        }
-
-                    //    @Override
-                     //   public void onFailure(Call<Camera_return_upload.Camera_return_create> call, Throwable t) {
-                     //       Toast.makeText(getApplicationContext(), t.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                      //  }
-                  //  });
+                if (number > 9 || number <= 0 || theme == null || name == null || mCoverURL == null) {
+                    Toast.makeText(getApplicationContext(), "请输入正确的数据或选择封面", Toast.LENGTH_SHORT).show();
+                } else {
+                    Create_Camera(name,mCoverURL,number,theme);
+                }
+            }
         });
     }
 
@@ -149,59 +124,90 @@ public class Camera_setting_stranger extends AppCompatActivity {
         mStart = (Button) findViewById(R.id.stranger_start);
     }
 
-//    private void ShowChoices() {
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
-//        //    指定下拉列表的显示数据
-//        final String[] choices = {"封面1", "封面2", "封面3", "封面4", "封面5", "封面6", "封面7", "封面8"};
-//        //    设置一个下拉的列表选择项
-//        builder.setItems(choices, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                switch (which) {
-//                    case 0: {
-//                        iv_image.setImageResource(R.drawable.cover_1);
-//                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/点构图.jpg";
-//                        break;
-//                    }
-//                    case 1: {
-//                        iv_image.setImageResource(R.drawable.cover_2);
-//                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/抓拍，广场上玩滑板的少年.jpg";
-//                        break;
-//                    }
-//                    case 2: {
-//                        iv_image.setImageResource(R.drawable.cover_3);
-//                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/三分线，冷清的广场.jpg";
-//                        break;
-//                    }
-//                    case 3: {
-//                        iv_image.setImageResource(R.drawable.cover_4);
-//                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/三分线构图.jpg";
-//                        break;
-//                    }
-//                    case 4: {
-//                        iv_image.setImageResource(R.drawable.cover_5);
-//                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/4.jpg";
-//                        break;
-//                    }
-//                    case 5: {
-//                        iv_image.setImageResource(R.drawable.cover_6);
-//                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/3.jpg";
-//                        break;
-//                    }
-//                    case 6: {
-//                        iv_image.setImageResource(R.drawable.cover_7);
-//                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/2.jpg";
-//                        break;
-//                    }
-//                    case 7: {
-//                        iv_image.setImageResource(R.drawable.cover_8);
-//                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/1.jpg";
-//                        break;
-//                    }
-//                }
-//            }
-//        });
-//        builder.show();
-//    }
+    private void ShowChoices() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
+        //    指定下拉列表的显示数据
+        final String[] choices = {"封面1", "封面2", "封面3", "封面4", "封面5", "封面6", "封面7", "封面8"};
+        //    设置一个下拉的列表选择项
+        builder.setItems(choices, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: {
+                        iv_image.setImageResource(R.drawable.cover_1);
+                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/点构图.jpg";
+                        break;
+                    }
+                    case 1: {
+                        iv_image.setImageResource(R.drawable.cover_2);
+                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/抓拍，广场上玩滑板的少年.jpg";
+                        break;
+                    }
+                    case 2: {
+                        iv_image.setImageResource(R.drawable.cover_3);
+                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/三分线，冷清的广场.jpg";
+                        break;
+                    }
+                    case 3: {
+                        iv_image.setImageResource(R.drawable.cover_4);
+                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/三分线构图.jpg";
+                        break;
+                    }
+                    case 4: {
+                        iv_image.setImageResource(R.drawable.cover_5);
+                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/4.jpg";
+                        break;
+                    }
+                    case 5: {
+                        iv_image.setImageResource(R.drawable.cover_6);
+                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/3.jpg";
+                        break;
+                    }
+                    case 6: {
+                        iv_image.setImageResource(R.drawable.cover_7);
+                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/2.jpg";
+                        break;
+                    }
+                    case 7: {
+                        iv_image.setImageResource(R.drawable.cover_8);
+                        mCoverURL = "mini-project.muxixyz.com/drifting/covers/1.jpg";
+                        break;
+                    }
+                }
+            }
+        });
+        builder.show();
+    }
+    private void Create_Camera(String name,String mCoverURL,Long number,String theme){
+        Camera_return_upload.Camera_upload_create upload_create = new Camera_return_upload.Camera_upload_create();
+        upload_create.setName(name);
+        upload_create.setCover(mCoverURL);
+        upload_create.setKind(KIND);
+        upload_create.setTheme(theme);
+        upload_create.setNumber(number);
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://116.204.121.9:61583/");
+        Retrofit retrofit = builder.build();
+        Camera_connector camera_connector = retrofit.create(Camera_connector.class);
+        Call<Camera_return_upload.Camera_return_create> call = camera_connector.CreateCamera_new(upload_create, User_Now.getUserNow().getUser().getToken());
+        call.enqueue(new Callback<Camera_return_upload.Camera_return_create>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Camera_return_create> call, Response<Camera_return_upload.Camera_return_create> response) {
+                if(response.isSuccessful()){
+                GetAllItems.getGetAllItems().refreshMessage(GetAllItems.CAMERA);
+                Intent intent = new Intent(Camera_setting_stranger.this, Camera_Start.class);
+                intent.putExtra("camera_id", response.body().getData().intValue());
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "创建成功，现在开始创作吧！", Toast.LENGTH_SHORT).show();
+            }
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Camera_return_create> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

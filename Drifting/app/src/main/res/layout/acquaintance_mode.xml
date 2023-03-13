@@ -50,7 +50,7 @@
         android:background="@drawable/shape_drifting_book_text"/>
 
     <Button
-        android:id="@+id/acquaintance_inviting_friends"
+        android:id="@+id/inviting_friends"
         android:layout_width="210dp"
         android:layout_height="50dp"
         android:layout_marginTop="32dp"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/person_number_text" />
 
     <Button
-        android:id="@+id/acquaintance_choose_front_cover"
+        android:id="@+id/choose_front_cover"
         android:layout_width="210dp"
         android:layout_height="50dp"
         android:layout_marginTop="32dp"
@@ -69,10 +69,10 @@
         android:background="@drawable/shape_drifting_book_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acquaintance_inviting_friends" />
+        app:layout_constraintTop_toBottomOf="@+id/inviting_friends" />
 
     <Button
-        android:id="@+id/acquaintance_start"
+        android:id="@+id/start"
         android:layout_width="210dp"
         android:layout_height="50dp"
         android:layout_marginBottom="105dp"
@@ -81,5 +81,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acquaintance_choose_front_cover" />
+        app:layout_constraintTop_toBottomOf="@+id/choose_front_cover" />
 </androidx.constraintlayout.widget.ConstraintLayout>

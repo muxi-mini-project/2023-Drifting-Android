@@ -1,20 +1,24 @@
 package android.bignerdranch.drifting.Novel;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.bignerdranch.drifting.Inviting.Loading.inviting_messageReturn;
 import android.bignerdranch.drifting.Inviting.Loading.inviting_request;
 import android.bignerdranch.drifting.Inviting.inviting_reactionBody;
 import android.bignerdranch.drifting.Inviting.inviting_reactionReturn;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.Main.Main_DiscoveringFragment;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.detail_request.getIdMessageReturn;
 import android.bignerdranch.drifting.detail_request.getIdRequestBody;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,21 +33,27 @@ public class Novel_InvitingActivity extends AppCompatActivity {
     private TextView start_time;
     private TextView theme_setting;
     private TextView people_num;
+    private TextView name;
+    private ImageView cover;
     private long id = 0;
+    private int position = 0;
     private long host_id = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.novel_inviting);
+        setContentView(R.layout.inviting);
 
         id = getIntent().getLongExtra("file_id",0);
+        position = getIntent().getIntExtra("position",0);
 
         commit_button = (Button) findViewById(R.id.commit_button);
         refuse_button = (Button) findViewById(R.id.refuse_button);
+        name = (TextView) findViewById(R.id.name);
         host = (TextView) findViewById(R.id.host);
         start_time = (TextView) findViewById(R.id.start_time);
         theme_setting = (TextView) findViewById(R.id.theme_setting);
         people_num = (TextView) findViewById(R.id.people_num);
+        cover = (ImageView) findViewById(R.id.cover);
 
         //与另外三个写法相同
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -58,7 +68,10 @@ public class Novel_InvitingActivity extends AppCompatActivity {
                 inviting_messageReturn request_return = response.body();
                 for(int i = 0;i < request_return.getData().size();i++){
                     if(request_return.getData().get(i).getFile_id() == id){
-                        host_id = request_return.getData().get(i).getOwner_id();
+                        String url = "http://" + request_return.getData().get(i).getCover();
+                        Glide.with(Novel_InvitingActivity.this).load(url).into(cover);
+                        host_id = request_return.getData().get(i).getHoner_id();
+                        name.setText(request_return.getData().get(i).getName());
                         android.bignerdranch.drifting.detail_request.request idRequest = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
                         Call<android.bignerdranch.drifting.detail_request.getIdMessageReturn> idMessageReturnCall
                                 = idRequest.idRequest(Login_LoginActivity.getToken(),new getIdRequestBody(host_id));
@@ -102,6 +115,7 @@ public class Novel_InvitingActivity extends AppCompatActivity {
                     public void onResponse(Call<inviting_reactionReturn> call, Response<inviting_reactionReturn> response) {
                         android.bignerdranch.drifting.Inviting.inviting_reactionReturn reactionReturn = response.body();
                         Toast.makeText(Novel_InvitingActivity.this, "接受成功", Toast.LENGTH_SHORT).show();
+                        Main_DiscoveringFragment.getMessageReturns().remove(position);
                     }
 
                     @Override
@@ -109,6 +123,7 @@ public class Novel_InvitingActivity extends AppCompatActivity {
                         Toast.makeText(Novel_InvitingActivity.this, "接受失败，请检查网络", Toast.LENGTH_SHORT).show();
                     }
                 });
+
                 finish();
             }
         });
@@ -124,6 +139,7 @@ public class Novel_InvitingActivity extends AppCompatActivity {
                     public void onResponse(Call<inviting_reactionReturn> call, Response<inviting_reactionReturn> response) {
                         android.bignerdranch.drifting.Inviting.inviting_reactionReturn reactionReturn = response.body();
                         Toast.makeText(Novel_InvitingActivity.this, "拒绝成功", Toast.LENGTH_SHORT).show();
+                        Main_DiscoveringFragment.getMessageReturns().remove(position);
                     }
 
                     @Override

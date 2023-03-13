@@ -1,13 +1,17 @@
 package android.bignerdranch.drifting.Camera;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Friends.FriendListInterface;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,8 +23,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.button.MaterialButtonToggleGroup;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,24 +33,46 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Camera_setting_acquaintance extends AppCompatActivity {
-    final int KIND = 1;
+    final Long KIND = new Long(1);
     EditText mName;
     EditText mTitle;
     EditText mNumber;
     String name;
     String theme;
     Long number;
+    Long id;//创建后返回的id
     ImageView iv_image;
     String mCoverURL;
     Button mSelectCover;
     Button mStart;
     Button mInviting;
+    List<FriendsList_return.Friends_Net> list = new ArrayList<>();
+    List<Integer> friend_invite = new ArrayList<>();//要邀请的好友id列表
+    List<Integer> friendID = new ArrayList<>(); //friends的ID，用于邀请
+    static Handler handler;
 
+    @SuppressLint("HandlerLeak")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acquaintance_mode);
+        setContentView(R.layout.drifting_acquaintance_mode);
         updateUI();
+
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 200) {
+                    ShowChoices_friends();
+                }
+                if (msg.what == 201)
+                    for (int i = 0; i < friend_invite.size(); i++)
+                        InvitingFriends((long) User_Now.getUserNow().getUser().getId(),
+                                (long) friend_invite.get(i),
+                                id,
+                                User_Now.getUserNow().getUser().getToken());
+            }
+        };
+
         mName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -97,54 +121,17 @@ public class Camera_setting_acquaintance extends AppCompatActivity {
 
             }
         });
-        mSelectCover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowChoices();
+        mSelectCover.setOnClickListener(v -> ShowChoices());
+        mStart.setOnClickListener(v -> {
+            if (number > 9 || number <= 0 || theme == null || name == null || mCoverURL == null) {
+                Toast.makeText(getApplicationContext(), "请输入正确的数据或选择封面", Toast.LENGTH_SHORT).show();
+            } else {
+                Create_Camera(name, mCoverURL, number, theme);
             }
         });
-        mStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (number > 9 || number <= 0 || theme == null || name == null || mCoverURL == null) {
-                    Toast.makeText(getApplicationContext(), "请输入正确的数据或选择封面", Toast.LENGTH_SHORT).show();
-                } else {
-                    Camera_return_upload.Camera_upload_create upload_create = new Camera_return_upload.Camera_upload_create();
-                    upload_create.setName(name);
-                    upload_create.setCover(mCoverURL);
-                    upload_create.setKind(new Long(KIND));
-                    upload_create.setTheme(theme);
-                    upload_create.setNumber(new Long(number));
-                    Retrofit.Builder builder = new Retrofit.Builder()
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .baseUrl("http://116.204.121.9:61583/");
-                    Retrofit retrofit = builder.build();
-                    Camera_connector camera_connector = retrofit.create(Camera_connector.class);
-                    Call<Camera_return_upload.Camera_return_create> call = camera_connector.CreateCamera_new(upload_create, User_Now.getUserNow().getUser().getToken());
-                    call.enqueue(new Callback<Camera_return_upload.Camera_return_create>() {
-                        @Override
-                        public void onResponse(Call<Camera_return_upload.Camera_return_create> call, Response<Camera_return_upload.Camera_return_create> response) {
-                            Toast.makeText(getApplicationContext(), "创建成功，现在开始创作吧！", Toast.LENGTH_SHORT).show();
-                            Camera_ camera = new Camera_(name, theme, number, mCoverURL, new Long(1));
-                            Intent intent = new Intent(Camera_setting_acquaintance.this, Camera_Start.class);
-                            intent.putExtra("camera_id", response.body().getData().intValue());
-                            startActivity(intent);
-                        }
-
-                        @Override
-                        public void onFailure(Call<Camera_return_upload.Camera_return_create> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-        });
-        mInviting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //获取好友列表进行邀请
-                Toast.makeText(getApplicationContext(), "邀请成功", Toast.LENGTH_SHORT).show();
-            }
+        mInviting.setOnClickListener(v -> {
+            //获取好友列表进行邀请
+            GetFriends();
         });
     }
 
@@ -216,22 +203,44 @@ public class Camera_setting_acquaintance extends AppCompatActivity {
 
     private void ShowChoices_friends() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog);
-       List<String> friends = GetFriends();
-       String[] friendstr = new String[999];
-       Boolean[] select = {false};
-       for(int i =0;i<friends.size();i++)
-           friendstr[i] = friends.get(i);
-       builder.setTitle("选择好友");
-//    builder.setMultiChoiceItems(friendstr, select, new DialogInterface.OnMultiChoiceClickListener() {
-//        @Override
-//        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//
-//        }
-//    })
+        final String[] friendstr = new String[list.size()];//friends名字
+        final boolean[] select = new boolean[list.size()];//是否邀请
+        for (int i = 0; i < list.size(); i++)
+            friendstr[i] = list.get(i).getNameN();
+        for (int i = 0; i < list.size(); i++)
+            friendID.add(list.get(i).getStudentID().intValue());
+        for (int i = 0; i < friendID.size(); i++)
+            for (int j = 0; j < friend_invite.size(); j++)
+                if (friend_invite.get(j) == friendID.get(i))
+                    select[i] = true;
+        builder.setTitle("选择好友");
+        builder.setMultiChoiceItems(friendstr, select, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                select[which] = isChecked;
+            }
+        });
+
+        builder.setPositiveButton("邀请", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                List<Integer> friend_Invite = new ArrayList<>();
+                for (int i = 0; i < list.size(); i++)
+                    if (select[i]) {
+                            friend_Invite.add(friendID.get(i));
+                    }
+                friend_invite = friend_Invite;
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
     }
 
-    private List<String> GetFriends() {
-        List<String> list = new ArrayList<>();
+    private void GetFriends() {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://116.204.121.9:61583/")
                 .addConverterFactory(GsonConverterFactory.create());
@@ -241,17 +250,84 @@ public class Camera_setting_acquaintance extends AppCompatActivity {
         call.enqueue(new Callback<FriendsList_return>() {
             @Override
             public void onResponse(Call<FriendsList_return> call, Response<FriendsList_return> response) {
-                FriendsList_return friendsList_return = response.body();
-                List<FriendsList_return.Friends_Net> friends_nets = friendsList_return.getDataN();
-                for(int i =0 ;i<friends_nets.size();i++)
-                    list.add(friends_nets.get(i).getNameN());
+                if (response.isSuccessful()) {
+                    FriendsList_return friendsList_return = response.body();
+                    List<FriendsList_return.Friends_Net> friends_nets = friendsList_return.getDataN();
+                    list = friends_nets;
+                    Message message = new Message();
+                    message.what = 200;
+                    handler.sendMessage(message);
+                }
             }
 
             @Override
             public void onFailure(Call<FriendsList_return> call, Throwable t) {
-
+                Log.d("camera_bug", "获取好友列表失败");
             }
         });
-        return list;
+    }
+
+    private void InvitingFriends(Long InviterID, Long FriendID, Long file_id, String token) {
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://116.204.121.9:61583/")
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = builder.build();
+        Camera_connector camera_connector = retrofit.create(Camera_connector.class);
+        Camera_return_upload.Camera_upload_inviting_friend body = new Camera_return_upload.Camera_upload_inviting_friend();
+        body.setFile_id(file_id);
+        body.setFriend_id(FriendID);
+        body.setHost_id(InviterID);
+        body.setFile_Kind("漂流相机");
+        Call<Camera_return_upload.Camera_return_inviting_friend> call
+                = camera_connector.Camera_inviting_friend(body, token);
+        call.enqueue(new Callback<Camera_return_upload.Camera_return_inviting_friend>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Camera_return_inviting_friend> call, Response<Camera_return_upload.Camera_return_inviting_friend> response) {
+                if (response.isSuccessful())
+                    Log.d("camera_bug", "邀请成功");
+                Log.d("camera_bug",response.body().getMessage().toString());
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Camera_return_inviting_friend> call, Throwable t) {
+                Log.d("camera_bug", t.toString());
+            }
+        });
+    }
+
+    private void Create_Camera(String name, String mCoverURL, Long number, String theme) {
+        Camera_return_upload.Camera_upload_create upload_create = new Camera_return_upload.Camera_upload_create();
+        upload_create.setName(name);
+        upload_create.setCover(mCoverURL);
+        upload_create.setKind(KIND);
+        upload_create.setTheme(theme);
+        upload_create.setNumber(number);
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://116.204.121.9:61583/");
+        Retrofit retrofit = builder.build();
+        Camera_connector camera_connector = retrofit.create(Camera_connector.class);
+        Call<Camera_return_upload.Camera_return_create> call = camera_connector.CreateCamera_new(upload_create, User_Now.getUserNow().getUser().getToken());
+        call.enqueue(new Callback<Camera_return_upload.Camera_return_create>() {
+            @Override
+            public void onResponse(Call<Camera_return_upload.Camera_return_create> call, Response<Camera_return_upload.Camera_return_create> response) {
+                if (response.isSuccessful()) {
+                    GetAllItems.getGetAllItems().refreshMessage(GetAllItems.CAMERA);
+                    id = response.body().getData();
+                    Message message = new Message();
+                    message.what = 201;
+                    handler.sendMessage(message);
+                    Intent intent = new Intent(Camera_setting_acquaintance.this, Camera_Start.class);
+                    intent.putExtra("camera_id", response.body().getData().intValue());
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(), "创建成功，现在开始创作吧！", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Camera_return_upload.Camera_return_create> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
