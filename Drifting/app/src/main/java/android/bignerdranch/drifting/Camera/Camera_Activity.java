@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.bignerdranch.drifting.Mine.FileUtils;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_Now;
 import android.content.Intent;
@@ -169,6 +170,7 @@ public class Camera_Activity extends AppCompatActivity {
             public void onResponse(Call<Camera_return_upload.Camera_return_make> call, Response<Camera_return_upload.Camera_return_make> response) {
                 if (response.isSuccessful()) {
                     Log.d("camera_bug", "图片上传成功");
+                    GetAllItems.getGetAllItems().refreshMessage();
                     Intent intent = new Intent(Camera_Activity.this, Camera_Start.class);
                     intent.putExtra("camera_id", id);
                     startActivity(intent);

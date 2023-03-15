@@ -15,7 +15,6 @@
         android:text="编辑"
         android:layout_alignParentRight="true"
         android:textColor="@color/black" />
-
     <ImageView
         android:id="@+id/portrait"
         android:layout_width="100dp"
@@ -23,7 +22,6 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="50dp"
         android:src="@color/black" />
-
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"

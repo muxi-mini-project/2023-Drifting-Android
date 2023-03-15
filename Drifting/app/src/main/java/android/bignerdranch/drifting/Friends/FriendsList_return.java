@@ -35,11 +35,13 @@ public class FriendsList_return {
    }
 
    public class Friends_Net{
+
       private String name;
       private String sex;
       private String avatar;
       private String selfWord;
       private Integer studentID;
+
 
       public Integer getStudentID() {
          return studentID;

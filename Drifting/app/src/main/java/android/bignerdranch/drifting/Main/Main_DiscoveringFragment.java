@@ -6,6 +6,7 @@ import android.bignerdranch.drifting.Book.Book_inviting;
 import android.bignerdranch.drifting.Camera.Camera_Inviting;
 import android.bignerdranch.drifting.Camera.Camera_create;
 import android.bignerdranch.drifting.Drawing.Drawing_InvitingActivity;
+import android.bignerdranch.drifting.Inviting.Inviting_return_of_random;
 import android.bignerdranch.drifting.Novel.Novel_InvitingActivity;
 import android.bignerdranch.drifting.Novel.Novel_switch_mode;
 import android.bignerdranch.drifting.User.User_Now;
@@ -38,6 +39,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -63,12 +65,16 @@ public class Main_DiscoveringFragment extends Fragment {
         return mMessageReturns;
     }
     private static  ArrayList<inviting_messageReturn.data> mDataArrayList = new ArrayList<>();
+    private static ArrayList<inviting_messageReturn.data> getmDataArrayList(){
+        return mDataArrayList;
+    }
     private int numberLine = 0;//判断次数，
     private ImageButton refresh;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.discovering_fragment, null);
-
+        mMessageReturns = new ArrayList<>();
+        mDataArrayList = new ArrayList<>();
         refresh = view.findViewById(R.id.refresh);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.discovering_recyclerview);
@@ -108,10 +114,15 @@ public class Main_DiscoveringFragment extends Fragment {
                 startActivity(new Intent(getContext(), Drawing_switch_mode.class));
             }
         });
+
+
         getViewInviting();
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                numberLine = 0;
+                mMessageReturns.clear();
+                mDataArrayList.clear();
                 getViewInviting();
             }
         });
@@ -165,7 +176,7 @@ public class Main_DiscoveringFragment extends Fragment {
                     mImageButton.setImageResource(R.drawable.cover_7);
                 else if (mData.getCover().contains("mini-project.muxixyz.com/drifting/covers/1.jpg"))
                     mImageButton.setImageResource(R.drawable.cover_8);
-                else mImageButton.setImageResource(R.drawable.cover_8);
+                else mImageButton.setImageResource(R.drawable.cover_6);
             }else mImageButton.setImageResource(R.drawable.cover_7);
 
 
@@ -177,6 +188,10 @@ public class Main_DiscoveringFragment extends Fragment {
                         case "漂流本": {
                             Intent intent = new Intent(getContext(), Book_inviting.class);
                             intent.putExtra("file_id",String.valueOf(mData.getFile_id()));
+                            intent.putExtra("kind",String.valueOf(mData.getKind()));
+                            Bundle b = new Bundle();
+                            b.putSerializable("data",(Serializable) mData);
+                            intent.putExtras(b);
                             startActivity(intent);
                             //inviting_type = "书";
                             break;
@@ -184,6 +199,10 @@ public class Main_DiscoveringFragment extends Fragment {
                         case "漂流相机": {
                             Intent intent = new Intent(getContext(), Camera_Inviting.class);
                             intent.putExtra("file_id",String.valueOf(mData.getFile_id()));
+                            intent.putExtra("kind",String.valueOf(mData.getKind()));
+                            Bundle b = new Bundle();
+                            b.putSerializable("data",(Serializable) mData);
+                            intent.putExtras(b);
                             startActivity(intent);
                             break;
                         }
@@ -191,6 +210,10 @@ public class Main_DiscoveringFragment extends Fragment {
                             Intent intent = new Intent(getContext(),Drawing_InvitingActivity.class);
                             intent.putExtra("file_id",mInviting.getId());
                             intent.putExtra("position",mInviting.getPosition());
+                            intent.putExtra("kind",String.valueOf(mData.getKind()));
+                            Bundle b = new Bundle();
+                            b.putSerializable("data",(Serializable) mData);
+                            intent.putExtras(b);
                             startActivity(intent);
                             break;
                         }
@@ -198,6 +221,10 @@ public class Main_DiscoveringFragment extends Fragment {
                             Intent intent = new Intent(getContext(), Novel_InvitingActivity.class);
                             intent.putExtra("file_id",mInviting.getId());
                             intent.putExtra("position",mInviting.getPosition());
+                            intent.putExtra("kind",String.valueOf(mData.getKind()));
+                            Bundle b = new Bundle();
+                            b.putSerializable("data",(Serializable) mData);
+                            intent.putExtras(b);
                             startActivity(intent);
                             break;
                         }
@@ -278,9 +305,9 @@ public class Main_DiscoveringFragment extends Fragment {
                                 Log.i("onResponse画", response.body().toString());
                                 messageReturn messageReturn = response.body();
                                 messageReturn.setZhonglei("漂流画");
-                                if (request_return.getData().get(finalI).getKind() == 0) {
+                                if (request_return.getData().get(finalI).getKind() != 1) {
                                     messageReturn.setInviter("随机");
-                                } else if (request_return.getData().get(finalI).getKind() == 1) {
+                                } else {
                                     messageReturn.setInviter("密友");
                                 }
                                 mDataArrayList.add(request_return.getData().get(finalI));
@@ -323,9 +350,9 @@ public class Main_DiscoveringFragment extends Fragment {
                             public void onResponse(@NonNull Call<messageReturn> call, @NonNull Response<messageReturn> response) {
                                 messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
                                 messageReturn.setZhonglei("漂流本");
-                                if (request_return.getData().get(finalI).getKind() == 0) {
+                                if (request_return.getData().get(finalI).getKind() != 1) {
                                     messageReturn.setInviter("随机");
-                                } else if (request_return.getData().get(finalI).getKind() == 1) {
+                                } else {
                                     messageReturn.setInviter("密友");
                                 }
                                 mDataArrayList.add(request_return.getData().get(finalI));
@@ -370,9 +397,9 @@ public class Main_DiscoveringFragment extends Fragment {
                             public void onResponse(@NonNull Call<messageReturn> call, @NonNull Response<messageReturn> response) {
                                 messageReturn messageReturn = response.body();
                                 messageReturn.setZhonglei("漂流小说");
-                                if (request_return.getData().get(finalI).getKind() == 0) {
+                                if (request_return.getData().get(finalI).getKind() != 1) {
                                     messageReturn.setInviter("随机");
-                                } else if (request_return.getData().get(finalI).getKind() == 1) {
+                                } else   {
                                     messageReturn.setInviter("密友");
                                 }
                                 mDataArrayList.add(request_return.getData().get(finalI));
@@ -415,9 +442,9 @@ public class Main_DiscoveringFragment extends Fragment {
                             public void onResponse(@NonNull Call<messageReturn> call, @NonNull Response<messageReturn> response) {
                                 messageReturn messageReturn = response.body();
                                 messageReturn.setZhonglei("漂流相机");
-                                if (request_return.getData().get(finalI).getKind() == 0) {
+                                if (request_return.getData().get(finalI).getKind() != 1) {
                                     messageReturn.setInviter("随机");
-                                } else if (request_return.getData().get(finalI).getKind() == 1) {
+                                } else   {
                                     messageReturn.setInviter("密友");
                                 }
                                 mDataArrayList.add(request_return.getData().get(finalI));
@@ -451,191 +478,212 @@ public class Main_DiscoveringFragment extends Fragment {
             @Override
             public void run() {
                 Log.i("次数",String.valueOf(numberLine));
-                if (numberLine<10){
-                    Random random2 = new Random();
-                    for (int i = 0;i<(10-numberLine);i++){
-                        int a = random2.nextInt(4); //a为0，1，2，3决定是哪一个漂流项目
-                        Log.i("a",String.valueOf(a));
-                        Retrofit.Builder builder = new Retrofit.Builder()
-                                .baseUrl("http://116.204.121.9:61583/")
-                                .addConverterFactory(GsonConverterFactory.create());
-                        Retrofit retrofit = builder.build();
-                        ApiNote random = retrofit.create(ApiNote.class);
+              Retrofit.Builder builder = new Retrofit.Builder()
+                      .baseUrl("http://116.204.121.9:61583/")
+                      .addConverterFactory(GsonConverterFactory.create());
+              Retrofit retrofit = builder.build();
+              ApiNote random = retrofit.create(ApiNote.class);
+              //漂流本
+              Call<Inviting_return_of_random> inviting_return_of_randomCall = random.getRandomBook(User_Now.getUserNow().getUser().getToken());
+              inviting_return_of_randomCall.enqueue(new Callback<Inviting_return_of_random>() {
+                  @Override
+                  public void onResponse(Call<Inviting_return_of_random> call, Response<Inviting_return_of_random> response) {
+                      Inviting_return_of_random inviting_return_of_random = response.body();
 
-                        switch (a){
-                            case 0:{
-                                Call<inviting_messageReturn.data> call0 = random.getRandomBook(User_Now
-                                        .getUserNow().getUser().getToken());
-                                call0.enqueue(new Callback<inviting_messageReturn.data>() {
-                                    @Override
-                                    public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
-                                        inviting_messageReturn.data return_data =response.body();
-                                        long id = return_data.getFile_id();
-                                        request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                                        Call<messageReturn> messageReturnCall = request1.bookRequest(User_Now.getUserNow().getUser().getToken(),
-                                                new request_body(id));
-                                        messageReturnCall.enqueue(new Callback<messageReturn>() {
-                                            @Override
-                                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
-                                                messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
-                                                messageReturn.setZhonglei("漂流本");
-                                                if (return_data.getKind() == 0) {
-                                                    messageReturn.setInviter("随机");
-                                                } else if (return_data.getKind() == 1) {
-                                                    messageReturn.setInviter("密友");
-                                                }
-                                                mDataArrayList.add(return_data);
-                                                mMessageReturns.add(messageReturn);
-                                                updateUI();
+                      android.bignerdranch.drifting.detail_request.request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                      Call<messageReturn> messageReturnCall = request1.bookRequest(User_Now.getUserNow().getUser().getToken(),
+                              new request_body(inviting_return_of_random.getData().getID()));
+                      messageReturnCall.enqueue(new Callback<messageReturn>() {
+                          @Override
+                          public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
+                              messageReturn messageReturn = response.body();
+                              messageReturn.setZhonglei("漂流本");
+                              if (inviting_return_of_random.getData().getKind() != 1) {
+                                  messageReturn.setInviter("随机");
+                              } else   {
+                                  messageReturn.setInviter("密友");
+                              }
+                              inviting_messageReturn.data data = new inviting_messageReturn.data(
+                                      inviting_return_of_random.getData().getID(),
+                                      inviting_return_of_random.getData().getCreatedAt(),
+                                      inviting_return_of_random.getData().getCover(),
+                                      inviting_return_of_random.getData().getKind(),
+                                      inviting_return_of_random.getData().getTheme(),
+                                      inviting_return_of_random.getData().getNumber(),
+                                      inviting_return_of_random.getData().getWriter_number(),
+                                      inviting_return_of_random.getData().getName(),
+                                      inviting_return_of_random.getData().getOwnerID()
+                              );
+                              Log.i("封面",data.getCover());
+                              mDataArrayList.add(data);
+                              mMessageReturns.add(messageReturn);
+                              updateUI();
 
-                                            }
+                          }
 
-                                            @Override
-                                            public void onFailure(Call<messageReturn> call, Throwable t) {
-                                                Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                          @Override
+                          public void onFailure(Call<messageReturn> call, Throwable t) {
 
-                                            }
-                                        });
+                          }
+                      });
 
-                                    }
+                  }
 
-                                    @Override
-                                    public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
-                                        Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
+                  @Override
+                  public void onFailure(Call<Inviting_return_of_random> call, Throwable t) {
 
-                                    }
-                                });
+                  }
+              });
+              //漂流画
+                Call<Inviting_return_of_random> inviting_return_of_randomCall2 = random.getRandomDraw(User_Now.getUserNow().getUser().getToken());
+                inviting_return_of_randomCall2.enqueue(new Callback<Inviting_return_of_random>() {
+                    @Override
+                    public void onResponse(Call<Inviting_return_of_random> call, Response<Inviting_return_of_random> response) {
+                        Inviting_return_of_random inviting_return_of_random = response.body();
 
-                            }//漂流本
-                            case 1:{
-                                Call<inviting_messageReturn.data> call1 = random.getRandomPicture(User_Now
-                                        .getUserNow().getUser().getToken());
-                                call1.enqueue(new Callback<inviting_messageReturn.data>() {
-                                    @Override
-                                    public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
-                                        inviting_messageReturn.data return_data = response.body();
-                                        long id = return_data.getFile_id();
-                                        request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                                        Call<messageReturn> messageReturnCall = request1.cameraRequest(User_Now.getUserNow().getUser().getToken(),
-                                                new request_body(id));
-                                        messageReturnCall.enqueue(new Callback<messageReturn>() {
-                                            @Override
-                                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
-                                                messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
-                                                messageReturn.setZhonglei("漂流相机");
-                                                if (return_data.getKind() == 0) {
-                                                    messageReturn.setInviter("随机");
-                                                } else if (return_data.getKind() == 1) {
-                                                    messageReturn.setInviter("密友");
-                                                }
-                                                mDataArrayList.add(return_data);
-                                                mMessageReturns.add(messageReturn);
-                                                updateUI();
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<messageReturn> call, Throwable t) {
-                                                Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
-                                        Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                });
-
-                            }//相机
-                            case 2:{
-                                Call<inviting_messageReturn.data> call2 = random.getRandomDraw(User_Now
-                                        .getUserNow().getUser().getToken());
-                                call2.enqueue(new Callback<inviting_messageReturn.data>() {
-                                    @Override
-                                    public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
-                                        inviting_messageReturn.data return_data = response.body();
-                                        long id = return_data.getFile_id();
-                                        request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                                        Call<messageReturn> messageReturnCall = request1.drawingRequest(User_Now.getUserNow().getUser().getToken(),
-                                                new request_body(id));
-                                        messageReturnCall.enqueue(new Callback<messageReturn>() {
-                                            @Override
-                                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
-                                                messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
-                                                messageReturn.setZhonglei("漂流画");
-                                                if (return_data.getKind() == 0) {
-                                                    messageReturn.setInviter("随机");
-                                                } else if (return_data.getKind() == 1) {
-                                                    messageReturn.setInviter("密友");
-                                                }
-                                                mDataArrayList.add(return_data);
-                                                mMessageReturns.add(messageReturn);
-                                                updateUI();
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<messageReturn> call, Throwable t) {
-                                                Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
-                                        Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                });
-                            }//
-                            case 3:{
-                                Call<inviting_messageReturn.data> call3 = random.getRandomNovel(User_Now
-                                        .getUserNow().getUser().getToken());
-                                call3.enqueue(new Callback<inviting_messageReturn.data>() {
-                                    @Override
-                                    public void onResponse(Call<inviting_messageReturn.data> call, Response<inviting_messageReturn.data> response) {
-                                        inviting_messageReturn.data return_data = response.body();
-                                        long id = return_data.getFile_id();
-                                        request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                                        Call<messageReturn> messageReturnCall = request1.novelRequest(User_Now.getUserNow().getUser().getToken(),
-                                                new request_body(id));
-                                        messageReturnCall.enqueue(new Callback<messageReturn>() {
-                                            @Override
-                                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
-                                                messageReturn messageReturn = response.body();//获得了当个漂流本内容的实例
-                                                messageReturn.setZhonglei("漂流小说");
-                                                if (return_data.getKind() == 0) {
-                                                    messageReturn.setInviter("随机");
-                                                } else if (return_data.getKind() == 1) {
-                                                    messageReturn.setInviter("密友");
-                                                }
-                                                mDataArrayList.add(return_data);
-                                                mMessageReturns.add(messageReturn);
-                                                updateUI();
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<messageReturn> call, Throwable t) {
-                                                Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<inviting_messageReturn.data> call, Throwable t) {
-                                        Toast.makeText(getContext(), "请求数据获得失败", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                });
+                        android.bignerdranch.drifting.detail_request.request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                        Call<messageReturn> messageReturnCall = request1.drawingRequest(User_Now.getUserNow().getUser().getToken(),
+                                new request_body(inviting_return_of_random.getData().getID()));
+                        messageReturnCall.enqueue(new Callback<messageReturn>() {
+                            @Override
+                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
+                                messageReturn messageReturn = response.body();
+                                messageReturn.setZhonglei("漂流画");
+                                if (inviting_return_of_random.getData().getKind() != 1) {
+                                    messageReturn.setInviter("随机");
+                                } else   {
+                                    messageReturn.setInviter("密友");
+                                }
+                                inviting_messageReturn.data data = new inviting_messageReturn.data(
+                                        inviting_return_of_random.getData().getID(),
+                                        inviting_return_of_random.getData().getCreatedAt(),
+                                        inviting_return_of_random.getData().getCover(),
+                                        inviting_return_of_random.getData().getKind(),
+                                        inviting_return_of_random.getData().getTheme(),
+                                        inviting_return_of_random.getData().getNumber(),
+                                        inviting_return_of_random.getData().getWriter_number(),
+                                        inviting_return_of_random.getData().getName(),
+                                        inviting_return_of_random.getData().getOwnerID()
+                                );
+                                Log.i("封面",data.getCover());
+                                mDataArrayList.add(data);
+                                mMessageReturns.add(messageReturn);
+                                updateUI();
                             }
-                        }//选项结束
+
+                            @Override
+                            public void onFailure(Call<messageReturn> call, Throwable t) {
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<Inviting_return_of_random> call, Throwable t) {
+                    }
+                });
+
+                //相机
+                Call<Inviting_return_of_random> inviting_return_of_randomCall3 = random.getRandomPicture(User_Now.getUserNow().getUser().getToken());
+                inviting_return_of_randomCall3.enqueue(new Callback<Inviting_return_of_random>() {
+                    @Override
+                    public void onResponse(Call<Inviting_return_of_random> call, Response<Inviting_return_of_random> response) {
+                        Inviting_return_of_random inviting_return_of_random = response.body();
+
+                        android.bignerdranch.drifting.detail_request.request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                        Call<messageReturn> messageReturnCall = request1.cameraRequest(User_Now.getUserNow().getUser().getToken(),
+                                new request_body(inviting_return_of_random.getData().getID()));
+                        messageReturnCall.enqueue(new Callback<messageReturn>() {
+                            @Override
+                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
+                                messageReturn messageReturn = response.body();
+                                messageReturn.setZhonglei("漂流相机");
+                                if (inviting_return_of_random.getData().getKind() != 1) {
+                                    messageReturn.setInviter("随机");
+                                } else   {
+                                    messageReturn.setInviter("密友");
+                                }
+                                inviting_messageReturn.data data = new inviting_messageReturn.data(
+                                        inviting_return_of_random.getData().getID(),
+                                        inviting_return_of_random.getData().getCreatedAt(),
+                                        inviting_return_of_random.getData().getCover(),
+                                        inviting_return_of_random.getData().getKind(),
+                                        inviting_return_of_random.getData().getTheme(),
+                                        inviting_return_of_random.getData().getNumber(),
+                                        inviting_return_of_random.getData().getWriter_number(),
+                                        inviting_return_of_random.getData().getName(),
+                                        inviting_return_of_random.getData().getOwnerID()
+                                );
+                                Log.i("封面",data.getCover());
+                                mDataArrayList.add(data);
+                                mMessageReturns.add(messageReturn);
+                                updateUI();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<messageReturn> call, Throwable t) {
+
+                            }
+                        });
 
                     }
 
-                }
+                    @Override
+                    public void onFailure(Call<Inviting_return_of_random> call, Throwable t) {
+
+                    }
+                });
+                //小说
+                Call<Inviting_return_of_random> inviting_return_of_randomCall4 = random.getRandomNovel(User_Now.getUserNow().getUser().getToken());
+                inviting_return_of_randomCall4.enqueue(new Callback<Inviting_return_of_random>() {
+                    @Override
+                    public void onResponse(Call<Inviting_return_of_random> call, Response<Inviting_return_of_random> response) {
+                        Inviting_return_of_random inviting_return_of_random = response.body();
+
+                        android.bignerdranch.drifting.detail_request.request request1 = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                        Call<messageReturn> messageReturnCall = request1.novelRequest(User_Now.getUserNow().getUser().getToken(),
+                                new request_body(inviting_return_of_random.getData().getID()));
+                        messageReturnCall.enqueue(new Callback<messageReturn>() {
+                            @Override
+                            public void onResponse(Call<messageReturn> call, Response<messageReturn> response) {
+                                messageReturn messageReturn = response.body();
+                                messageReturn.setZhonglei("漂流小说");
+                                if (inviting_return_of_random.getData().getKind() != 1) {
+                                    messageReturn.setInviter("随机");
+                                } else   {
+                                    messageReturn.setInviter("密友");
+                                }
+                                inviting_messageReturn.data data = new inviting_messageReturn.data(
+                                        inviting_return_of_random.getData().getID(),
+                                        inviting_return_of_random.getData().getCreatedAt(),
+                                        inviting_return_of_random.getData().getCover(),
+                                        inviting_return_of_random.getData().getKind(),
+                                        inviting_return_of_random.getData().getTheme(),
+                                        inviting_return_of_random.getData().getNumber(),
+                                        inviting_return_of_random.getData().getWriter_number(),
+                                        inviting_return_of_random.getData().getName(),
+                                        inviting_return_of_random.getData().getOwnerID()
+                                );
+                                Log.i("封面",data.getCover());
+                                mDataArrayList.add(data);
+                                mMessageReturns.add(messageReturn);
+                                updateUI();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<messageReturn> call, Throwable t) {
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Inviting_return_of_random> call, Throwable t) {
+
+                    }
+                });
 
             }
         };

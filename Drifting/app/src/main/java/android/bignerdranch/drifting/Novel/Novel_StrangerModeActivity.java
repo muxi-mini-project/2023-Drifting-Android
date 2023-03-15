@@ -2,6 +2,7 @@ package android.bignerdranch.drifting.Novel;
 
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,6 +66,7 @@ public class Novel_StrangerModeActivity extends AppCompatActivity {
                                 if (create_return.getCode() == 200) {
                                     newNovelId = create_return.getData();
                                     Toast.makeText(Novel_StrangerModeActivity.this, "创建成功！", Toast.LENGTH_SHORT).show();
+                                    GetAllItems.getGetAllItems().refreshMessage();
                                     Intent intent = new Intent(Novel_StrangerModeActivity.this, Novel_Activity.class);
                                     intent.putExtra("file_id", newNovelId);
                                     startActivity(intent);

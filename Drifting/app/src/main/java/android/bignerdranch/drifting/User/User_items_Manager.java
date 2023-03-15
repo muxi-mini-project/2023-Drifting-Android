@@ -1,16 +1,24 @@
 package android.bignerdranch.drifting.User;
 
 import android.app.AlertDialog;
+import android.bignerdranch.drifting.Book.Book_Writing;
+import android.bignerdranch.drifting.Camera.Camera_Activity;
+import android.bignerdranch.drifting.Camera.Camera_Start;
 import android.bignerdranch.drifting.Camera.Camera_return_upload;
+import android.bignerdranch.drifting.Drawing.Drawing_Activity;
+import android.bignerdranch.drifting.Mine.Detail_Activity;
+import android.bignerdranch.drifting.Mine.Detail_novel_underway;
 import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.Mine.Items;
 import android.bignerdranch.drifting.Mine.Mine_items;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +28,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,13 +68,20 @@ public class User_items_Manager extends AppCompatActivity {
     RecyclerView.Adapter mAttend_ed;
     int manager_kind;
     String Now_manager;//默认进入ALL界面，分为ALL、MINE、ATTEND三种
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg){
-            if(msg.what == 200)
+        public void handleMessage(Message msg) {
+            if (msg.what == 200)
                 updateview();
         }
     };
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK)
+                updateview();
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +133,7 @@ public class User_items_Manager extends AppCompatActivity {
         mReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -145,7 +172,7 @@ public class User_items_Manager extends AppCompatActivity {
         }
     }
 
-   public void updateview() {
+    public void updateview() {
         if (manager_kind == 0) {
             mAll_ing = new Manager_All_ing();
             mCreate_ing = new Manager_create_Adapting();
@@ -183,7 +210,7 @@ public class User_items_Manager extends AppCompatActivity {
             String time = list.get(position).getCreate_time();
             String kind = list.get(position).getItem_kind();
             Long id = list.get(position).getId();
-            ((Manager_Holder) holder).bind(name, number, time, kind, id,position);
+            ((Manager_Holder) holder).bind(name, number, time, kind, id, position, list.get(position).getCover());
         }
 
         @Override
@@ -213,7 +240,7 @@ public class User_items_Manager extends AppCompatActivity {
             String time = list.get(position).getCreate_time();
             String kind = list.get(position).getItem_kind();
             Long id = list.get(position).getId();
-            ((Manager_Holder) holder).bind(name, number, time, kind, id,position);
+            ((Manager_Holder) holder).bind(name, number, time, kind, id, position, list.get(position).getCover());
         }
 
         @Override
@@ -243,7 +270,7 @@ public class User_items_Manager extends AppCompatActivity {
             String time = list.get(position).getCreate_time();
             String kind = list.get(position).getItem_kind();
             Long id = list.get(position).getId();
-            ((Manager_Holder) holder).bind(name, number, time, kind, id,position);
+            ((Manager_Holder) holder).bind(name, number, time, kind, id, position, list.get(position).getCover());
         }
 
         @Override
@@ -273,7 +300,7 @@ public class User_items_Manager extends AppCompatActivity {
             String time = list.get(position).getCreate_time();
             String kind = list.get(position).getItem_kind();
             Long id = list.get(position).getId();
-            ((Manager_Holder) holder).bind(name, number, time, kind, id,position);
+            ((Manager_Holder) holder).bind(name, number, time, kind, id, position, list.get(position).getCover());
         }
 
         @Override
@@ -304,7 +331,7 @@ public class User_items_Manager extends AppCompatActivity {
             String time = list.get(position).getCreate_time();
             String kind = list.get(position).getItem_kind();
             Long id = list.get(position).getId();
-            ((Manager_Holder) holder).bind(name, number, time, kind, id,position);
+            ((Manager_Holder) holder).bind(name, number, time, kind, id, position, list.get(position).getCover());
         }
 
         @Override
@@ -334,7 +361,7 @@ public class User_items_Manager extends AppCompatActivity {
             String time = list.get(position).getCreate_time();
             String kind = list.get(position).getItem_kind();
             Long id = list.get(position).getId();
-            ((Manager_Holder) holder).bind(name, number, time, kind, id,position);
+            ((Manager_Holder) holder).bind(name, number, time, kind, id, position, list.get(position).getCover());
         }
 
         @Override
@@ -352,6 +379,7 @@ public class User_items_Manager extends AppCompatActivity {
         private RelativeLayout relativeLayout;
         private String kind;
         private int position;
+        private String cover;
 
         public Manager_Holder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_manager_list, parent, false));
@@ -402,7 +430,7 @@ public class User_items_Manager extends AppCompatActivity {
                                     mHandler.sendMessage(message);
                                 }
                             };
-                            new Timer().schedule(timerTask,300);
+                            new Timer().schedule(timerTask, 300);
                         }
                     });
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -420,24 +448,56 @@ public class User_items_Manager extends AppCompatActivity {
                     if (manager_kind == 0)//项目仍在进行中
                         switch (kind) {
                             case "漂流相机":
-                               // Intent intent = new Intent(User_items_Manager.this,);
-                               // intent.putExtra("item_id",ID);
-                               // startActivity(intent);
+                                Intent intent = new Intent(User_items_Manager.this, Camera_Start.class);
+                                intent.putExtra("camera_id", ID.intValue());
+                                startActivity(intent);
                                 break;
                             case "漂流本":
-                                // Intent intent = new Intent(User_items_Manager.this,);
-                                // intent.putExtra("item_id",ID);
-                                // startActivity(intent);
+                                File file = new File(getApplication().getFilesDir().getAbsolutePath() + "/DriftingNote/" + ID.toString() + ".txt");
+                                Intent intent1 = new Intent(User_items_Manager.this, Book_Writing.class);
+                                intent1.putExtra("data", ID.toString());
+                                intent1.putExtra("cover", cover);
+                                if (file.exists()) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                                    builder.setIcon(R.drawable.logo);
+                                    builder.setTitle("提示");
+                                    builder.setMessage("检测到您有保存的内容\n要继续创作吗?");
+                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            try {
+                                                FileInputStream fis = new FileInputStream(file.getAbsolutePath());
+                                                byte[] b = new byte[fis.available()];
+                                                fis.read(b);
+                                                String readStr = new String(b);
+                                                intent1.putExtra("contact",readStr);
+                                                startActivity(intent1);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            file.delete();
+                                            startActivity(intent1);
+                                        }
+                                    });
+                                    builder.show();
+                                }else
+                                    startActivity(intent1);
+
                                 break;
                             case "漂流小说":
-                                // Intent intent = new Intent(User_items_Manager.this,);
-                                // intent.putExtra("item_id",ID);
-                                // startActivity(intent);
+                                Intent intent2 = new Intent(User_items_Manager.this, Detail_novel_underway.class);
+                                intent2.putExtra("file_id", ID);
+                                launcher.launch(intent2);
                                 break;
                             case "漂流画":
-                                // Intent intent = new Intent(User_items_Manager.this,);
-                                // intent.putExtra("item_id",ID);
-                                // startActivity(intent);
+                                Intent intent3 = new Intent(User_items_Manager.this, Drawing_Activity.class);
+                                intent3.putExtra("file_id", ID);
+                                startActivity(intent3);
                                 break;
                             default:
                                 break;
@@ -445,24 +505,28 @@ public class User_items_Manager extends AppCompatActivity {
                     else//项目已经结束
                         switch (kind) {
                             case "漂流相机":
-                                // Intent intent = new Intent(User_items_Manager.this,);
-                                // intent.putExtra("item_id",ID);
-                                // startActivity(intent);
+                                Intent intent = new Intent(User_items_Manager.this, Detail_Activity.class);
+                                intent.putExtra("file_id", ID);
+                                intent.putExtra("type", "漂流相机");
+                                startActivity(intent);
                                 break;
                             case "漂流本":
-                                // Intent intent = new Intent(User_items_Manager.this,);
-                                // intent.putExtra("item_id",ID);
-                                // startActivity(intent);
+                                Intent intent1 = new Intent(User_items_Manager.this, Detail_Activity.class);
+                                intent1.putExtra("file_id", ID);
+                                intent1.putExtra("type", "漂流本");
+                                startActivity(intent1);
                                 break;
                             case "漂流小说":
-                                // Intent intent = new Intent(User_items_Manager.this,);
-                                // intent.putExtra("item_id",ID);
-                                // startActivity(intent);
+                                Intent intent2 = new Intent(User_items_Manager.this, Detail_Activity.class);
+                                intent2.putExtra("file_id", ID);
+                                intent2.putExtra("type", "漂流小说");
+                                startActivity(intent2);
                                 break;
                             case "漂流画":
-                                // Intent intent = new Intent(User_items_Manager.this,);
-                                // intent.putExtra("item_id",ID);
-                                // startActivity(intent);
+                                Intent intent3 = new Intent(User_items_Manager.this, Detail_Activity.class);
+                                intent3.putExtra("file_id", ID);
+                                intent3.putExtra("type", "漂流画");
+                                startActivity(intent3);
                                 break;
                             default:
                                 break;
@@ -470,11 +534,13 @@ public class User_items_Manager extends AppCompatActivity {
                 }
             });
         }
-        public void bind(String name, String number, String time, String kind, Long id,int position) {
+
+        public void bind(String name, String number, String time, String kind, Long id, int position, String cover) {
             Log.d("manager_bug", name + "....get");
             mName.setText("名称:《" + name + "》");
             mAccount.setText("进度:" + number);
             mTime.setText("创建时间:" + time);
+            this.cover = cover;
             switch (kind) {
                 case "漂流相机":
                     mKind.setImageResource(R.drawable.camera);
@@ -591,5 +657,24 @@ public class User_items_Manager extends AppCompatActivity {
                 Log.d("itmes_bug", t.toString());
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 是否触发按键为back键
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(RESULT_OK);
+            onBackPressed();
+            return true;
+        } else {// 如果不是back键正常响应
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
+    private String cutTime(String s) {
+        String year = s.substring(0, 4);
+        String mouth = s.substring(5, 7);
+        String days = s.substring(8, 10);
+        return year + "年" + mouth + "月" + days + "日";
     }
 }

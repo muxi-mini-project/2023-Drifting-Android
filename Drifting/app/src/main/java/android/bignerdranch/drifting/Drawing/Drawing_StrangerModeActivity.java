@@ -2,6 +2,7 @@ package android.bignerdranch.drifting.Drawing;
 
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,6 +66,7 @@ public class Drawing_StrangerModeActivity extends AppCompatActivity {
                                 if (create_return.getCode() == 200) {
                                     newDrawingId = create_return.getData();
                                     Toast.makeText(Drawing_StrangerModeActivity.this, "创建成功！", Toast.LENGTH_SHORT).show();
+                                    GetAllItems.getGetAllItems().refreshMessage();
                                     Intent intent = new Intent(Drawing_StrangerModeActivity.this, Drawing_Activity.class);
                                     intent.putExtra("file_id", newDrawingId);
                                     startActivity(intent);

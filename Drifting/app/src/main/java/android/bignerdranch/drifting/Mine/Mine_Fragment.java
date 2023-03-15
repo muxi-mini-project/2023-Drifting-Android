@@ -148,6 +148,13 @@ public class Mine_Fragment extends Fragment {
                 }
             }
         });
+        ActivityResultLauncher<Intent> Refreshmanager = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == RESULT_OK)
+                    updateUI();
+            }
+        });
 
         if (User_Now.getUserNow().getUser().getavatar() == null) {
             try {
@@ -182,16 +189,16 @@ public class Mine_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), User_items_Manager.class);
-                intent.putExtra("manager_kind",0);
-                startActivity(intent);
+                intent.putExtra("manager_kind", 0);
+                Refreshmanager.launch(intent);
             }
         });
         mLayout_over.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), User_items_Manager.class);
-                intent.putExtra("manager_kind",1);
-                startActivity(intent);
+                intent.putExtra("manager_kind", 1);
+                Refreshmanager.launch(intent);
             }
         });
         updateUI();
@@ -199,9 +206,9 @@ public class Mine_Fragment extends Fragment {
     }
 
     public void updateUI() {
-            DoingAdapter = new JinduAdaptering();//将案例组传给Adapter并创建Adapter
+        DoingAdapter = new JinduAdaptering();//将案例组传给Adapter并创建Adapter
         mDoingNow.setAdapter(DoingAdapter);//将RecyclerView与Adapter绑定
-            DoneAdapter = new JinduAdapterover();
+        DoneAdapter = new JinduAdapterover();
         mDoneAgo.setAdapter(DoneAdapter);
     }
 
@@ -243,7 +250,7 @@ public class Mine_Fragment extends Fragment {
      * 以下为Adapter和Holder
      */
     private class JinduAdaptering extends Adapter<RecyclerView.ViewHolder> {
-       private List<Items> list ;
+        private List<Items> list;
 
         public JinduAdaptering() {
             list = GetAllItems.getGetAllItems().getList_Items_All_ing();
@@ -283,7 +290,7 @@ public class Mine_Fragment extends Fragment {
     }
 
     private class JinduAdapterover extends Adapter<JinduHolder> {
-        private List<Items> list ;
+        private List<Items> list;
 
         public JinduAdapterover() {
             list = GetAllItems.getGetAllItems().getList_Items_All_ed();
@@ -305,7 +312,7 @@ public class Mine_Fragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            Log.d("manager_bug",list.size()+"");
+            Log.d("manager_bug", list.size() + "");
             return list.size();//RecyclerView通过调用该方法确定一共有多少个Fragment
         }
     }

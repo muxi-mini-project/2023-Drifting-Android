@@ -1,7 +1,9 @@
 package android.bignerdranch.drifting.Book;
 
+import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_Just_join_request;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_return;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_refuseAndAgree_request;
+import android.bignerdranch.drifting.Inviting.Inviting_return_of_random;
 import android.bignerdranch.drifting.Inviting.Loading.inviting_messageReturn;
 import android.bignerdranch.drifting.Inviting.Loading.inviting_request;
 import android.bignerdranch.drifting.R;
@@ -56,6 +58,7 @@ public class Book_inviting extends AppCompatActivity {
     private String timeCreate; //漂流创建时间
     private String theme; //漂流主题
     private int number;//漂流人数
+    private int writer_number;
     private Integer hostId;
     private RecyclerView bookList;
     private BookListAdapter mBookListAdapter;
@@ -68,9 +71,17 @@ public class Book_inviting extends AppCompatActivity {
 
         initView();
 
+        //从邀请界面获得的数据
         Intent intent = getIntent();
         String idn = intent.getStringExtra("file_id");
+        String kinds  = intent.getStringExtra("kind");
+        Log.i("kind",kinds);
         long id = Long.valueOf(idn);
+        long kind = Long.valueOf(kinds);
+
+        Bundle bundle = getIntent().getExtras();
+        inviting_messageReturn.data  data = (inviting_messageReturn.data) bundle.getSerializable("data");
+
 
 
         Retrofit.Builder builder0 = new Retrofit.Builder()
@@ -79,34 +90,44 @@ public class Book_inviting extends AppCompatActivity {
         Retrofit retrofit0 = builder0.build();
 
         //获得获得漂流本的其他内容
-        inviting_request bookInviting = retrofit0.create(inviting_request.class);
-        Call<inviting_messageReturn> inviting_requestCall =  bookInviting.book_request(User_Now.getUserNow().getUser().getToken());
-        inviting_requestCall.enqueue(new Callback<inviting_messageReturn>() {
-            @Override
-            public void onResponse(Call<inviting_messageReturn> call, Response<inviting_messageReturn> response) {
-                Log.i("获得的邀请信息",response.body().toString());
-                Log.i("id",String.valueOf(id));
-                for (int i = 0;i<response.body().getData().size();i++){
-                    if (response.body().getData().get(i).getFile_id() == id){
-                        theme = response.body().getData().get(i).getTheme();
-                        bookCover = response.body().getData().get(i).getCover();
-                        timeCreate = response.body().getData().get(i).getCreatedAt();
-                        number = response.body().getData().get(i).getNumber();
-                        Toast.makeText(Book_inviting.this, String.valueOf(response.body().getData().get(i).getFile_id()), Toast.LENGTH_SHORT).show();
-
-
+        /**
+         * 从邀请里面获得
+         */
+        if (kind == 1){
+            inviting_request bookInviting = retrofit0.create(inviting_request.class);
+            Call<inviting_messageReturn> inviting_requestCall =  bookInviting.book_request(User_Now.getUserNow().getUser().getToken());
+            inviting_requestCall.enqueue(new Callback<inviting_messageReturn>() {
+                @Override
+                public void onResponse(Call<inviting_messageReturn> call, Response<inviting_messageReturn> response) {
+                    Log.i("获得的邀请信息",response.body().toString());
+                    Log.i("id",String.valueOf(id));
+                    for (int i = 0;i<response.body().getData().size();i++){
+                        if (response.body().getData().get(i).getFile_id() == id){
+                            theme = response.body().getData().get(i).getTheme();
+                            bookCover = response.body().getData().get(i).getCover();
+                            timeCreate = response.body().getData().get(i).getCreatedAt();
+                            number = response.body().getData().get(i).getNumber();
+                            writer_number = response.body().getData().get(i).getWriter_number();
+                            Toast.makeText(Book_inviting.this, String.valueOf(response.body().getData().get(i).getFile_id()), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
+                @Override
+                public void onFailure(Call<inviting_messageReturn> call, Throwable t) {
+                    Toast.makeText(Book_inviting.this, "网络错误获得漂流列表表", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-            }
-
-            @Override
-            public void onFailure(Call<inviting_messageReturn> call, Throwable t) {
-                Toast.makeText(Book_inviting.this, "网络错误获得漂流列表表", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        }
+        //随机模式
+        else {
+            theme = data.getTheme();
+            bookCover = data.getCover();
+            timeCreate = data.getCreatedAt();
+            number =  data.getNumber();
+            writer_number = data.getWriter_number();
+        }
         //设置背景图
         // try {
         //
@@ -135,8 +156,6 @@ public class Book_inviting extends AppCompatActivity {
                         //
                        mBook_refuse_request = new Book_refuseAndAgree_request(id,"漂流本"
                                ,messageReturn.getData().getOwnerID());
-
-
 
                         //获得漂流创建者的名字
                         GetNameFormIDRequest getNameFormIDRequest  = new GetNameFormIDRequest();
@@ -188,23 +207,31 @@ public class Book_inviting extends AppCompatActivity {
                 agreeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Book_Just_join_request just_join_request = new Book_Just_join_request(Integer.valueOf(idn),
+                                User_Now.getUserNow().getUser().getId());
+
+                        ApiNote justJoin = retrofit0.create(ApiNote.class);
+                        Call<Book_create_return> just_join = justJoin.justJoin(just_join_request,
+                                User_Now.getUserNow().getUser().getToken());
+                        just_join.enqueue(new Callback<Book_create_return>() {
+                            @Override
+                            public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
+                                // Toast.makeText(Book_Writing.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onFailure(Call<Book_create_return> call, Throwable t) {
+                            }
+                        });
                         Intent intent1 = new Intent(Book_inviting.this,Book_Writing.class);
                         intent1.putExtra("data",idn);
                         intent1.putExtra("cover",bookCover);
-
                         startActivity(intent1);
-
                     }
                 });
-
-
-
 
             }
         };
         timer1.schedule(timerTask1,500);
-
-
 
 
 

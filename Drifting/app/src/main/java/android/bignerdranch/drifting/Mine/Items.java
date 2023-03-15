@@ -10,8 +10,9 @@ public class Items {
     private Long maxamount;//最大参与人数/收集数量
     private String create_time;//创建时间
     private Long id;//id
+    private Long creatorID;//创建者id
 
-    public Items(String name,String theme,String cover,String item_kind,Long kind,Long nowamount,Long maxamount,String create_time,Long id){
+    public Items(String name,String theme,String cover,String item_kind,Long kind,Long nowamount,Long maxamount,String create_time,Long id,Long creatorID){
         this.name = name;
         this.theme = theme;
         this.cover = cover;
@@ -21,6 +22,15 @@ public class Items {
         this.maxamount = maxamount;
         this.create_time = create_time;
         this.id = id;
+        this.creatorID = creatorID;
+    }
+
+    public Long getCreatorID() {
+        return creatorID;
+    }
+
+    public void setCreatorID(Long createrID) {
+        this.creatorID = createrID;
     }
 
     public Long getId() {

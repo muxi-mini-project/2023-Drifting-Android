@@ -1,5 +1,6 @@
 package android.bignerdranch.drifting.Inviting.Loading;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class inviting_messageReturn {
@@ -8,17 +9,17 @@ public class inviting_messageReturn {
     private ArrayList<data> data;
 
 
-    public static class data{
-        private long file_id;
-        private String createdAt;
+    public static class data implements Serializable {
+        private long file_id;  //
+        private String createdAt; //
         private String fileKind;
-        private long owner_id;
-        private String cover;
-        private int kind;
-        private String theme;
-        private Integer number;
-        private Integer writer_number;
-        private String name;
+        private long owner_id; //
+        private String cover; //
+        private int kind; //
+        private String theme ; //
+        private int number; //
+        private int writer_number;//
+        private String name; //
 
         public data(long file_id, String createdAt, String fileKind, long honer_id, String cover, int kind, String theme, int number) {
             this.file_id = file_id;
@@ -29,6 +30,27 @@ public class inviting_messageReturn {
             this.kind = kind;
             this.theme = theme;
             this.number = number;
+        }
+
+        public data() {
+        }
+
+        public data(long file_id, String cover, int kind) {
+            this.file_id = file_id;
+            this.cover = cover;
+            this.kind = kind;
+        }
+
+        public data(long file_id, String createdAt, String cover, int kind, String theme, int number, int writer_number, String name,long owner_id) {
+            this.file_id = file_id;
+            this.createdAt = createdAt; //
+            this.cover = cover; //
+            this.kind = kind;
+            this.theme = theme; //
+            this.number = number; //
+            this.writer_number = writer_number;
+            this.name = name;
+            this.owner_id = owner_id;
         }
 
         public String getName() {

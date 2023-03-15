@@ -8,6 +8,7 @@ import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_Participate_retu
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_request;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_return;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_refuseAndAgree_request;
+import android.bignerdranch.drifting.Inviting.Inviting_return_of_random;
 import android.bignerdranch.drifting.Inviting.Loading.inviting_messageReturn;
 
 import retrofit2.Call;
@@ -76,7 +77,7 @@ public interface ApiNote {
      * @return
      */
     @GET("/api/v1/drifting_note/recommendation")
-    Call<inviting_messageReturn.data> getRandomBook(@Header("Authorization") String token);
+    Call<Inviting_return_of_random> getRandomBook(@Header("Authorization") String token);
 
     /**
      * 获得随机漂流相机
@@ -84,7 +85,7 @@ public interface ApiNote {
      * @return
      */
     @GET("/api/v1/drifting_picture/recommendation")
-    Call<inviting_messageReturn.data> getRandomPicture(@Header("Authorization") String token);
+    Call<Inviting_return_of_random> getRandomPicture(@Header("Authorization") String token);
 
     /**
      * 获得随机漂流画
@@ -92,7 +93,7 @@ public interface ApiNote {
      * @return
      */
     @GET("/api/v1/drifting_drawing/recommendation")
-    Call<inviting_messageReturn.data> getRandomDraw(@Header("Authorization") String token);
+    Call<Inviting_return_of_random> getRandomDraw(@Header("Authorization") String token);
 
     /**
      * 获得随机漂流小说
@@ -100,7 +101,7 @@ public interface ApiNote {
      * @return
      */
     @GET("/api/v1/drifting_novel/recommendation")
-    Call<inviting_messageReturn.data> getRandomNovel(@Header("Authorization") String token);
+    Call<Inviting_return_of_random> getRandomNovel(@Header("Authorization") String token);
 
 
 

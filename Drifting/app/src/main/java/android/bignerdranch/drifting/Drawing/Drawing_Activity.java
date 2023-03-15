@@ -2,6 +2,7 @@ package android.bignerdranch.drifting.Drawing;
 
 import android.bignerdranch.drifting.Camera.Camera_ZoomImageView;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
 import android.content.Intent;
 import android.database.Cursor;
@@ -115,6 +116,7 @@ public class Drawing_Activity extends AppCompatActivity {
                         create_return create_return = response.body();
                         if(create_return.getCode() == 200){
                             Toast.makeText(Drawing_Activity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                            GetAllItems.getGetAllItems().refreshMessage();
                             finish();
                         }else{
                             Toast.makeText(Drawing_Activity.this, "上传出现问题，请稍后重试", Toast.LENGTH_SHORT).show();

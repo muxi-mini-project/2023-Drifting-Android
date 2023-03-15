@@ -15,6 +15,7 @@ import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_refuseAndAgree_r
 import android.bignerdranch.drifting.Friends.FriendsBeInvitedID;
 import android.bignerdranch.drifting.Main.Main_DiscoveringFragment;
 import android.bignerdranch.drifting.Main.Main_MainActivity;
+import android.bignerdranch.drifting.Mine.FileUtils;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_Now;
 import android.content.DialogInterface;
@@ -23,9 +24,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +36,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -51,8 +57,10 @@ public class Book_Writing extends AppCompatActivity {
 
     private EditText bookWText;
     private Button book_create_ingEd;
+    private Button mButtonofBac;
     private String book_participateTx;
     private ImageView bookCover;
+    private String Savedcontacts;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +69,19 @@ public class Book_Writing extends AppCompatActivity {
         bookWText = findViewById(R.id.book_writingText);
         book_create_ingEd = findViewById(R.id.book_creatingToed);
         bookCover = findViewById(R.id.book_cover);
+        mButtonofBac = findViewById(R.id.cookw);
+
         //接收数据新建的漂流本。
         Intent intent = getIntent();
+        Savedcontacts = intent.getStringExtra("contact");
+        if(Savedcontacts!=null)
+            bookWText.setText(Savedcontacts);
         String idn = intent.getStringExtra("data");
         String cover = intent.getStringExtra("cover");
         long file_id = Long.valueOf(idn);
+
+       // String used = FileUtils.readFromXML("/driftingBook/"+idn+".txt");
+       //if ( used != null) {bookWText.setText(used);}
 
         if (cover.contains("mini-project.muxixyz.com/drifting/covers/点构图.jpg"))
             bookCover.setImageResource(R.drawable.cover_1);
@@ -99,6 +115,28 @@ public class Book_Writing extends AppCompatActivity {
                 book_participateTx = s.toString();
             }
         });
+        mButtonofBac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String SAVE_CONTACT_PATH = getApplication().getFilesDir().getAbsolutePath();
+                File file= new File(SAVE_CONTACT_PATH,"DriftingNote");
+                if(!file.exists())
+                    file.mkdirs();
+                File contactfile = new File(file,file_id+".txt");
+                if(contactfile.exists())
+                    contactfile.delete();
+                try {
+                    contactfile.createNewFile();
+                FileOutputStream fileOutputStream = new FileOutputStream(contactfile.getAbsolutePath());
+                fileOutputStream.write(book_participateTx.getBytes());
+                fileOutputStream.close();
+                Toast.makeText(Book_Writing.this,"保存成功",Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         /**
          * 发起者参与漂流项目
          */
@@ -163,48 +201,6 @@ public class Book_Writing extends AppCompatActivity {
 
                 }
 
-                //在参与里面增加数据
-                Book_Just_join_request just_join_request = new Book_Just_join_request(Integer.valueOf(idn),
-                        User_Now.getUserNow().getUser().getId());
-
-                ApiNote justJoin = retrofit.create(ApiNote.class);
-                Call<Book_create_return> just_join = justJoin.justJoin(just_join_request,
-                        User_Now.getUserNow().getUser().getToken());
-                just_join.enqueue(new Callback<Book_create_return>() {
-                    @Override
-                    public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
-                       // Toast.makeText(Book_Writing.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Book_create_return> call, Throwable t) {
-
-                    }
-                });
-
-                //写拒绝邀请，但是自己已经参加的，所以变相拒绝
-
-                Book_refuseAndAgree_request mBook_refuse_request = new Book_refuseAndAgree_request(file_id,
-                        "漂流本");
-
-                ApiNote refuse = retrofit.create(ApiNote.class);
-                Call<Book_create_return> returnCall  = refuse.refuseJoinBook(mBook_refuse_request,
-                        User_Now.getUserNow().getUser().getToken());
-                returnCall.enqueue(new Callback<Book_create_return>() {
-                    @Override
-                    public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
-
-                        Toast.makeText(Book_Writing.this, "拒绝成功", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Book_create_return> call, Throwable t) {
-
-                    }
-                });
-
-
-
                 Timer timer = new Timer();
                 TimerTask timerTask = new TimerTask() {
                     @Override
@@ -238,16 +234,5 @@ public class Book_Writing extends AppCompatActivity {
                 finish();
             }
         });
-    }
-    private static Bitmap getImage(String path) throws Exception{
-        URL url = new URL(path);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(5000);
-        conn.setRequestMethod("GET");
-        if(conn. getResponseCode() == 200){
-            InputStream inStream = conn. getInputStream();
-            Bitmap bitmap = BitmapFactory. decodeStream(inStream) ;
-            return bitmap;
-        }else return null;
     }
 }

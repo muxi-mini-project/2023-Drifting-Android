@@ -67,36 +67,38 @@ public class Book_AcquaintanceModeActivity extends AppCompatActivity {
                     if(isNumeric(person_number)) {
                         number = Integer.parseInt(person_number);
                         if(number <= max_number){
-                            Book_create_request book_create_request = new Book_create_request();
-                            book_create_request.setName(name);
-                            book_create_request.setKind(1);
-                            book_create_request.setNumber(Integer.valueOf(person_number));
-                            book_create_request.setTheme(title);
-                            book_create_request.setCover(mCoverURL);
+                            if (mCoverURL != null){
+                                Book_create_request book_create_request = new Book_create_request();
+                                book_create_request.setName(name);
+                                book_create_request.setKind(1);
+                                book_create_request.setNumber(Integer.valueOf(person_number));
+                                book_create_request.setTheme(title);
+                                book_create_request.setCover(mCoverURL);
 
-                            Retrofit.Builder builder = new Retrofit.Builder()
-                                    .baseUrl("http://116.204.121.9:61583/")
-                                            .addConverterFactory(GsonConverterFactory.create());
-                            Retrofit retrofit = builder.build();
-                            ApiNote bookcreate = retrofit.create(ApiNote.class);
-                            Call<Book_create_return> call = bookcreate.bookCreate(book_create_request
-                                    , User_Now.getUserNow().getUser().getToken());
-                            call.enqueue(new Callback<Book_create_return>() {
-                                @Override
-                                public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
-                                    Book_create_return book_create_return = response.body();
-                                    Toast.makeText(Book_AcquaintanceModeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Book_AcquaintanceModeActivity.this, Book_Writing.class);
-                                    intent.putExtra("data",String.valueOf(response.body().getData()));
-                                    intent.putExtra("cover",mCoverURL);
-                                    startActivity(intent);
-                                }
+                                Retrofit.Builder builder = new Retrofit.Builder()
+                                        .baseUrl("http://116.204.121.9:61583/")
+                                        .addConverterFactory(GsonConverterFactory.create());
+                                Retrofit retrofit = builder.build();
+                                ApiNote bookcreate = retrofit.create(ApiNote.class);
+                                Call<Book_create_return> call = bookcreate.bookCreate(book_create_request
+                                        , User_Now.getUserNow().getUser().getToken());
+                                call.enqueue(new Callback<Book_create_return>() {
+                                    @Override
+                                    public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
+                                        Book_create_return book_create_return = response.body();
+                                        Toast.makeText(Book_AcquaintanceModeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(Book_AcquaintanceModeActivity.this, Book_Writing.class);
+                                        intent.putExtra("data",String.valueOf(response.body().getData()));
+                                        intent.putExtra("cover",mCoverURL);
+                                        startActivity(intent);
+                                    }
 
-                                @Override
-                                public void onFailure(Call<Book_create_return> call, Throwable t) {
+                                    @Override
+                                    public void onFailure(Call<Book_create_return> call, Throwable t) {
 
-                                }
-                            });
+                                    }
+                                });
+                            }
 
 
                         }

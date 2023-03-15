@@ -31,7 +31,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:targetApi="32" >
-
+        <activity android:name=".Mine.Detail_novel_underway"/>
+        <activity android:name=".Mine.Detail_Activity"/>
+        <activity android:name=".Novel.Novel_StrangerModeActivity"/>
+        <activity android:name=".Novel.Novel_Activity"/>
+        <activity android:name=".Novel.Novel_AcquaintanceModeActivity"/>
+        <activity android:name=".Novel.Novel_InvitingActivity"/>
+    <activity android:name=".Novel.Novel_switch_mode"/>
+        <activity android:name=".Camera.Camera_Inviting"/>
         <activity
             android:name=".Friends.FriendsNotingActivity"
             android:exported="false">
@@ -39,13 +46,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".Novel.Novel_switch_mode"/>
-        <activity android:name=".Novel.Novel_StrangerModeActivity"/>
-        <activity android:name=".Novel.Novel_AcquaintanceModeActivity"/>
-        <activity android:name=".Novel.Novel_Activity"/>
+        <activity android:name=".Drawing.Drawing_StrangerModeActivity"/>
         <activity android:name=".Inviting.Inviting_Friends" />
         <activity android:name=".Book.Book_inviting"/>
-        <activity android:name=".Novel.Novel_InvitingActivity"/>
         <activity android:name=".User.User_items_Manager"/>
         <activity android:name=".Drawing.Drawing_switch_mode" />
         <activity android:name=".Drawing.Drawing_InvitingActivity" />

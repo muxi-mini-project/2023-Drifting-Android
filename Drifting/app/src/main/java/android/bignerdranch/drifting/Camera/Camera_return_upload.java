@@ -97,20 +97,12 @@ public class Camera_return_upload {
    static public class Camera_accept_inviting{
         private long fileid;
         private String fileKind;
-        private Long friendid;
-        private Long hostid;
 
         public long getFileid() { return fileid; }
         public void setFileid(long value) { this.fileid = value; }
 
         public String getFileKind() { return fileKind; }
         public void setFileKind(String value) { this.fileKind = value; }
-
-        public Long getFriendid() { return friendid; }
-        public void setFriendid(Long value) { this.friendid = value; }
-
-        public Long getHostid() { return hostid; }
-        public void setHostid(Long value) { this.hostid = value; }
     }
     //返回类
    static public class Camera_accept_inviting_return{
@@ -400,22 +392,22 @@ public class Camera_return_upload {
      */
     //上传类
    static public class Camera_upload_accept_random{
-        Integer driftingPictureID;
-        Integer studentID;
+        Long driftingPictureID;
+        Long studentID;
 
-        public Integer getDriftingPictureID() {
+        public Long getDriftingPictureID() {
             return driftingPictureID;
         }
 
-        public void setDriftingPictureID(Integer driftingPictureID) {
+        public void setDriftingPictureID(Long driftingPictureID) {
             this.driftingPictureID = driftingPictureID;
         }
 
-        public Integer getStudentID() {
+        public Long getStudentID() {
             return studentID;
         }
 
-        public void setStudentID(Integer studentID) {
+        public void setStudentID(Long studentID) {
             this.studentID = studentID;
         }
     }
@@ -553,8 +545,6 @@ public class Camera_return_upload {
    static public class Camera_upload_refuse_inviting{
         private long fileid;
         private String fileKind;
-        private Long friendid;
-        private Long hostid;
 
         public long getFileid() { return fileid; }
         public void setFileid(long value) { this.fileid = value; }
@@ -562,11 +552,6 @@ public class Camera_return_upload {
         public String getFileKind() { return fileKind; }
         public void setFileKind(String value) { this.fileKind = value; }
 
-        public Long getFriendid() { return friendid; }
-        public void setFriendid(Long value) { this.friendid = value; }
-
-        public Long getHostid() { return hostid; }
-        public void setHostid(Long value) { this.hostid = value; }
     }
     //返回类
    static public class Camera_return_refuse_inviting{

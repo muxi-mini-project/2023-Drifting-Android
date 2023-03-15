@@ -102,8 +102,8 @@ public class Camera_setting_stranger extends AppCompatActivity {
         mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (number > 9 || number <= 0 || theme == null || name == null || mCoverURL == null) {
-                    Toast.makeText(getApplicationContext(), "请输入正确的数据或选择封面", Toast.LENGTH_SHORT).show();
+                if (number == null || theme == null || name == null || mCoverURL == null||number > 9 || number <= 0 ) {
+                    Toast.makeText(getApplicationContext(), "请输入完整的数据或选择封面", Toast.LENGTH_SHORT).show();
                 } else {
                     Create_Camera(name,mCoverURL,number,theme);
                 }

@@ -38,13 +38,14 @@ public class Novel_InvitingActivity extends AppCompatActivity {
     private long id = 0;
     private int position = 0;
     private long host_id = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inviting);
 
-        id = getIntent().getLongExtra("file_id",0);
-        position = getIntent().getIntExtra("position",0);
+        id = getIntent().getLongExtra("file_id", 0);
+        position = getIntent().getIntExtra("position", 0);
 
         commit_button = (Button) findViewById(R.id.commit_button);
         refuse_button = (Button) findViewById(R.id.refuse_button);
@@ -65,34 +66,38 @@ public class Novel_InvitingActivity extends AppCompatActivity {
         call.enqueue(new Callback<inviting_messageReturn>() {
             @Override
             public void onResponse(Call<inviting_messageReturn> call, Response<inviting_messageReturn> response) {
-                inviting_messageReturn request_return = response.body();
-                for(int i = 0;i < request_return.getData().size();i++){
-                    if(request_return.getData().get(i).getFile_id() == id){
-                        String url = "http://" + request_return.getData().get(i).getCover();
-                        Glide.with(Novel_InvitingActivity.this).load(url).into(cover);
-                        host_id = request_return.getData().get(i).getHoner_id();
-                        name.setText(request_return.getData().get(i).getName());
-                        android.bignerdranch.drifting.detail_request.request idRequest = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
-                        Call<android.bignerdranch.drifting.detail_request.getIdMessageReturn> idMessageReturnCall
-                                = idRequest.idRequest(Login_LoginActivity.getToken(),new getIdRequestBody(host_id));
-                        int finalI = i;
-                        idMessageReturnCall.enqueue(new Callback<getIdMessageReturn>() {
-                            @Override
-                            public void onResponse(Call<getIdMessageReturn> call, Response<getIdMessageReturn> response) {
-                                getIdMessageReturn messageReturn = response.body();
-                                host.setText("发起人：" + messageReturn.getData().getName());
-                                start_time.setText("发起时间：" + request_return.getData().get(finalI).getCreatedAt().substring(0,10));
-                                theme_setting.setText("主题设定：" + request_return.getData().get(finalI).getTheme());
-                                people_num.setText("设定的总人数：" + request_return.getData().get(finalI).getNumber());
+                if (response.isSuccessful()) {
+                    inviting_messageReturn request_return = response.body();
 
-                            }
+                    if(request_return.getData()!=null && request_return.getData() != null)
+                    for (int i = 0; i < request_return.getData().size(); i++) {
+                        if (request_return.getData().get(i).getFile_id() == id) {
+                            String url = "http://" + request_return.getData().get(i).getCover();
+                            Glide.with(Novel_InvitingActivity.this).load(url).into(cover);
+                            host_id = request_return.getData().get(i).getHoner_id();
+                            name.setText(request_return.getData().get(i).getName());
+                            android.bignerdranch.drifting.detail_request.request idRequest = retrofit.create(android.bignerdranch.drifting.detail_request.request.class);
+                            Call<android.bignerdranch.drifting.detail_request.getIdMessageReturn> idMessageReturnCall
+                                    = idRequest.idRequest(Login_LoginActivity.getToken(), new getIdRequestBody(host_id));
+                            int finalI = i;
+                            idMessageReturnCall.enqueue(new Callback<getIdMessageReturn>() {
+                                @Override
+                                public void onResponse(Call<getIdMessageReturn> call, Response<getIdMessageReturn> response) {
+                                    getIdMessageReturn messageReturn = response.body();
+                                    host.setText("发起人：" + messageReturn.getData().getName());
+                                    start_time.setText("发起时间：" + request_return.getData().get(finalI).getCreatedAt().substring(0, 10));
+                                    theme_setting.setText("主题设定：" + request_return.getData().get(finalI).getTheme());
+                                    people_num.setText("设定的总人数：" + request_return.getData().get(finalI).getNumber());
 
-                            @Override
-                            public void onFailure(Call<getIdMessageReturn> call, Throwable t) {
-                                Toast.makeText(Novel_InvitingActivity.this, "获取详细信息失败，请检查网络", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                                }
 
+                                @Override
+                                public void onFailure(Call<getIdMessageReturn> call, Throwable t) {
+                                    Toast.makeText(Novel_InvitingActivity.this, "获取详细信息失败，请检查网络", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        }
                     }
                 }
             }
@@ -109,7 +114,7 @@ public class Novel_InvitingActivity extends AppCompatActivity {
                 android.bignerdranch.drifting.Inviting.inviting_reaction
                         reaction = retrofit.create(android.bignerdranch.drifting.Inviting.inviting_reaction.class);
                 Call<android.bignerdranch.drifting.Inviting.inviting_reactionReturn> inviting_reactionReturnCall
-                        = reaction.accept(Login_LoginActivity.getToken(),new inviting_reactionBody(id,"漂流小说",0,host_id));
+                        = reaction.accept(Login_LoginActivity.getToken(), new inviting_reactionBody(id, "漂流小说", 0, host_id));
                 inviting_reactionReturnCall.enqueue(new Callback<inviting_reactionReturn>() {
                     @Override
                     public void onResponse(Call<inviting_reactionReturn> call, Response<inviting_reactionReturn> response) {
@@ -133,7 +138,7 @@ public class Novel_InvitingActivity extends AppCompatActivity {
                 android.bignerdranch.drifting.Inviting.inviting_reaction
                         reaction = retrofit.create(android.bignerdranch.drifting.Inviting.inviting_reaction.class);
                 Call<android.bignerdranch.drifting.Inviting.inviting_reactionReturn> inviting_reactionReturnCall
-                        = reaction.refuse(Login_LoginActivity.getToken(),new inviting_reactionBody(id,"漂流小说",0,host_id));
+                        = reaction.refuse(Login_LoginActivity.getToken(), new inviting_reactionBody(id, "漂流小说", 0, host_id));
                 inviting_reactionReturnCall.enqueue(new Callback<inviting_reactionReturn>() {
                     @Override
                     public void onResponse(Call<inviting_reactionReturn> call, Response<inviting_reactionReturn> response) {

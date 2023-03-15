@@ -108,10 +108,10 @@
         android:background="@drawable/rectangle_back"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.081"
+        app:layout_constraintHorizontal_bias="0.07"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/discovering_recyclerview"
-        app:layout_constraintVertical_bias="0.444">
+        app:layout_constraintVertical_bias="0.7">
 
     </ImageView>
 
@@ -130,11 +130,11 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="更多功能"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.117"
+        app:layout_constraintHorizontal_bias="0.107"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/discovering_recyclerview">
 
@@ -162,9 +162,10 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:scaleType="centerInside"
                 android:id="@+id/imageView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:src="@drawable/book"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -217,9 +218,10 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:scaleType="centerInside"
                 android:id="@+id/imageView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:src="@drawable/camera"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -282,8 +284,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/novel"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout5"
@@ -335,8 +338,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:src="@drawable/drawing"
                 app:layout_constraintBottom_toBottomOf="parent"

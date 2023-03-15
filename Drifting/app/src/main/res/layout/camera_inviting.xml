@@ -11,35 +11,46 @@
         android:layout_height="250dp"
         android:background="@drawable/yaoqing"/>
     <TextView
+        android:id="@+id/camera_name_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="漂流相机名字"
+        android:text="漂流相机"
         android:textSize="25dp"
         android:layout_marginTop="20dp"
         android:textStyle="bold"/>
     <TextView
+        android:id="@+id/camera_owner_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="发起人:"
         android:textSize="15dp"
         android:padding="10dp"/>
     <TextView
+        android:id="@+id/camera_time_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="发起时间"
         android:textSize="15dp"/>
     <TextView
+        android:id="@+id/camera_theme_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="主题拟定"
         android:textSize="15dp"/>
     <TextView
+        android:id="@+id/camera_jindu_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="此前接龙人(X位):"
+        android:text="当前进度:"
+        android:textSize="15dp"
+        android:padding="10dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="内容概览:"
         android:padding="10dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,27 +59,25 @@
         android:layout_height="60dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/camera_image1"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/try1"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintBottom_toBottomOf="@+id/camera_image2"
+            app:layout_constraintEnd_toStartOf="@+id/camera_image2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+            app:layout_constraintTop_toTopOf="@+id/camera_image2" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/camera_image2"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="40dp"
-            android:background="@drawable/try2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/camera_image1"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,25 +87,23 @@
         android:layout_height="55dp">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/camera_image3"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/try3"
-            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintEnd_toStartOf="@+id/camera_image4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/camera_image4"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="40dp"
-            android:background="@drawable/try4"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toEndOf="@+id/camera_image3"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout

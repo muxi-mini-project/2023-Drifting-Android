@@ -6,6 +6,7 @@ import android.bignerdranch.drifting.Friends.FriendsList_return;
 import android.bignerdranch.drifting.Inviting.inviting_reactionBody;
 import android.bignerdranch.drifting.Inviting.inviting_reactionReturn;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_Now;
 import android.bignerdranch.drifting.friendsInvitingItem;
@@ -125,6 +126,7 @@ public class Drawing_AcquaintanceModeActivity extends AppCompatActivity {
                                 if(create_return.getCode() == 200){
                                     newDrawingId = create_return.getData();
                                     Toast.makeText(Drawing_AcquaintanceModeActivity.this, "创建成功！", Toast.LENGTH_SHORT).show();
+                                    GetAllItems.getGetAllItems().refreshMessage();
                                     Intent intent = new Intent(Drawing_AcquaintanceModeActivity.this, Drawing_Activity.class);
                                     intent.putExtra("file_id",newDrawingId);
                                     startActivity(intent);

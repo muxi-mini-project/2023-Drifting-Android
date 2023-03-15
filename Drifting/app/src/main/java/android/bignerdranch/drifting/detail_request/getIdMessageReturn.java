@@ -17,7 +17,7 @@ public class getIdMessageReturn {
         return data;
     }
 
-    public class data{
+   public class data{
         private long studentID;
         private String name;
         private String sex;

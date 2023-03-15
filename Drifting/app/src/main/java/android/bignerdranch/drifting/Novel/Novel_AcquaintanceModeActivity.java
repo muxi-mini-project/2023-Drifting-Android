@@ -3,11 +3,7 @@ package android.bignerdranch.drifting.Novel;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.bignerdranch.drifting.Drawing.Drawing_AcquaintanceModeActivity;
-import android.bignerdranch.drifting.Drawing.Drawing_Activity;
-import android.bignerdranch.drifting.Drawing.Drawing_Api;
-import android.bignerdranch.drifting.Novel.create_message;
-import android.bignerdranch.drifting.Novel.create_return;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.Friends.FriendListInterface;
 import android.bignerdranch.drifting.Friends.FriendsList_return;
 import android.bignerdranch.drifting.Inviting.inviting_reactionBody;
@@ -131,6 +127,7 @@ public class Novel_AcquaintanceModeActivity extends AppCompatActivity {
                                 if(create_return.getCode() == 200){
                                     newNovelId = create_return.getData();
                                     Toast.makeText(Novel_AcquaintanceModeActivity.this, "创建成功！", Toast.LENGTH_SHORT).show();
+                                    GetAllItems.getGetAllItems().refreshMessage();
                                     Intent intent = new Intent(Novel_AcquaintanceModeActivity.this, Novel_Activity.class);
                                     intent.putExtra("file_id",newNovelId);
                                     startActivity(intent);

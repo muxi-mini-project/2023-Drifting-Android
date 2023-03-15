@@ -17,6 +17,7 @@ import android.os.Message;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -202,7 +203,8 @@ public class Login_LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User_returnAll> call, Throwable t) {
-
+                Log.d("Login_bug",t.toString());
+                Toast.makeText(getApplicationContext(),"请检查网络",Toast.LENGTH_SHORT).show();
             }
         });
     }

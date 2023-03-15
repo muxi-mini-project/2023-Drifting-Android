@@ -2,6 +2,7 @@ package android.bignerdranch.drifting.Novel;
 
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Login.Login_LoginActivity;
+import android.bignerdranch.drifting.Mine.GetAllItems;
 import android.bignerdranch.drifting.R;
 import android.bignerdranch.drifting.User.User_Now;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class Novel_Activity extends AppCompatActivity {
     private EditText editor;
     private TextView words_num;
     private long newNovelId;
+    private String textlast;
     private String text = "";
 
     @Override
@@ -47,7 +49,9 @@ public class Novel_Activity extends AppCompatActivity {
         words_num = (TextView) findViewById(R.id.words_num);
 
         newNovelId = getIntent().getLongExtra("file_id", 0);
-
+        textlast = getIntent().getStringExtra("last_content");
+        if(textlast != null)
+            editor.setText(textlast);
         editor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -135,6 +139,7 @@ public class Novel_Activity extends AppCompatActivity {
                         public void onResponse(Call<create_return> call, Response<create_return> response) {
                             create_return create_return = response.body();
                             if (create_return.getCode() == 200) {
+                                GetAllItems.getGetAllItems().refreshMessage();
                                 Toast.makeText(Novel_Activity.this, "上传成功", Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {

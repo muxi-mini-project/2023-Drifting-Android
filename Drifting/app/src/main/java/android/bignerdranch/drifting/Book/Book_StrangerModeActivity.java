@@ -2,6 +2,7 @@ package android.bignerdranch.drifting.Book;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.AlertDialog;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_request;
 import android.bignerdranch.drifting.Book.ReturnAndReauest.Book_create_return;
@@ -38,6 +39,7 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
     private int number;
     private Camera_ mCamera;
     private String mCoverURL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,50 +57,50 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(name == null || title == null || person_number == null){
+                if (name == null || title == null || person_number == null) {
                     Toast.makeText(Book_StrangerModeActivity.this, "请输入名字，主题和人数", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    if(isNumeric(person_number)) {
+                } else {
+                    if (isNumeric(person_number)) {
                         number = Integer.parseInt(person_number);
-                        if(number <= max_number){
+                        if (number <= max_number) {
+                            if (mCoverURL != null) {
 
-                            Book_create_request book_create_request = new Book_create_request();
-                            book_create_request.setName(name);
-                            book_create_request.setKind(0);
-                            book_create_request.setNumber(Integer.valueOf(person_number));
-                            book_create_request.setTheme(title);
-                            book_create_request.setCover(mCoverURL);
+                                Book_create_request book_create_request = new Book_create_request();
+                                book_create_request.setName(name);
+                                book_create_request.setKind(0);
+                                book_create_request.setNumber(Integer.valueOf(person_number));
+                                book_create_request.setTheme(title);
+                                book_create_request.setCover(mCoverURL);
 
-                            Retrofit.Builder builder = new Retrofit.Builder()
-                                    .baseUrl("http://116.204.121.9:61583/")
-                                    .addConverterFactory(GsonConverterFactory.create());
-                            Retrofit retrofit = builder.build();
-                            ApiNote bookcreate = retrofit.create(ApiNote.class);
-                            Call<Book_create_return> call = bookcreate.bookCreate(book_create_request
-                                    , User_Now.getUserNow().getUser().getToken());
-                            call.enqueue(new Callback<Book_create_return>() {
-                                @Override
-                                public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
-                                    Book_create_return book_create_return = response.body();
-                                    Toast.makeText(Book_StrangerModeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Book_StrangerModeActivity.this, Book_Writing.class);
-                                    intent.putExtra("data",String.valueOf(response.body().getData()));
-                                    intent.putExtra("cover",mCoverURL);
-                                    startActivity(intent);
-                                }
+                                Retrofit.Builder builder = new Retrofit.Builder()
+                                        .baseUrl("http://116.204.121.9:61583/")
+                                        .addConverterFactory(GsonConverterFactory.create());
+                                Retrofit retrofit = builder.build();
+                                ApiNote bookcreate = retrofit.create(ApiNote.class);
+                                Call<Book_create_return> call = bookcreate.bookCreate(book_create_request
+                                        , User_Now.getUserNow().getUser().getToken());
+                                call.enqueue(new Callback<Book_create_return>() {
+                                    @Override
+                                    public void onResponse(Call<Book_create_return> call, Response<Book_create_return> response) {
+                                        Book_create_return book_create_return = response.body();
+                                        Toast.makeText(Book_StrangerModeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(Book_StrangerModeActivity.this, Book_Writing.class);
+                                        intent.putExtra("data", String.valueOf(response.body().getData()));
+                                        intent.putExtra("cover", mCoverURL);
+                                        startActivity(intent);
+                                    }
 
-                                @Override
-                                public void onFailure(Call<Book_create_return> call, Throwable t) {
+                                    @Override
+                                    public void onFailure(Call<Book_create_return> call, Throwable t) {
 
-                                }
-                            });
-                        }
-                        else {
+                                    }
+                                });
+                            }
+
+                        } else {
                             Toast.makeText(Book_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else {
+                    } else {
                         Toast.makeText(Book_StrangerModeActivity.this, "请输入正确的人数", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -163,6 +165,7 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
 
 
     }
+
     private boolean isNumeric(String str) {
         for (int i = 0; i < str.length(); i++) {
             if (!Character.isDigit(str.charAt(i))) {
@@ -171,6 +174,7 @@ public class Book_StrangerModeActivity extends AppCompatActivity {
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

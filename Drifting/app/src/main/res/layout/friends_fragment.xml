@@ -16,11 +16,13 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
         <ImageButton
+            android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/friend_sreach"
             android:background="@color/friend_search_background"/>
         <EditText
+            android:id="@+id/search_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"

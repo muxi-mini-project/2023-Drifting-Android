@@ -32,7 +32,7 @@ public class GetAllItems extends AppCompatActivity {
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 200 && update == 8) {
+            if (msg.what == 200 && update == 7) {
                 List_Items_userAll = new ArrayList<>();
                 List_Items_userAll.addAll(List_Camera_user_create);
                 List_Items_userAll.addAll(List_Camera_user_attend);
@@ -53,7 +53,8 @@ public class GetAllItems extends AppCompatActivity {
                 Log.d("GetAllItems", "添加完成");
                 Get_message();
                 Log.d("GetAllItems", "管理器获取成功");
-            }
+            }else
+                update++;
             Log.d("GetAllItems", update + "");
         }
     };
@@ -134,12 +135,12 @@ public class GetAllItems extends AppCompatActivity {
                                     list.get(i).getWriter_number(),
                                     list.get(i).getNumber(),
                                     list.get(i).getCreatedAt(),
-                                    list.get(i).getID());
+                                    list.get(i).getID(),
+                                    list.get(i).getOwnerID());
                             camera_list.add(item);
                         }
                     List_Camera_user_create = camera_list;
                     Log.d("GetAllItems", "漂流相机1获取成功");
-                    update++;
                     Message message = new Message();
                     message.what = 200;
                     mHandler.sendMessageAtTime(message,0);
@@ -177,12 +178,12 @@ public class GetAllItems extends AppCompatActivity {
                                     list.get(i).getWriter_number(),
                                     list.get(i).getNumber(),
                                     list.get(i).getCreatedAt(),
-                                    list.get(i).getID());
+                                    list.get(i).getID(),
+                                    list.get(i).getOwnerID());
                             camera_list.add(item);
                         }
                     List_Camera_user_attend = camera_list;
                     Log.d("GetAllItems", "漂流相机2获取成功");
-                    update++;
                     Message message = new Message();
                     message.what = 200;
                     mHandler.sendMessageAtTime(message,0);
@@ -218,12 +219,12 @@ public class GetAllItems extends AppCompatActivity {
                                     list.get(i).getWriter_number(),
                                     list.get(i).getNumber(),
                                     list.get(i).getCreatedAt(),
-                                    list.get(i).getID());
+                                    list.get(i).getID(),
+                                    list.get(i).getOwnerID());
                             book_list.add(item);
                         }
                     List_Book_user_create = book_list;
                     Log.d("GetAllItems", "漂流本1获取成功");
-                    update++;
                     Message message = new Message();
                     message.what = 200;
                     mHandler.sendMessageAtTime(message,0);
@@ -259,12 +260,12 @@ public class GetAllItems extends AppCompatActivity {
                                     list.get(i).getWriter_number(),
                                     list.get(i).getNumber(),
                                     list.get(i).getCreatedAt(),
-                                    list.get(i).getID());
+                                    list.get(i).getID(),
+                                    list.get(i).getOwnerID());
                             book_list.add(item);
                         }
                     List_Book_user_attend = book_list;
                     Log.d("GetAllItems", "漂流本2获取成功");
-                    update++;
                     Message message = new Message();
                     message.what = 200;
                     mHandler.sendMessageAtTime(message,0);
@@ -300,12 +301,12 @@ public class GetAllItems extends AppCompatActivity {
                                     list.get(i).getWriter_number(),
                                     list.get(i).getNumber(),
                                     list.get(i).getCreatedAt(),
-                                    list.get(i).getID());
+                                    list.get(i).getID(),
+                                    list.get(i).getOwnerID());
                             drawing_list.add(item);
                         }
                     List_Drawing_user_create = drawing_list;
                     Log.d("GetAllItems", "漂流画1获取成功");
-                    update++;
                     Message message = new Message();
                     message.what = 200;
                     mHandler.sendMessageAtTime(message,0);
@@ -341,12 +342,12 @@ public class GetAllItems extends AppCompatActivity {
                                     list.get(i).getWriter_number(),
                                     list.get(i).getNumber(),
                                     list.get(i).getCreatedAt(),
-                                    list.get(i).getID());
+                                    list.get(i).getID(),
+                                    list.get(i).getOwnerID());
                             drawing_list.add(item);
                         }
                     List_Drawing_user_attend = drawing_list;
                     Log.d("GetAllItems", "漂流画2获取成功");
-                    update++;
                     Message message = new Message();
                     message.what = 200;
                     mHandler.sendMessageAtTime(message,0);
@@ -382,12 +383,12 @@ public class GetAllItems extends AppCompatActivity {
                                     list.get(i).getWriter_number(),
                                     list.get(i).getNumber(),
                                     list.get(i).getCreatedAt(),
-                                    list.get(i).getID());
+                                    list.get(i).getID(),
+                                    list.get(i).getOwnerID());
                             novel_list.add(item);
                         }
                     List_Novel_user_create = novel_list;
                     Log.d("GetAllItems", "漂流小说1获取成功");
-                    update++;
                     Message message = new Message();
                     message.what = 200;
                     mHandler.sendMessageAtTime(message,0);
@@ -423,12 +424,12 @@ public class GetAllItems extends AppCompatActivity {
                                     list.get(i).getWriter_number(),
                                     list.get(i).getNumber(),
                                     list.get(i).getCreatedAt(),
-                                    list.get(i).getID());
+                                    list.get(i).getID(),
+                                    list.get(i).getOwnerID());
                             novel_list.add(item);
                         }
                     List_Novel_user_attend = novel_list;
                     Log.d("GetAllItems", "漂流小说2获取成功");
-                    update++;
                     Message message = new Message();
                     message.what = 200;
                     mHandler.sendMessageAtTime(message,0);
